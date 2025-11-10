@@ -99,7 +99,9 @@ def ensure_schema(cur: sqlite3.Cursor) -> None:
             keyword TEXT NOT NULL UNIQUE,
             descriptions TEXT NOT NULL,
             ref_id TEXT NOT NULL,
-            types TEXT NOT NULL
+            types TEXT NOT NULL,
+            times TEXT NOT NULL,
+            years TEXT NOT NULL
         )
         """
     )
@@ -107,6 +109,10 @@ def ensure_schema(cur: sqlite3.Cursor) -> None:
     keyword_columns = {row[1] for row in cur.fetchall()}
     if "types" not in keyword_columns:
         cur.execute("ALTER TABLE keywords ADD COLUMN types TEXT NOT NULL DEFAULT '[]'")
+    if "times" not in keyword_columns:
+        cur.execute("ALTER TABLE keywords ADD COLUMN times TEXT NOT NULL DEFAULT '[]'")
+    if "years" not in keyword_columns:
+        cur.execute("ALTER TABLE keywords ADD COLUMN years TEXT NOT NULL DEFAULT '[]'")
 
 
 def resolve_number(raw_number, fallback: int) -> int:
@@ -181,12 +187,15 @@ def remove_parenthetical_segments(text: str) -> str:
     return "".join(result_chars).strip()
 
 
-def split_dash_entries(entries) -> tuple[list[str], list[str], list[str]]:
+def split_dash_entries(
+    entries,
+) -> tuple[list[str], list[str], list[str], list[list[str]]]:
     if not entries:
-        return [], [], []
+        return [], [], [], []
     left_parts: list[str] = []
     right_parts: list[str] = []
     detail_parts: list[str] = []
+    detail_segments: list[list[str]] = []
     for entry in entries:
         if isinstance(entry, str):
             normalized = strip_leading_marker(entry)
@@ -196,18 +205,23 @@ def split_dash_entries(entries) -> tuple[list[str], list[str], list[str]]:
                 cleaned_right = right.strip()
                 segments = extract_parenthetical_segments(cleaned_right)
                 right_parts.append(remove_parenthetical_segments(cleaned_right))
-                detail_parts.append(" ".join(seg.strip() for seg in segments if seg) if segments else "")
+                cleaned_segments = [seg.strip() for seg in segments if seg.strip()]
+                detail_parts.append(" ".join(cleaned_segments) if cleaned_segments else "")
+                detail_segments.append(cleaned_segments)
             else:
                 cleaned_entry = normalized.strip()
                 left_parts.append(cleaned_entry)
                 right_parts.append("")
                 segments = extract_parenthetical_segments(cleaned_entry)
-                detail_parts.append(" ".join(seg.strip() for seg in segments if seg) if segments else "")
+                cleaned_segments = [seg.strip() for seg in segments if seg.strip()]
+                detail_parts.append(" ".join(cleaned_segments) if cleaned_segments else "")
+                detail_segments.append(cleaned_segments)
         else:
             left_parts.append(json.dumps(entry, ensure_ascii=False))
             right_parts.append("")
             detail_parts.append("")
-    return left_parts, right_parts, detail_parts
+            detail_segments.append([])
+    return left_parts, right_parts, detail_parts, detail_segments
 
 
 _LEADING_MARKERS: tuple[re.Pattern[str], ...] = (
@@ -232,6 +246,54 @@ def strip_leading_marker(text: str) -> str:
 
 
 _BRACKET_PATTERN = re.compile(r"\[([^\]]*)\]")
+_YEAR_KR_PATTERN = re.compile(
+    r"(?P<bc>기원전\s*)?(?P<year>\d{1,4})\s*년(?:\s*(?P<month>\d{1,2})\s*월(?:\s*(?P<day>\d{1,2})\s*일)?)?"
+)
+_YEAR_DOT_PATTERN = re.compile(
+    r"(?P<bc>기원전\s*)?(?P<year>\d{1,4})\.(?P<month>\d{1,2})(?:\.(?P<day>\d{1,2}))?"
+)
+_CENTURY_PATTERN = re.compile(
+    r"(?P<century>(?:(?:기원전|BC)\s*)?\d+\s*세기)"
+)
+_TIME_KEYWORDS = (
+    "조선",
+    "고려",
+    "신라",
+    "통일신라",
+    "고구려",
+    "백제",
+    "가야",
+    "부여",
+    "발해",
+    "삼국",
+    "대한제국",
+    "대한민국",
+    "일제강점기",
+    "광복 이후",
+    "광복이후",
+    "미군정기",
+    "정부",
+    "왕",
+    "황제",
+    "황후",
+    "대왕",
+    "후기",
+    "전기",
+    "중기",
+    "초기",
+    "말기",
+    "시대",
+    "세기",
+    "시기",
+    "연간",
+    "정권",
+    "통치기",
+    "왕조",
+    "송",
+    "원",
+    "명",
+    "청",
+)
 
 
 def derive_descriptions(text: str) -> list[str]:
@@ -260,6 +322,142 @@ def split_keywords(text: str) -> list[str]:
     return [segment.strip() for segment in text.split(",") if segment.strip()]
 
 
+def _extract_years(text: str) -> tuple[list[str], str]:
+    years: list[str] = []
+
+    def handle_match(match: re.Match[str]) -> str:
+        segment = match.group(0).strip()
+        if segment:
+            years.append(segment)
+        return " "
+
+    cleaned = _YEAR_KR_PATTERN.sub(handle_match, text)
+
+    def handle_dot_match(match: re.Match[str]) -> str:
+        segment = match.group(0).strip()
+        if segment:
+            years.append(segment)
+        return " "
+
+    cleaned = _YEAR_DOT_PATTERN.sub(handle_dot_match, cleaned)
+
+    def handle_century(match: re.Match[str]) -> str:
+        century = match.group("century")
+        if century:
+            years.append(century.strip())
+        return " "
+
+    cleaned = _CENTURY_PATTERN.sub(handle_century, cleaned)
+    return years, cleaned
+
+
+def _looks_like_time_descriptor(text: str) -> bool:
+    if not text:
+        return False
+    if any("가" <= ch <= "힣" for ch in text):
+        return True
+    return any(keyword in text for keyword in _TIME_KEYWORDS)
+
+
+def parse_time_metadata(detail_segments: list[str]) -> tuple[set[str], set[str]]:
+    times: set[str] = set()
+    years: set[str] = set()
+    for segment in detail_segments:
+        segment = segment.strip()
+        if not segment:
+            continue
+        extracted_years, remainder = _extract_years(segment)
+        years.update(extracted_years)
+        remainder = " ".join(remainder.replace("(", " ").replace(")", " ").split())
+        remainder = remainder.strip(",.; ")
+        if remainder and _looks_like_time_descriptor(remainder):
+            times.add(remainder)
+    return times, years
+
+
+def is_period_type(question_type: str | None) -> bool:
+    if not question_type:
+        return False
+    question_type = question_type.strip()
+    return question_type == "시기" or question_type.endswith("-시기")
+
+
+def _normalize_descriptor(text: str) -> str:
+    return "".join(text.split())
+
+
+def _tokenize_descriptor(text: str) -> list[str]:
+    return [token.strip() for token in text.split() if token.strip()]
+
+
+def _tokens_subset(tokens_a: list[str], tokens_b: list[str]) -> bool:
+    if not tokens_a:
+        return False
+    if not tokens_b:
+        return False
+    return all(token in tokens_b for token in tokens_a)
+
+
+def merge_time_descriptors(existing: set[str], candidates: set[str]) -> set[str]:
+    result = set(existing)
+    for candidate in sorted(candidates, key=len):
+        cand_norm = _normalize_descriptor(candidate)
+        cand_tokens = _tokenize_descriptor(candidate)
+        if not cand_norm:
+            continue
+        skip = False
+        to_remove: set[str] = set()
+        for current in result:
+            current_norm = _normalize_descriptor(current)
+            current_tokens = _tokenize_descriptor(current)
+            if not current_norm:
+                to_remove.add(current)
+                continue
+            same_or_subset = False
+            if cand_norm == current_norm or cand_norm in current_norm:
+                same_or_subset = True
+            elif _tokens_subset(cand_tokens, current_tokens):
+                same_or_subset = True
+            if same_or_subset:
+                skip = True
+                break
+            if current_norm in cand_norm or _tokens_subset(current_tokens, cand_tokens):
+                to_remove.add(current)
+        if skip:
+            continue
+        if to_remove:
+            result.difference_update(to_remove)
+        result.add(candidate)
+    return result
+
+
+def merge_year_descriptors(existing: set[str], candidates: set[str]) -> set[str]:
+    result = set(existing)
+    for candidate in sorted(candidates, key=len):
+        cand_clean = candidate.strip()
+        cand_norm = _normalize_descriptor(cand_clean)
+        if not cand_norm:
+            continue
+        skip = False
+        to_remove: set[str] = set()
+        for current in result:
+            current_norm = _normalize_descriptor(current)
+            if not current_norm:
+                to_remove.add(current)
+                continue
+            if cand_norm == current_norm or cand_norm in current_norm:
+                skip = True
+                break
+            if current_norm in cand_norm:
+                to_remove.add(current)
+        if skip:
+            continue
+        if to_remove:
+            result.difference_update(to_remove)
+        result.add(cand_clean)
+    return result
+
+
 def collect_keywords(
     keyword_map: dict[str, dict[str, set[str]]],
     session: str,
@@ -268,19 +466,43 @@ def collect_keywords(
     passage_right: list[str],
     option_left: list[str],
     option_right: list[str],
+    passage_detail_segments: list[list[str]],
+    option_detail_segments: list[list[str]],
     question_type: str | None,
 ) -> None:
     ref_id = f"{session}{number:02d}"
 
-    def process_pair(left_entries: list[str], right_entries: list[str]) -> None:
-        for left, right in zip(left_entries, right_entries):
+    def normalize_keyword(keyword: str) -> str:
+        cleaned = keyword.strip()
+        if question_type in {"사건", "사건-시기"} and cleaned.endswith("설치"):
+            cleaned = cleaned[: - len("설치")].rstrip()
+        return cleaned
+
+    def process_pair(
+        left_entries: list[str],
+        right_entries: list[str],
+        detail_segments: list[list[str]],
+    ) -> None:
+        for left, right, detail_segment in zip(left_entries, right_entries, detail_segments):
             if not right:
                 continue
             for keyword in split_keywords(right):
+                keyword_segments = extract_parenthetical_segments(keyword)
+                keyword = remove_parenthetical_segments(keyword)
+                keyword = normalize_keyword(keyword)
+                if not keyword:
+                    continue
                 left_clean = strip_leading_marker(left)
                 descriptions = derive_descriptions(left_clean)
                 bucket = keyword_map.setdefault(
-                    keyword, {"ref_ids": set(), "descriptions": set(), "types": set()}
+                    keyword,
+                    {
+                        "ref_ids": set(),
+                        "descriptions": set(),
+                        "types": set(),
+                        "times": set(),
+                        "years": set(),
+                    },
                 )
                 bucket["ref_ids"].add(ref_id)
                 if descriptions:
@@ -294,9 +516,16 @@ def collect_keywords(
                         bucket["descriptions"].update(filtered)
                 if question_type:
                     bucket["types"].add(str(question_type))
+                if is_period_type(question_type):
+                    segment_source = keyword_segments if keyword_segments else detail_segment
+                    times, years = parse_time_metadata(segment_source)
+                    if times:
+                        bucket["times"] = merge_time_descriptors(bucket["times"], times)
+                    if years:
+                        bucket["years"] = merge_year_descriptors(bucket["years"], years)
 
-    process_pair(passage_left, passage_right)
-    process_pair(option_left, option_right)
+    process_pair(passage_left, passage_right, passage_detail_segments)
+    process_pair(option_left, option_right, option_detail_segments)
 
 
 def generate_keyword_id(used_ids: set[str]) -> str:
@@ -310,84 +539,42 @@ def generate_keyword_id(used_ids: set[str]) -> str:
 
 def upsert_keywords(cur: sqlite3.Cursor, keyword_map: dict[str, dict[str, set[str]]]) -> None:
     if not keyword_map:
+        cur.execute("DELETE FROM keywords")
         return
 
-    cur.execute("SELECT id, keyword, descriptions, ref_id, types FROM keywords")
-    existing_rows = {
-        keyword: {
-            "id": row_id,
-            "descriptions": set(json.loads(descriptions) if descriptions else []),
-            "ref_ids": set(json.loads(ref_ids) if ref_ids else []),
-            "types": set(json.loads(types) if types else []),
-        }
-        for row_id, keyword, descriptions, ref_ids, types in cur.fetchall()
-    }
-    used_ids = {row["id"] for row in existing_rows.values()}
+    cur.execute("DELETE FROM keywords")
+    used_ids: set[str] = set()
 
-    for keyword, data in keyword_map.items():
-        new_descriptions_set = data["descriptions"]
-        new_ref_ids_set = data["ref_ids"]
-        new_types_set = data["types"]
-        normalized_keyword = keyword.replace(" ", "")
-
-        if keyword in existing_rows:
-            row = existing_rows[keyword]
-            cleaned_existing_descriptions = {
-                desc
-                for desc in row["descriptions"]
-                if desc.replace(" ", "") != normalized_keyword
-            }
-            merged_descriptions_set = cleaned_existing_descriptions.union(new_descriptions_set)
-            merged_ref_ids_set = row["ref_ids"].union(new_ref_ids_set)
-            merged_types_set = row["types"].union(new_types_set)
-            if (
-                merged_descriptions_set != row["descriptions"]
-                or merged_ref_ids_set != row["ref_ids"]
-                or merged_types_set != row["types"]
-            ):
-                cur.execute(
-                    """
-                    UPDATE keywords
-                    SET descriptions = ?, ref_id = ?, types = ?
-                    WHERE keyword = ?
-                    """,
-                    (
-                        json.dumps(sorted(merged_descriptions_set), ensure_ascii=False),
-                        json.dumps(sorted(merged_ref_ids_set), ensure_ascii=False),
-                        json.dumps(sorted(merged_types_set), ensure_ascii=False),
-                        keyword,
-                    ),
-                )
-                row["descriptions"] = merged_descriptions_set
-                row["ref_ids"] = merged_ref_ids_set
-                row["types"] = merged_types_set
-        else:
-            keyword_id = generate_keyword_id(used_ids)
-            cur.execute(
-                """
-                INSERT INTO keywords (id, keyword, descriptions, ref_id, types)
-                VALUES (?, ?, ?, ?, ?)
-                """,
-                (
-                    keyword_id,
-                    keyword,
-                    json.dumps(sorted(new_descriptions_set), ensure_ascii=False),
-                    json.dumps(sorted(new_ref_ids_set), ensure_ascii=False),
-                    json.dumps(sorted(new_types_set), ensure_ascii=False),
-                ),
+    for keyword in sorted(keyword_map.keys()):
+        data = keyword_map[keyword]
+        descriptions = json.dumps(sorted(data["descriptions"]), ensure_ascii=False)
+        ref_ids = json.dumps(sorted(data["ref_ids"]), ensure_ascii=False)
+        types = json.dumps(sorted(data["types"]), ensure_ascii=False)
+        times = json.dumps(sorted(data.get("times", set())), ensure_ascii=False)
+        years = json.dumps(sorted(data.get("years", set())), ensure_ascii=False)
+        keyword_id = generate_keyword_id(used_ids)
+        cur.execute(
+            """
+            INSERT INTO keywords (
+                id,
+                keyword,
+                descriptions,
+                ref_id,
+                types,
+                times,
+                years
             )
-            existing_rows[keyword] = {
-                "id": keyword_id,
-                "descriptions": new_descriptions_set,
-                "ref_ids": new_ref_ids_set,
-                "types": new_types_set,
-            }
-
-    obsolete_keywords = set(existing_rows.keys()) - set(keyword_map.keys())
-    if obsolete_keywords:
-        cur.executemany(
-            "DELETE FROM keywords WHERE keyword = ?",
-            ((keyword,) for keyword in obsolete_keywords),
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                keyword_id,
+                keyword,
+                descriptions,
+                ref_ids,
+                types,
+                times,
+                years,
+            ),
         )
 
 
@@ -402,8 +589,18 @@ def upsert_problem(
         form = json.dumps(form, ensure_ascii=False)
     passage_analyze = row.get("passage-analyze")
     analyze = row.get("analyze")
-    passage_left, passage_right, passage_detail = split_dash_entries(passage_analyze)
-    option_left, option_right, option_detail = split_dash_entries(analyze)
+    (
+        passage_left,
+        passage_right,
+        passage_detail,
+        passage_detail_segments,
+    ) = split_dash_entries(passage_analyze)
+    (
+        option_left,
+        option_right,
+        option_detail,
+        option_detail_segments,
+    ) = split_dash_entries(analyze)
     try:
         cur.execute(
             """
@@ -457,8 +654,10 @@ def upsert_problem(
         "number": number,
         "passage_left": passage_left,
         "passage_right": passage_right,
+        "passage_detail_segments": passage_detail_segments,
         "option_left": option_left,
         "option_right": option_right,
+        "option_detail_segments": option_detail_segments,
         "question_type": row.get("type"),
     }
 
@@ -480,6 +679,8 @@ def process_files(cur: sqlite3.Cursor, files: Iterable[Path]) -> Tuple[int, int,
                 problem_context["passage_right"],
                 problem_context["option_left"],
                 problem_context["option_right"],
+                problem_context["passage_detail_segments"],
+                problem_context["option_detail_segments"],
                 problem_context["question_type"],
             )
             total_rows += 1

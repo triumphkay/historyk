@@ -16,13 +16,17 @@ from pathlib import Path
 from typing import Iterable, Tuple
 
 
-def fetch_keywords(conn: sqlite3.Connection) -> Iterable[Tuple[str, str, str, str]]:
+def fetch_keywords(
+    conn: sqlite3.Connection,
+) -> Iterable[Tuple[str, str, str, str, str, str]]:
     cur = conn.cursor()
-    cur.execute("SELECT keyword, descriptions, ref_id, types FROM keywords")
+    cur.execute("SELECT keyword, descriptions, ref_id, types, times, years FROM keywords")
     return cur.fetchall()
 
 
-def sort_keywords(rows: Iterable[Tuple[str, str, str, str]]) -> list[Tuple[str, str, str, str]]:
+def sort_keywords(
+    rows: Iterable[Tuple[str, str, str, str, str, str]]
+) -> list[Tuple[str, str, str, str, str, str]]:
     try:
         locale.setlocale(locale.LC_COLLATE, "ko_KR.UTF-8")
         key = locale.strxfrm
@@ -42,18 +46,59 @@ def normalize_list(value: str) -> list[str]:
     return [str(data)]
 
 
-def format_line(keyword: str, descriptions_json: str, ref_ids_json: str, types_json: str) -> str:
-    descriptions = ", ".join(normalize_list(descriptions_json))
-    types = ", ".join(normalize_list(types_json))
+def build_event_period_segments(times: list[str], years: list[str]) -> list[str]:
+    segments: list[str] = []
+    if times and years:
+        for time in times:
+            for year in years:
+                text = " ".join(part for part in (time, year) if part).strip()
+                if text:
+                    segments.append(text)
+    elif times:
+        segments.extend(time.strip() for time in times if time.strip())
+    elif years:
+        segments.extend(year.strip() for year in years if year.strip())
+
+    seen: set[str] = set()
+    unique: list[str] = []
+    for item in segments:
+        if item not in seen:
+            seen.add(item)
+            unique.append(item)
+    return unique
+
+
+def format_line(
+    keyword: str,
+    descriptions_json: str,
+    ref_ids_json: str,
+    types_json: str,
+    times_json: str,
+    years_json: str,
+) -> str:
+    types_list = normalize_list(types_json)
+    descriptions_list = normalize_list(descriptions_json)
+    times_list = normalize_list(times_json)
+    years_list = normalize_list(years_json)
+
+    descriptions_text = ", ".join(descriptions_list)
+    period_segments = build_event_period_segments(times_list, years_list)
+    period_text = ", ".join(period_segments)
+    if period_text:
+        descriptions_text = (
+            f"{descriptions_text}, {period_text}" if descriptions_text else period_text
+        )
+
+    types = ", ".join(types_list)
     suffix = f" ({types})" if types else ""
-    return f"{keyword}{suffix} - {descriptions}"
+    return f"{keyword}{suffix} - {descriptions_text}"
 
 
-def write_output(rows: Iterable[Tuple[str, str, str, str]], output_path: Path) -> None:
+def write_output(rows: Iterable[Tuple[str, str, str, str, str, str]], output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8") as fh:
-        for keyword, descriptions, ref_ids, types in rows:
-            fh.write(format_line(keyword, descriptions, ref_ids, types) + "\n")
+        for keyword, descriptions, ref_ids, types, times, years in rows:
+            fh.write(format_line(keyword, descriptions, ref_ids, types, times, years) + "\n")
 
 
 def main() -> None:
