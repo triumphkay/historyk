@@ -15,7 +15,7 @@ import json
 import re
 import sqlite3
 from pathlib import Path
-from typing import Iterable, List, Tuple
+from typing import Callable, Iterable, List, Tuple
 
 
 def read_json(path: Path) -> List[dict]:
@@ -99,9 +99,11 @@ def ensure_schema(cur: sqlite3.Cursor) -> None:
             keyword TEXT NOT NULL UNIQUE,
             descriptions TEXT NOT NULL,
             ref_id TEXT NOT NULL,
+            question_ref_id TEXT NOT NULL,
             types TEXT NOT NULL,
             times TEXT NOT NULL,
-            years TEXT NOT NULL
+            years TEXT NOT NULL,
+            scores TEXT NOT NULL
         )
         """
     )
@@ -109,10 +111,14 @@ def ensure_schema(cur: sqlite3.Cursor) -> None:
     keyword_columns = {row[1] for row in cur.fetchall()}
     if "types" not in keyword_columns:
         cur.execute("ALTER TABLE keywords ADD COLUMN types TEXT NOT NULL DEFAULT '[]'")
+    if "question_ref_id" not in keyword_columns:
+        cur.execute("ALTER TABLE keywords ADD COLUMN question_ref_id TEXT NOT NULL DEFAULT '[]'")
     if "times" not in keyword_columns:
         cur.execute("ALTER TABLE keywords ADD COLUMN times TEXT NOT NULL DEFAULT '[]'")
     if "years" not in keyword_columns:
         cur.execute("ALTER TABLE keywords ADD COLUMN years TEXT NOT NULL DEFAULT '[]'")
+    if "scores" not in keyword_columns:
+        cur.execute("ALTER TABLE keywords ADD COLUMN scores TEXT NOT NULL DEFAULT '[]'")
 
 
 def resolve_number(raw_number, fallback: int) -> int:
@@ -469,27 +475,27 @@ def collect_keywords(
     passage_detail_segments: list[list[str]],
     option_detail_segments: list[list[str]],
     question_type: str | None,
+    answer_value_raw,
 ) -> None:
     ref_id = f"{session}{number:02d}"
-
-    def normalize_keyword(keyword: str) -> str:
-        cleaned = keyword.strip()
-        if question_type in {"사건", "사건-시기"} and cleaned.endswith("설치"):
-            cleaned = cleaned[: - len("설치")].rstrip()
-        return cleaned
 
     def process_pair(
         left_entries: list[str],
         right_entries: list[str],
         detail_segments: list[list[str]],
+        *,
+        is_passage: bool,
+        score_provider: Callable[[int], int],
     ) -> None:
-        for left, right, detail_segment in zip(left_entries, right_entries, detail_segments):
+        for idx, (left, right, detail_segment) in enumerate(
+            zip(left_entries, right_entries, detail_segments)
+        ):
             if not right:
                 continue
             for keyword in split_keywords(right):
                 keyword_segments = extract_parenthetical_segments(keyword)
                 keyword = remove_parenthetical_segments(keyword)
-                keyword = normalize_keyword(keyword)
+                keyword = normalize_age_keyword(keyword)
                 if not keyword:
                     continue
                 left_clean = strip_leading_marker(left)
@@ -498,13 +504,18 @@ def collect_keywords(
                     keyword,
                     {
                         "ref_ids": set(),
+                        "question_ref_ids": set(),
                         "descriptions": set(),
                         "types": set(),
                         "times": set(),
                         "years": set(),
+                        "scores": [],
                     },
                 )
-                bucket["ref_ids"].add(ref_id)
+                if is_passage:
+                    bucket["question_ref_ids"].add(ref_id)
+                else:
+                    bucket["ref_ids"].add(ref_id)
                 if descriptions:
                     normalized_keyword = keyword.replace(" ", "")
                     filtered = {
@@ -523,9 +534,31 @@ def collect_keywords(
                         bucket["times"] = merge_time_descriptors(bucket["times"], times)
                     if years:
                         bucket["years"] = merge_year_descriptors(bucket["years"], years)
+                bucket["scores"].append(score_provider(idx))
 
-    process_pair(passage_left, passage_right, passage_detail_segments)
-    process_pair(option_left, option_right, option_detail_segments)
+    answer_value: int | None = None
+    try:
+        if answer_value_raw is not None:
+            answer_value = int(answer_value_raw)
+    except (ValueError, TypeError):
+        answer_value = None
+
+    process_pair(
+        passage_left,
+        passage_right,
+        passage_detail_segments,
+        is_passage=True,
+        score_provider=lambda _idx: 3,
+    )
+    process_pair(
+        option_left,
+        option_right,
+        option_detail_segments,
+        is_passage=False,
+        score_provider=lambda idx: 2
+        if answer_value is not None and (idx + 1) == answer_value
+        else 1,
+    )
 
 
 def generate_keyword_id(used_ids: set[str]) -> str:
@@ -549,9 +582,13 @@ def upsert_keywords(cur: sqlite3.Cursor, keyword_map: dict[str, dict[str, set[st
         data = keyword_map[keyword]
         descriptions = json.dumps(sorted(data["descriptions"]), ensure_ascii=False)
         ref_ids = json.dumps(sorted(data["ref_ids"]), ensure_ascii=False)
+        question_ref_ids = json.dumps(
+            sorted(data.get("question_ref_ids", set())), ensure_ascii=False
+        )
         types = json.dumps(sorted(data["types"]), ensure_ascii=False)
         times = json.dumps(sorted(data.get("times", set())), ensure_ascii=False)
         years = json.dumps(sorted(data.get("years", set())), ensure_ascii=False)
+        scores = json.dumps(data.get("scores", []), ensure_ascii=False)
         keyword_id = generate_keyword_id(used_ids)
         cur.execute(
             """
@@ -560,20 +597,24 @@ def upsert_keywords(cur: sqlite3.Cursor, keyword_map: dict[str, dict[str, set[st
                 keyword,
                 descriptions,
                 ref_id,
+                question_ref_id,
                 types,
                 times,
-                years
+                years,
+                scores
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 keyword_id,
                 keyword,
                 descriptions,
                 ref_ids,
+                question_ref_ids,
                 types,
                 times,
                 years,
+                scores,
             ),
         )
 
@@ -659,6 +700,7 @@ def upsert_problem(
         "option_right": option_right,
         "option_detail_segments": option_detail_segments,
         "question_type": row.get("type"),
+        "answer": row.get("answer"),
     }
 
 
@@ -682,6 +724,7 @@ def process_files(cur: sqlite3.Cursor, files: Iterable[Path]) -> Tuple[int, int,
                 problem_context["passage_detail_segments"],
                 problem_context["option_detail_segments"],
                 problem_context["question_type"],
+                problem_context["answer"],
             )
             total_rows += 1
     return total_files, total_rows, keyword_map
@@ -711,6 +754,32 @@ def main() -> None:
         print(f"Processed {processed_files} files, inserted {inserted_rows} rows into {db_path}.")
     finally:
         conn.close()
+
+
+_AGE_KEYWORD_MAP: dict[str, str] | None = None
+
+
+def normalize_age_keyword(keyword: str) -> str:
+    global _AGE_KEYWORD_MAP
+    if _AGE_KEYWORD_MAP is None:
+        _AGE_KEYWORD_MAP = {}
+        age_file = Path(__file__).resolve().parent.parent / "database" / "age-keywords.txt"
+        if age_file.exists():
+            lines = [
+                line.strip()
+                for line in age_file.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            existing = set(lines)
+            for line in lines:
+                parts = line.split()
+                if len(parts) >= 3:
+                    canonical = " ".join([parts[0]] + parts[2:])
+                    if canonical in existing:
+                        _AGE_KEYWORD_MAP[line] = canonical
+    if not keyword:
+        return keyword
+    return _AGE_KEYWORD_MAP.get(keyword, keyword) if _AGE_KEYWORD_MAP else keyword
 
 
 if __name__ == "__main__":

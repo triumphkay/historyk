@@ -18,21 +18,27 @@ from typing import Iterable, Tuple
 
 def fetch_keywords(
     conn: sqlite3.Connection,
-) -> Iterable[Tuple[str, str, str, str, str, str]]:
+) -> Iterable[Tuple[str, str, str, str, str, str, str]]:
     cur = conn.cursor()
-    cur.execute("SELECT keyword, descriptions, ref_id, types, times, years FROM keywords")
+    cur.execute(
+        "SELECT keyword, descriptions, ref_id, types, times, years, scores FROM keywords"
+    )
     return cur.fetchall()
 
 
 def sort_keywords(
-    rows: Iterable[Tuple[str, str, str, str, str, str]]
-) -> list[Tuple[str, str, str, str, str, str]]:
+    rows: Iterable[Tuple[str, str, str, str, str, str, str]]
+) -> list[Tuple[int, Tuple[str, str, str, str, str, str, str]]]:
     try:
         locale.setlocale(locale.LC_COLLATE, "ko_KR.UTF-8")
         key = locale.strxfrm
     except locale.Error:
         key = lambda value: value  # type: ignore[assignment]
-    return sorted(rows, key=lambda row: key(row[0]))
+    scored_rows = []
+    for row in rows:
+        score_total = calculate_score_sum(row[6])
+        scored_rows.append((score_total, row))
+    return sorted(scored_rows, key=lambda item: key(item[1][0]))
 
 
 def normalize_list(value: str) -> list[str]:
@@ -68,6 +74,23 @@ def build_event_period_segments(times: list[str], years: list[str]) -> list[str]
     return unique
 
 
+def calculate_score_sum(scores_json: str) -> int:
+    total = 0
+    if not scores_json:
+        return total
+    try:
+        data = json.loads(scores_json)
+    except json.JSONDecodeError:
+        return total
+    if isinstance(data, list):
+        for item in data:
+            try:
+                total += int(item)
+            except (ValueError, TypeError):
+                continue
+    return total
+
+
 def format_line(
     keyword: str,
     descriptions_json: str,
@@ -75,6 +98,7 @@ def format_line(
     types_json: str,
     times_json: str,
     years_json: str,
+    scores_json: str,
 ) -> str:
     types_list = normalize_list(types_json)
     descriptions_list = normalize_list(descriptions_json)
@@ -94,11 +118,19 @@ def format_line(
     return f"{keyword}{suffix} - {descriptions_text}"
 
 
-def write_output(rows: Iterable[Tuple[str, str, str, str, str, str]], output_path: Path) -> None:
+def write_output(
+    rows: Iterable[Tuple[int, Tuple[str, str, str, str, str, str, str]]],
+    output_path: Path,
+) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("w", encoding="utf-8") as fh:
-        for keyword, descriptions, ref_ids, types, times, years in rows:
-            fh.write(format_line(keyword, descriptions, ref_ids, types, times, years) + "\n")
+        for _score_total, (keyword, descriptions, ref_ids, types, times, years, scores) in rows:
+            fh.write(
+                format_line(
+                    keyword, descriptions, ref_ids, types, times, years, scores
+                )
+                + "\n"
+            )
 
 
 def main() -> None:
