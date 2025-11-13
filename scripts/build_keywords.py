@@ -49,6 +49,26 @@ def main() -> None:
         default="database/keywords.txt",
         help="키워드 텍스트 출력 경로 (기본값: database/keywords.txt)",
     )
+    parser.add_argument(
+        "--all-output",
+        default="database/all-keywords.txt",
+        help="추가 키워드 목록 출력 경로 (기본값: database/all-keywords.txt)",
+    )
+    parser.add_argument(
+        "--all-wo-period-output",
+        default="database/all-keywords-wo.txt",
+        help="사건-시기 제외 키워드 목록 경로 (기본값: database/all-keywords-wo.txt)",
+    )
+    parser.add_argument(
+        "--period-output",
+        default="database/keywords-wo.txt",
+        help="사건-시기 키워드 목록 경로 (기본값: database/keywords-wo.txt)",
+    )
+    parser.add_argument(
+        "--non-period-output",
+        default=None,
+        help="사건-시기 제외 키워드 목록 경로",
+    )
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parent.parent
@@ -68,16 +88,25 @@ def main() -> None:
             str(args.db),
         ],
     )
+    export_command = [
+        sys.executable,
+        str(export_script),
+        "--db",
+        str(args.db),
+        "--output",
+        str(args.output),
+    ]
+    if args.all_output:
+        export_command.extend(["--all-output", str(args.all_output)])
+    if args.all_wo_period_output:
+        export_command.extend(["--all-without-period-output", str(args.all_wo_period_output)])
+    if args.period_output:
+        export_command.extend(["--period-output", str(args.period_output)])
+    if args.non_period_output:
+        export_command.extend(["--non-period-output", str(args.non_period_output)])
     run_command(
         "키워드 텍스트 내보내기",
-        [
-            sys.executable,
-            str(export_script),
-            "--db",
-            str(args.db),
-            "--output",
-            str(args.output),
-        ],
+        export_command,
     )
     print("[build] 완료되었습니다.")
 

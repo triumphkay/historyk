@@ -107,6 +107,21 @@ def ensure_schema(cur: sqlite3.Cursor) -> None:
         )
         """
     )
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS event (
+            id TEXT NOT NULL PRIMARY KEY,
+            keyword TEXT NOT NULL UNIQUE,
+            descriptions TEXT NOT NULL,
+            ref_id TEXT NOT NULL,
+            question_ref_id TEXT NOT NULL,
+            types TEXT NOT NULL,
+            times TEXT NOT NULL,
+            years TEXT NOT NULL,
+            scores TEXT NOT NULL
+        )
+        """
+    )
     cur.execute("PRAGMA table_info(keywords)")
     keyword_columns = {row[1] for row in cur.fetchall()}
     if "types" not in keyword_columns:
@@ -119,6 +134,20 @@ def ensure_schema(cur: sqlite3.Cursor) -> None:
         cur.execute("ALTER TABLE keywords ADD COLUMN years TEXT NOT NULL DEFAULT '[]'")
     if "scores" not in keyword_columns:
         cur.execute("ALTER TABLE keywords ADD COLUMN scores TEXT NOT NULL DEFAULT '[]'")
+    cur.execute("PRAGMA table_info(event)")
+    event_columns = {row[1] for row in cur.fetchall()}
+    required_columns = [
+        ("descriptions", "TEXT NOT NULL DEFAULT '[]'"),
+        ("ref_id", "TEXT NOT NULL DEFAULT '[]'"),
+        ("question_ref_id", "TEXT NOT NULL DEFAULT '[]'"),
+        ("types", "TEXT NOT NULL DEFAULT '[]'"),
+        ("times", "TEXT NOT NULL DEFAULT '[]'"),
+        ("years", "TEXT NOT NULL DEFAULT '[]'"),
+        ("scores", "TEXT NOT NULL DEFAULT '[]'"),
+    ]
+    for column, definition in required_columns:
+        if column not in event_columns:
+            cur.execute(f"ALTER TABLE event ADD COLUMN {column} {definition}")
 
 
 def resolve_number(raw_number, fallback: int) -> int:
@@ -570,16 +599,14 @@ def generate_keyword_id(used_ids: set[str]) -> str:
     raise RuntimeError("Unable to allocate new keyword id; exhausted 4-digit space.")
 
 
-def upsert_keywords(cur: sqlite3.Cursor, keyword_map: dict[str, dict[str, set[str]]]) -> None:
-    if not keyword_map:
-        cur.execute("DELETE FROM keywords")
-        return
-
-    cur.execute("DELETE FROM keywords")
+def _write_keyword_table(
+    cur: sqlite3.Cursor,
+    table_name: str,
+    entries: list[tuple[str, dict[str, set[str]]]],
+) -> None:
+    cur.execute(f"DELETE FROM {table_name}")
     used_ids: set[str] = set()
-
-    for keyword in sorted(keyword_map.keys()):
-        data = keyword_map[keyword]
+    for keyword, data in entries:
         descriptions = json.dumps(sorted(data["descriptions"]), ensure_ascii=False)
         ref_ids = json.dumps(sorted(data["ref_ids"]), ensure_ascii=False)
         question_ref_ids = json.dumps(
@@ -591,8 +618,8 @@ def upsert_keywords(cur: sqlite3.Cursor, keyword_map: dict[str, dict[str, set[st
         scores = json.dumps(data.get("scores", []), ensure_ascii=False)
         keyword_id = generate_keyword_id(used_ids)
         cur.execute(
-            """
-            INSERT INTO keywords (
+            f"""
+            INSERT INTO {table_name} (
                 id,
                 keyword,
                 descriptions,
@@ -617,6 +644,85 @@ def upsert_keywords(cur: sqlite3.Cursor, keyword_map: dict[str, dict[str, set[st
                 scores,
             ),
         )
+
+
+def upsert_keywords(cur: sqlite3.Cursor, keyword_map: dict[str, dict[str, set[str]]]) -> None:
+    if not keyword_map:
+        cur.execute("DELETE FROM keywords")
+        cur.execute("DELETE FROM event")
+        return
+
+    def clone_data(data: dict[str, set[str]]) -> dict[str, set[str]]:
+        return {
+            "descriptions": set(data["descriptions"]),
+            "ref_ids": set(data["ref_ids"]),
+            "question_ref_ids": set(data.get("question_ref_ids", set())),
+            "types": set(data["types"]),
+            "times": set(data.get("times", set())),
+            "years": set(data.get("years", set())),
+            "scores": list(data.get("scores", [])),
+        }
+
+    def add_entry(store: dict[str, dict[str, set[str]]], keyword: str, data: dict[str, set[str]]) -> None:
+        entry = store.setdefault(
+            keyword,
+            {
+                "descriptions": set(),
+                "ref_ids": set(),
+                "question_ref_ids": set(),
+                "types": set(),
+                "times": set(),
+                "years": set(),
+                "scores": [],
+            },
+        )
+        entry["descriptions"].update(data["descriptions"])
+        entry["ref_ids"].update(data["ref_ids"])
+        entry["question_ref_ids"].update(data.get("question_ref_ids", set()))
+        entry["types"].update(data["types"])
+        entry["times"].update(data.get("times", set()))
+        entry["years"].update(data.get("years", set()))
+        entry["scores"].extend(data.get("scores", []))
+
+    base_store: dict[str, dict[str, set[str]]] = {}
+    event_store: dict[str, dict[str, set[str]]] = {}
+
+    for keyword, data in keyword_map.items():
+        data_clone = clone_data(data)
+        types = data_clone["types"]
+        period_types = {t for t in types if t.endswith("시기")}
+        has_period_type = bool(period_types)
+        all_period_type = has_period_type and len(period_types) == len(types)
+        normalized_keyword = keyword
+        if has_period_type:
+            add_entry(event_store, keyword, data_clone)
+        if not all_period_type:
+            adjusted_data = clone_data(data_clone)
+            adjusted_data["types"].difference_update(period_types)
+            add_entry(base_store, keyword, adjusted_data)
+        else:
+            normalized_keyword, stripped = strip_keyword_suffix(keyword)
+            if stripped and normalized_keyword:
+                adjusted_data = clone_data(data_clone)
+                adjusted_data["types"].clear()
+                add_entry(base_store, normalized_keyword, adjusted_data)
+
+    trimmed_keywords = set()
+    for keyword in event_store:
+        trimmed, stripped = strip_keyword_suffix(keyword)
+        if stripped and trimmed:
+            trimmed_keywords.add(trimmed)
+
+    for trimmed_keyword in trimmed_keywords:
+        entry = base_store.get(trimmed_keyword)
+        if entry is not None and not entry["descriptions"]:
+            del base_store[trimmed_keyword]
+
+    base_entries = sorted(base_store.items())
+    event_entries = sorted(event_store.items())
+
+    _write_keyword_table(cur, "keywords", base_entries)
+    _write_keyword_table(cur, "event", event_entries)
 
 
 def upsert_problem(
@@ -757,6 +863,36 @@ def main() -> None:
 
 
 _AGE_KEYWORD_MAP: dict[str, str] | None = None
+_KEYWORD_SUFFIXES = [
+    "설치",
+    "시행",
+    "제정",
+    "공포",
+    "반포",
+    "창립",
+    "전개",
+    "조직",
+    "선포",
+    "결성",
+    "발표",
+    "간행",
+    "설립",
+    "주장",
+    "개척",
+    "파견",
+    "창간",
+    "창설",
+    "체결",
+    "저술",
+    "건의",
+    "강요",
+    "창건",
+    "조판",
+    "구성",
+    "시작",
+    "축조",
+    "채택",
+]
 
 
 def normalize_age_keyword(keyword: str) -> str:
@@ -780,6 +916,13 @@ def normalize_age_keyword(keyword: str) -> str:
     if not keyword:
         return keyword
     return _AGE_KEYWORD_MAP.get(keyword, keyword) if _AGE_KEYWORD_MAP else keyword
+
+
+def strip_keyword_suffix(keyword: str) -> tuple[str, bool]:
+    for suffix in _KEYWORD_SUFFIXES:
+        if keyword.endswith(suffix):
+            return keyword[: -len(suffix)].rstrip(), True
+    return keyword, False
 
 
 if __name__ == "__main__":
