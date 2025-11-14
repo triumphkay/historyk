@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Rebuild korean-history database and export keywords in one step.
+Generate korean-history.db tables and export keyword text files.
 
-Usage:
-    python3 scripts/build_keywords.py \
-        --input sources \
-        --db database/korean-history.db \
-        --output database/keywords.txt
+Pipeline order:
+1. sessions (json_to_sessions.py)
+2. event (sessions_to_event.py)
+3. keywords (sessions_to_keywords.py)
+4. Keyword text exports (export_keywords.py)
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ def run_command(description: str, command: list[str]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Rebuild database and export keywords in sequence."
+        description="Rebuild database tables (sessions → event → keywords) and export keyword lists."
     )
     parser.add_argument(
         "--input",
@@ -74,39 +74,38 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     scripts_dir = repo_root / "scripts"
 
-    json_script = scripts_dir / "json_to_sqlite.py"
-    export_script = scripts_dir / "export_keywords.py"
+    session_script = scripts_dir / "json_to_sessions.py"
+    event_script = scripts_dir / "sessions_to_events.py"
+    keyword_script = scripts_dir / "sessions_to_keywords.py"
 
     run_command(
-        "DB 생성",
+        "sessions 테이블 생성",
         [
             sys.executable,
-            str(json_script),
+            str(session_script),
             "--input",
             str(args.input),
             "--db",
             str(args.db),
         ],
     )
-    export_command = [
-        sys.executable,
-        str(export_script),
-        "--db",
-        str(args.db),
-        "--output",
-        str(args.output),
-    ]
-    if args.all_output:
-        export_command.extend(["--all-output", str(args.all_output)])
-    if args.all_wo_period_output:
-        export_command.extend(["--all-without-period-output", str(args.all_wo_period_output)])
-    if args.period_output:
-        export_command.extend(["--period-output", str(args.period_output)])
-    if args.non_period_output:
-        export_command.extend(["--non-period-output", str(args.non_period_output)])
     run_command(
-        "키워드 텍스트 내보내기",
-        export_command,
+        "event 테이블 생성",
+        [
+            sys.executable,
+            str(event_script),
+            "--db",
+            str(args.db),
+        ],
+    )
+    run_command(
+        "keywords 테이블 생성",
+        [
+            sys.executable,
+            str(keyword_script),
+            "--db",
+            str(args.db),
+        ],
     )
     print("[build] 완료되었습니다.")
 
