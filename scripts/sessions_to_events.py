@@ -60,12 +60,41 @@ def _split_time_year(detail: str | None) -> tuple[str, str]:
     if not detail:
         return "", ""
     detail = str(detail).strip()
+    special_time, start_offset = _extract_goryeo_jeongjong(detail)
+    if special_time:
+        years = _validate_year_segment(_extract_year_segment(detail, start_offset=start_offset))
+        return special_time, years
     match = DIGIT_PATTERN.search(detail)
     if not match:
         return detail, ""
     times = detail[: match.start()].strip()
-    years = detail[match.start():].strip()
+    years = _validate_year_segment(detail[match.start():].strip())
     return times, years
+
+
+def _extract_year_segment(detail: str, *, start_offset: int = 0) -> str:
+    match = DIGIT_PATTERN.search(detail, start_offset)
+    if not match:
+        return ""
+    return detail[match.start():].strip()
+
+
+def _extract_goryeo_jeongjong(detail: str) -> tuple[str, int]:
+    """Handle the Goryeo Jeongjong special-case rules."""
+    if "고려" not in detail or "정종" not in detail:
+        return "", 0
+    if "10대_정종" in detail:
+        idx = detail.index("10대_정종") + len("10대_정종")
+        return "고려 10대_정종", idx
+    return "고려 정종", 0
+
+
+def _validate_year_segment(years: str) -> str:
+    disallowed_tokens = {"정종", "10대_정종"}
+    for token in disallowed_tokens:
+        if token and token in years:
+            raise ValueError(f"years '{years}' 에 허용되지 않은 문자열({token})이 포함되어 있습니다.")
+    return years
 
 
 def _normalize_years(years: str | None) -> tuple[str, str, str]:

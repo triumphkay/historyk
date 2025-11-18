@@ -10,6 +10,9 @@ const ROOT = path.resolve(__dirname, '..');
 const DB_PATH = path.join(ROOT, 'database', 'korean-history.db');
 const OUTPUT_PATH = path.join(ROOT, 'publish', 'assets', 'db.json');
 
+const KEYWORD_TYPES_PATH = path.join(ROOT, 'database', 'keyword-types.json');
+const TYPES_OUTPUT_PATH = path.join(ROOT, 'publish', 'assets', 'keyword-types.json');
+
 const ensureArray = (value) => {
   if (Array.isArray(value)) {
     return value;
@@ -65,6 +68,13 @@ const main = () => {
 
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify(formatted, null, 2), 'utf8');
   console.log(`Generated ${formatted.length} keyword records at ${OUTPUT_PATH}`);
+
+  if (fs.existsSync(KEYWORD_TYPES_PATH)) {
+    fs.copyFileSync(KEYWORD_TYPES_PATH, TYPES_OUTPUT_PATH);
+    console.log(`Copied keyword type definitions to ${TYPES_OUTPUT_PATH}`);
+  } else {
+    console.warn('keyword-types.json not found; skipping copy.');
+  }
 };
 
 main();

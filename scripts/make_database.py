@@ -77,6 +77,7 @@ def main() -> None:
     session_script = scripts_dir / "json_to_sessions.py"
     event_script = scripts_dir / "sessions_to_events.py"
     keyword_script = scripts_dir / "sessions_to_keywords.py"
+    key_age_script = scripts_dir / "update_key_age.py"
 
     run_command(
         "sessions 테이블 생성",
@@ -105,6 +106,13 @@ def main() -> None:
             str(keyword_script),
             "--db",
             str(args.db),
+        ],
+    )
+    run_command(
+        "\"key-age\" JSON 업데이트",
+        [
+            sys.executable,
+            str(key_age_script),
         ],
     )
     print("[build] 완료되었습니다.")
