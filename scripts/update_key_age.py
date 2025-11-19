@@ -7,6 +7,7 @@ from pathlib import Path
 ALLOWED_NATIONS = {
     "고구려",
     "고려",
+    "조선",
     "신라",
     "후백제",
     "고조선",
@@ -25,6 +26,46 @@ PERIOD_WORDS = {"상대", "중대", "하대", "무신집권기"}
 
 DB_PATH = Path("database/korean-history.db")
 KEYWORD_TYPES_PATH = Path("database/keyword-types.json")
+
+
+def _build_age_index(ages):
+    if not isinstance(ages, list):
+        raise ValueError("keyword-types.json 내 ages 배열이 필요합니다.")
+    order = []
+    index = {}
+    for idx, value in enumerate(ages):
+        normalized = str(value).strip()
+        order.append(normalized)
+        if normalized and normalized not in index:
+            index[normalized] = idx
+    return order, index
+
+
+def _find_nation_position(nation: str, ages: list[str]) -> int:
+    prefix = f"{nation} "
+    for idx, value in enumerate(ages):
+        if value == nation or value.startswith(prefix):
+            return idx
+    raise ValueError(f"ages 배열에서 nation '{nation}'을 찾을 수 없습니다.")
+
+
+def _sort_entries_by_age(
+    nation: str, entries: list[str], age_index: dict[str, int]
+) -> list[str]:
+    indexed_entries = []
+    for entry in entries:
+        normalized_entry = entry.strip()
+        if not normalized_entry:
+            continue
+        if nation == "대한민국" and normalized_entry.endswith("정부"):
+            label = normalized_entry
+        else:
+            label = f"{nation} {normalized_entry}"
+        if label not in age_index:
+            raise ValueError(f"ages 배열에서 '{label}'을 찾을 수 없습니다.")
+        indexed_entries.append((age_index[label], normalized_entry))
+    indexed_entries.sort(key=lambda item: item[0])
+    return [entry for _, entry in indexed_entries]
 
 
 def is_period_word(word: str) -> bool:
@@ -114,12 +155,17 @@ def update_keyword_types(nation_lists):
     with KEYWORD_TYPES_PATH.open(encoding="utf-8") as fh:
         keyword_data = json.load(fh)
 
+    ages, age_index = _build_age_index(keyword_data.get("ages"))
     keyword_data.pop("key-age", None)
 
-    key_age = [
-        {"nation": nation, "list": entries}
-        for nation, entries in sorted(nation_lists.items(), key=lambda item: item[0])
-    ]
+    ordered_entries = []
+    for nation, entries in nation_lists.items():
+        nation_position = _find_nation_position(nation, ages)
+        sorted_entries = _sort_entries_by_age(nation, entries, age_index)
+        ordered_entries.append((nation_position, {"nation": nation, "list": sorted_entries}))
+
+    ordered_entries.sort(key=lambda item: item[0])
+    key_age = [entry for _, entry in ordered_entries]
 
     keyword_data["key-age"] = key_age
 

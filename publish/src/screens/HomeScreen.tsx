@@ -20,6 +20,9 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <Button mode="contained" onPress={() => navigation.navigate('Quiz')}>
         키워드 문제
       </Button>
+      <Button mode="contained" onPress={() => navigation.navigate('KeywordEraQuiz')}>
+        키워드 시대
+      </Button>
     </Surface>
   );
 };

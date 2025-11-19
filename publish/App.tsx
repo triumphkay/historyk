@@ -7,8 +7,10 @@ import HeadIcon from './assets/head.svg';
 import HomeScreen from './src/screens/HomeScreen';
 import KeywordListScreen from './src/screens/KeywordListScreen';
 import QuizScreen from './src/screens/QuizScreen';
+import KeywordEraQuizScreen from './src/screens/KeywordEraQuizScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import { QuizProvider } from './src/context/QuizContext';
+import { EraQuizProvider } from './src/context/EraQuizContext';
 import { ThemePreferenceProvider, useThemePreference } from './src/context/ThemePreferenceContext';
 import { RootStackParamList } from './src/types/navigation';
 import { darkTheme, lightTheme } from './src/theme';
@@ -17,7 +19,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const NavigationHeader: React.FC<NativeStackHeaderProps> = ({ navigation, route, options }) => {
   const theme = useTheme();
-  const title = options.title ?? route.name;
   const isHome = route.name === 'Home';
   const iconColor = theme.dark ? '#FFFFFF' : undefined;
 
@@ -71,6 +72,7 @@ const AppNavigator = () => (
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: '홈' }} />
       <Stack.Screen name="KeywordList" component={KeywordListScreen} options={{ title: '키워드 목록' }} />
       <Stack.Screen name="Quiz" component={QuizScreen} options={{ title: '키워드 문제' }} />
+      <Stack.Screen name="KeywordEraQuiz" component={KeywordEraQuizScreen} options={{ title: '키워드 시대' }} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: '설정' }} />
     </Stack.Navigator>
   </NavigationContainer>
@@ -89,7 +91,9 @@ const ThemedApp: React.FC = () => {
   return (
     <PaperProvider theme={currentTheme}>
       <QuizProvider>
-        <AppNavigator />
+        <EraQuizProvider>
+          <AppNavigator />
+        </EraQuizProvider>
       </QuizProvider>
     </PaperProvider>
   );

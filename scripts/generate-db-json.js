@@ -10,8 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DB_PATH = path.join(ROOT, 'database', 'korean-history.db');
 const OUTPUT_PATH = path.join(ROOT, 'publish', 'assets', 'db.json');
 
-const KEYWORD_TYPES_PATH = path.join(ROOT, 'database', 'keyword-types.json');
-const TYPES_OUTPUT_PATH = path.join(ROOT, 'publish', 'assets', 'keyword-types.json');
+const EVENTS_OUTPUT_PATH = path.join(ROOT, 'publish', 'assets', 'events.json');
 
 const ensureArray = (value) => {
   if (Array.isArray(value)) {
@@ -69,12 +68,30 @@ const main = () => {
   fs.writeFileSync(OUTPUT_PATH, JSON.stringify(formatted, null, 2), 'utf8');
   console.log(`Generated ${formatted.length} keyword records at ${OUTPUT_PATH}`);
 
-  if (fs.existsSync(KEYWORD_TYPES_PATH)) {
-    fs.copyFileSync(KEYWORD_TYPES_PATH, TYPES_OUTPUT_PATH);
-    console.log(`Copied keyword type definitions to ${TYPES_OUTPUT_PATH}`);
-  } else {
-    console.warn('keyword-types.json not found; skipping copy.');
+  let eventsRaw;
+  try {
+    eventsRaw = execSync(
+      `sqlite3 -json ${JSON.stringify(DB_PATH)} "SELECT id, keyword, ref_id, q_ref_id, times, years, score, type FROM events"`,
+      { encoding: 'utf8' }
+    );
+  } catch (error) {
+    console.error('Failed to fetch events data:', error.message);
+    process.exit(1);
   }
+
+  const eventRows = JSON.parse(eventsRaw || '[]').map((row) => ({
+    id: row.id,
+    keyword: row.keyword,
+    ref_id: ensureArray(row.ref_id),
+    q_ref_id: ensureArray(row.q_ref_id),
+    times: ensureArray(row.times),
+    years: row.years || '',
+    score: ensureArray(row.score).map((value) => Number(value)),
+    types: ensureArray(row.type)
+  }));
+
+  fs.writeFileSync(EVENTS_OUTPUT_PATH, JSON.stringify(eventRows, null, 2), 'utf8');
+  console.log(`Generated ${eventRows.length} event records at ${EVENTS_OUTPUT_PATH}`);
 };
 
 main();
