@@ -74,11 +74,19 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     scripts_dir = repo_root / "scripts"
 
+    age_list_script = scripts_dir / "update-age-list.py"
     session_script = scripts_dir / "json_to_sessions.py"
     event_script = scripts_dir / "sessions_to_events.py"
     keyword_script = scripts_dir / "sessions_to_keywords.py"
     key_age_script = scripts_dir / "update_key_age.py"
 
+    run_command(
+        "연령 리스트 업데이트",
+        [
+            sys.executable,
+            str(age_list_script),
+        ],
+    )
     run_command(
         "sessions 테이블 생성",
         [

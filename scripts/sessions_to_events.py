@@ -23,7 +23,26 @@ DIGIT_PATTERN = re.compile(r"\d")
 YEAR_PREFIX_PATTERN = re.compile(r"^(\d{1,4})년")
 BCE_PATTERN = re.compile(r"^(기원전\s*\d+년|기원전\s*\d+세기)")
 CONFIG_PATH = Path(__file__).resolve().parent.parent / "database" / "keyword-types.json"
+TIMETABLE_PATH = Path(__file__).resolve().parent.parent / "database" / "timetable.json"
 _AGE_KEYWORDS: set[str] | None = None
+_TIMETABLE_LOOKUP: dict[str, object] | None = None
+ROYAL_TITLE_SUFFIXES = {"마립간", "이사금", "차차웅", "거서간"}
+_BCE_TOKEN = "기원전"
+
+
+def _load_timetable_lookup() -> dict[str, object]:
+    global _TIMETABLE_LOOKUP
+    if _TIMETABLE_LOOKUP is not None:
+        return _TIMETABLE_LOOKUP
+    if not TIMETABLE_PATH.exists():
+        raise FileNotFoundError(f"연표 설정 파일을 찾을 수 없습니다: {TIMETABLE_PATH}")
+    try:
+        payload = json.loads(TIMETABLE_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:  # pragma: no cover - defensive
+        raise ValueError(f"{TIMETABLE_PATH} 파싱 실패: {exc}") from exc
+    lookup = _build_timetable_lookup(payload)
+    _TIMETABLE_LOOKUP = lookup
+    return lookup
 
 
 def _load_age_keywords() -> set[str]:
@@ -42,6 +61,163 @@ def _load_age_keywords() -> set[str]:
     entries = {str(item).strip() for item in ages if str(item).strip()}
     _AGE_KEYWORDS = entries
     return entries
+
+
+def _build_timetable_lookup(payload: object) -> dict[str, object]:
+    if not isinstance(payload, list):
+        raise ValueError("timetable.json 최상위는 배열이어야 합니다.")
+    group_aliases: dict[str, str] = {}
+    group_list_map: dict[tuple[str, str], tuple[str, str]] = {}
+    government_only_map: dict[str, tuple[str, str]] = {}
+    group_age_map: dict[tuple[str, str], tuple[str, str]] = {}
+    age_tokens: set[str] = set()
+    prehistoric_map: dict[str, tuple[str, str]] = {}
+    for epic_entry in payload:
+        if not isinstance(epic_entry, dict):
+            continue
+        epic_name = str(epic_entry.get("epic", "")).strip()
+        groups = epic_entry.get("group")
+        if not isinstance(groups, list):
+            continue
+        for group in groups:
+            if not isinstance(group, dict):
+                continue
+            item = str(group.get("item", "")).strip()
+            if not item:
+                continue
+            alias_candidates = [item]
+            aka_values = group.get("aka")
+            if isinstance(aka_values, list):
+                alias_candidates.extend(
+                    str(alias).strip() for alias in aka_values if str(alias).strip()
+                )
+            for alias in alias_candidates:
+                existing = group_aliases.get(alias)
+                if existing and existing != item:
+                    raise ValueError(
+                        f"group '{alias}' 가 두 개의 항목({existing}, {item})에 중복 정의되어 있습니다."
+                    )
+                group_aliases[alias] = item
+            if epic_name == "선사시대" and item in {"구석기", "신석기", "청동기", "철기"}:
+                prehistoric_map[item] = ("선사시대", item)
+
+            _register_group_lists(
+                item,
+                group.get("list"),
+                group_list_map,
+                special_map=government_only_map if item == "대한민국" else None,
+            )
+            periods = group.get("period")
+            if not isinstance(periods, list):
+                continue
+            for period in periods:
+                if not isinstance(period, dict):
+                    continue
+                age_value = str(period.get("age", "")).strip()
+                if age_value:
+                    _add_age_token(age_tokens, age_value)
+                    period_list = period.get("list")
+                    if not period_list:
+                        group_age_map[(item, age_value)] = (item, age_value)
+                else:
+                    period_list = period.get("list")
+                aka_entries = period.get("aka")
+                if isinstance(aka_entries, list):
+                    for alias in aka_entries:
+                        alias_text = str(alias).strip()
+                        if alias_text:
+                            _add_age_token(age_tokens, alias_text)
+                _register_group_lists(
+                    item,
+                    period_list,
+                    group_list_map,
+                    special_map=government_only_map if item == "대한민국" else None,
+                )
+    # add commonly used age tokens that may not be explicitly declared
+    age_tokens.update({"상대", "중대", "하대", "전기", "후기", "중기", "말기"})
+    return {
+        "group_aliases": group_aliases,
+        "group_list_map": group_list_map,
+        "government_only_map": government_only_map,
+        "group_age_map": group_age_map,
+        "age_tokens": age_tokens,
+        "prehistoric_map": prehistoric_map,
+    }
+
+
+def _register_group_lists(
+    group_name: str,
+    entries: object,
+    dest: dict[tuple[str, str], tuple[str, str]],
+    *,
+    special_map: dict[str, tuple[str, str]] | None = None,
+) -> None:
+    if not isinstance(entries, list):
+        return
+    for item in entries:
+        if not isinstance(item, dict):
+            continue
+        name = str(item.get("name", "")).strip()
+        if not name:
+            continue
+        dest[(group_name, name)] = (group_name, name)
+        if special_map is not None:
+            special_map[name] = (group_name, name)
+
+
+def _add_age_token(container: set[str], value: str) -> None:
+    container.add(value)
+    for segment in value.split():
+        segment_value = segment.strip()
+        if segment_value:
+            container.add(segment_value)
+
+
+def _resolve_timetable_label(time_value: str) -> tuple[str, str]:
+    lookup = _load_timetable_lookup()
+    payload = str(time_value).strip()
+    if not payload:
+        raise ValueError("빈 time_value 는 timetable 매핑이 필요 없습니다.")
+    prehistoric = lookup["prehistoric_map"]
+    if payload in prehistoric:
+        return prehistoric[payload]
+    governments = lookup["government_only_map"]
+    if payload in governments:
+        return governments[payload]
+    tokens = payload.split()
+    if not tokens:
+        raise ValueError(f"times '{time_value}' 는 유효한 형식이 아닙니다.")
+    group_alias = tokens[0]
+    group_aliases = lookup["group_aliases"]
+    canonical_group = group_aliases.get(group_alias)
+    if not canonical_group:
+        raise ValueError(
+            f"times '{time_value}' 에 해당하는 group('{group_alias}') 을 timetable.json에서 찾을 수 없습니다."
+        )
+    if len(tokens) == 1:
+        return canonical_group, ""
+    age_specific = lookup["group_age_map"].get((canonical_group, tokens[1]))
+    if len(tokens) == 2 and age_specific:
+        return age_specific
+    age_tokens = lookup["age_tokens"]
+    name_tokens = [token for token in tokens[1:] if token not in age_tokens]
+    if not name_tokens:
+        return canonical_group, ""
+    group_list_map = lookup["group_list_map"]
+    full_name = " ".join(name_tokens)
+    match = group_list_map.get((canonical_group, full_name))
+    if match:
+        return match
+    suffix = name_tokens[-1]
+    if suffix in ROYAL_TITLE_SUFFIXES:
+        raise ValueError(
+            f"times '{time_value}' 는 왕호('{suffix}')와 함께 표기되었으나 timetable.json 에 '{full_name}' 항목이 없습니다."
+        )
+    if (canonical_group, suffix) in group_list_map:
+        return group_list_map[(canonical_group, suffix)]
+    raise ValueError(
+        f"times '{time_value}' 는 timetable.json 항목과 매칭되지 않습니다."
+    )
 
 
 def _parse_json_array(payload: str | None, *, context: str) -> list:
@@ -109,6 +285,13 @@ def _normalize_years(years: str | None) -> tuple[str, str, str]:
         prefix = prefix_match.group(1)
         return "AD", prefix, years
     return "", "", years
+
+
+def _strip_bce_token(value: str) -> str:
+    if not value:
+        return ""
+    cleaned = value.replace(_BCE_TOKEN, " ").strip()
+    return " ".join(cleaned.split())
 
 
 def rebuild_event_table(db_path: Path) -> None:
@@ -219,10 +402,12 @@ def rebuild_event_table(db_path: Path) -> None:
                     ref_id,
                     q_ref_id,
                     times,
+                    t_group,
+                    t_item,
                     years,
                     score,
                     type
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     f"e{index:04d}",
@@ -230,6 +415,8 @@ def rebuild_event_table(db_path: Path) -> None:
                     json.dumps(sorted(data["ref_ids"]), ensure_ascii=False),
                     json.dumps(sorted(data["q_ref_ids"]), ensure_ascii=False),
                     json.dumps(data["times"], ensure_ascii=False),
+                    json.dumps(data["t_groups"], ensure_ascii=False),
+                    json.dumps(data["t_items"], ensure_ascii=False),
                     data["years"],
                     json.dumps(data["scores"], ensure_ascii=False),
                     json.dumps(sorted(data["types"]), ensure_ascii=False),
@@ -261,6 +448,8 @@ def _upsert_event_entry(
     if entry is None:
         entry = {
             "times": [],
+            "t_groups": [],
+            "t_items": [],
             "year_type": year_type,
             "year_prefix": year_prefix,
             "years": normalized_year,
@@ -308,8 +497,10 @@ def _upsert_event_entry(
                 if not existing_years:
                     entry["years"] = normalized_year
     if times:
-        normalized_time = _canonicalize_time_label(times, valid_times)
-        _merge_time_value(entry["times"], normalized_time)
+        cleaned_times = _strip_bce_token(times)
+        normalized_time = _canonicalize_time_label(cleaned_times, valid_times)
+        t_group, t_item = _resolve_timetable_label(cleaned_times)
+        _merge_time_value(entry, normalized_time, t_group, t_item)
     if q_ref_id:
         entry["q_ref_ids"].add(q_ref_id)
     if ref_id:
@@ -319,16 +510,36 @@ def _upsert_event_entry(
         entry["types"].add(session_type)
 
 
-def _merge_time_value(existing: list[str], new_value: str) -> None:
-    for current in existing:
+def _merge_time_value(
+    entry: dict[str, object], new_value: str, group_label: str, item_label: str
+) -> None:
+    times: list[str] = entry["times"]
+    groups: list[str] = entry["t_groups"]
+    items: list[str] = entry["t_items"]
+    for idx, (existing_group, existing_item) in enumerate(zip(groups, items)):
+        if existing_group == group_label and existing_item == item_label:
+            return
+    for idx, current in enumerate(times):
         if new_value == current:
+            if groups[idx] != group_label or items[idx] != item_label:
+                raise ValueError(
+                    f"times '{new_value}' 의 t_group/t_item 정보가 일관되지 않습니다."
+                )
             return
         if new_value in current and len(new_value) < len(current):
             return
-    to_remove = [current for current in existing if current in new_value and len(current) < len(new_value)]
-    for item in to_remove:
-        existing.remove(item)
-    existing.append(new_value)
+    removal_indexes = [
+        index
+        for index, current in enumerate(times)
+        if current in new_value and len(current) < len(new_value)
+    ]
+    for removal_index in reversed(removal_indexes):
+        times.pop(removal_index)
+        groups.pop(removal_index)
+        items.pop(removal_index)
+    times.append(new_value)
+    groups.append(group_label)
+    items.append(item_label)
 
 
 def _canonicalize_time_label(raw: str, valid_times: set[str]) -> str:

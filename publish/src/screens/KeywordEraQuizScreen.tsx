@@ -82,6 +82,9 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
 
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < totalProblems - 1;
+  const totalProblemCount = totalProblems;
+  const currentProblemIndex =
+    totalProblemCount > 0 ? Math.min(Math.max(currentIndex + 1, 1), totalProblemCount) : 0;
 
   if (loading) {
     return (
@@ -166,10 +169,15 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
         </Button>
 
         <View style={styles.navRow}>
-          <Button mode="outlined" disabled={!canGoPrevious} onPress={goToPrevious}>
+          <Button mode="outlined" disabled={!canGoPrevious} onPress={goToPrevious} style={styles.navButton}>
             이전
           </Button>
-          <Button mode="outlined" disabled={!canGoNext} onPress={goToNext}>
+          <View style={styles.navIndexWrapper}>
+            <Text style={[styles.navIndexText, { color: theme.colors.onSurface }]}>
+              {currentProblemIndex} / {totalProblemCount}
+            </Text>
+          </View>
+          <Button mode="outlined" disabled={!canGoNext} onPress={goToNext} style={styles.navButton}>
             다음
           </Button>
         </View>
@@ -247,8 +255,19 @@ const styles = StyleSheet.create({
   },
   navRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: spacing.md
+  },
+  navButton: {
+    minWidth: 100
+  },
+  navIndexWrapper: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  navIndexText: {
+    fontSize: 18,
+    fontWeight: typography.weights.bold
   },
   center: {
     flex: 1,
