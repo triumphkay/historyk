@@ -302,8 +302,14 @@ def rebuild_event_table(db_path: Path) -> None:
         valid_times = _load_age_keywords()
         cur.execute(
             """
-            SELECT id, type, passage_result, passage_result_detail,
-                   option_result, option_result_detail, answer
+            SELECT id,
+                   type,
+                   passage_result,
+                   passage_result_detail,
+                   option_result,
+                   option_result_detail,
+                   answer,
+                   y_check
             FROM sessions
             ORDER BY id
             """
@@ -317,6 +323,7 @@ def rebuild_event_table(db_path: Path) -> None:
             option_result,
             option_detail,
             answer,
+            session_y_check,
         ) in cur.fetchall():
             session_id = str(session_id)
             session_type = str(question_type).strip() if question_type else ""
@@ -354,6 +361,7 @@ def rebuild_event_table(db_path: Path) -> None:
                         keyword,
                         times,
                         years,
+                        session_y_check=session_y_check,
                         q_ref_id=session_id,
                         ref_id=None,
                         score_value=3,
@@ -384,6 +392,7 @@ def rebuild_event_table(db_path: Path) -> None:
                         keyword,
                         times,
                         years,
+                        session_y_check=session_y_check,
                         q_ref_id=None,
                         ref_id=session_id,
                         score_value=score_value,
@@ -405,9 +414,10 @@ def rebuild_event_table(db_path: Path) -> None:
                     t_group,
                     t_item,
                     years,
+                    y_check,
                     score,
                     type
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     f"e{index:04d}",
@@ -418,6 +428,7 @@ def rebuild_event_table(db_path: Path) -> None:
                     json.dumps(data["t_groups"], ensure_ascii=False),
                     json.dumps(data["t_items"], ensure_ascii=False),
                     data["years"],
+                    data["y_check"],
                     json.dumps(data["scores"], ensure_ascii=False),
                     json.dumps(sorted(data["types"]), ensure_ascii=False),
                 ),
@@ -434,6 +445,7 @@ def _upsert_event_entry(
     times: str,
     years: str,
     *,
+    session_y_check: str | None,
     q_ref_id: str | None,
     ref_id: str | None,
     score_value: int,
@@ -444,6 +456,7 @@ def _upsert_event_entry(
     if not keyword:
         return
     year_type, year_prefix, normalized_year = _normalize_years(years)
+    session_flag = "true" if str(session_y_check).strip().lower() == "true" else ""
     entry = store.get(keyword)
     if entry is None:
         entry = {
@@ -453,6 +466,7 @@ def _upsert_event_entry(
             "year_type": year_type,
             "year_prefix": year_prefix,
             "years": normalized_year,
+            "y_check": session_flag,
             "ref_ids": set(),
             "q_ref_ids": set(),
             "scores": [],
@@ -496,6 +510,8 @@ def _upsert_event_entry(
                     )
                 if not existing_years:
                     entry["years"] = normalized_year
+    if session_flag == "true":
+        entry["y_check"] = "true"
     if times:
         cleaned_times = _strip_bce_token(times)
         normalized_time = _canonicalize_time_label(cleaned_times, valid_times)

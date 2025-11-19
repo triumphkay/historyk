@@ -70,7 +70,7 @@ const main = () => {
   let eventsRaw;
   try {
     eventsRaw = execSync(
-      `sqlite3 -json ${JSON.stringify(DB_PATH)} "SELECT id, keyword, ref_id, q_ref_id, times, t_group, t_item, years, score, type FROM events"`,
+      `sqlite3 -json ${JSON.stringify(DB_PATH)} "SELECT id, keyword, ref_id, q_ref_id, times, t_group, t_item, years, y_check, score, type FROM events"`,
       { encoding: 'utf8' }
     );
   } catch (error) {
@@ -92,6 +92,7 @@ const main = () => {
       t_group: groups,
       t_item: items,
       years: row.years || '',
+      y_check: row.y_check ?? '',
       score: ensureArray(row.score).map((value) => Number(value)),
       types: ensureArray(row.type)
     };

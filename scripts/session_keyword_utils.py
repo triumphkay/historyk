@@ -34,6 +34,7 @@ def ensure_table(cur: sqlite3.Cursor, name: str) -> None:
                 t_group TEXT NOT NULL,
                 t_item TEXT NOT NULL,
                 years TEXT NOT NULL,
+                y_check TEXT NOT NULL DEFAULT '',
                 score TEXT NOT NULL,
                 type TEXT NOT NULL
             )
