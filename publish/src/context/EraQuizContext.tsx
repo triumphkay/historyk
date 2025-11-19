@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import { EventItem } from '../types/EventItem';
 import { loadEventData } from '../utils/dataLoader';
 import { shuffle } from '../utils/random';
+import keyAgeData from '../../assets/keyword-types.json';
 
 interface EraQuizContextValue {
   problems: EventItem[];
@@ -16,8 +17,38 @@ interface EraQuizContextValue {
 
 const EraQuizContext = createContext<EraQuizContextValue | undefined>(undefined);
 
+const keyAgeEntries = (keyAgeData as { 'key-age': Array<{ nation: string; list: string[] }> })['key-age'] || [];
+const keyAgeMap: Record<string, Set<string>> = keyAgeEntries.reduce((acc, entry) => {
+  acc[entry.nation] = new Set(entry.list);
+  return acc;
+}, {} as Record<string, Set<string>>);
+
+const normalizeTimes = (event: EventItem): [string, string] => {
+  if (Array.isArray(event.times) && event.times.length === 2) {
+    return [event.times[0] || '', event.times[1] || ''];
+  }
+
+  const group = event.t_group?.[0] || '';
+  const item = event.t_item?.[0] || '';
+  return [group, item];
+};
+
 const isValidEvent = (event: EventItem): boolean => {
-  return Array.isArray(event.times) && event.times.length === 2;
+  const [nation, period] = normalizeTimes(event);
+  if (!nation) {
+    return false;
+  }
+
+  const validItems = keyAgeMap[nation];
+  if (!validItems) {
+    return false;
+  }
+
+  if (!period) {
+    return true;
+  }
+
+  return validItems.has(period);
 };
 
 export const EraQuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -29,7 +60,11 @@ export const EraQuizProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     const bootstrap = async () => {
       const events = await loadEventData();
-      const eligible = events.filter(isValidEvent);
+      const normalizedEvents = events.map((event) => ({
+        ...event,
+        times: normalizeTimes(event)
+      }));
+      const eligible = normalizedEvents.filter(isValidEvent);
       setProblems(shuffle(eligible));
       setLoading(false);
     };

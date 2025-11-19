@@ -28,9 +28,16 @@ DB_PATH = Path("database/korean-history.db")
 KEYWORD_TYPES_PATH = Path("database/keyword-types.json")
 
 
-def _build_age_index(ages):
+def _build_age_index():
+    age_list_path = Path("database/age-list.json")
+    if not age_list_path.exists():
+        raise FileNotFoundError(f"나이 목록 파일을 찾을 수 없습니다: {age_list_path}")
+    try:
+        ages = json.loads(age_list_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"{age_list_path} 파싱 실패: {exc}")
     if not isinstance(ages, list):
-        raise ValueError("keyword-types.json 내 ages 배열이 필요합니다.")
+        raise ValueError(f"{age_list_path} 내 배열이 필요합니다.")
     order = []
     index = {}
     for idx, value in enumerate(ages):
@@ -155,7 +162,7 @@ def update_keyword_types(nation_lists):
     with KEYWORD_TYPES_PATH.open(encoding="utf-8") as fh:
         keyword_data = json.load(fh)
 
-    ages, age_index = _build_age_index(keyword_data.get("ages"))
+    ages, age_index = _build_age_index()
     keyword_data.pop("key-age", None)
 
     ordered_entries = []

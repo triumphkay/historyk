@@ -49,15 +49,15 @@ def _load_age_keywords() -> set[str]:
     global _AGE_KEYWORDS
     if _AGE_KEYWORDS is not None:
         return _AGE_KEYWORDS
-    if not CONFIG_PATH.exists():
-        raise FileNotFoundError(f"키워드 설정 파일을 찾을 수 없습니다: {CONFIG_PATH}")
+    age_list_path = Path(__file__).resolve().parent.parent / "database" / "age-list.json"
+    if not age_list_path.exists():
+        raise FileNotFoundError(f"나이 목록 파일을 찾을 수 없습니다: {age_list_path}")
     try:
-        payload = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+        ages = json.loads(age_list_path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
-        raise ValueError(f"{CONFIG_PATH} 파싱 실패: {exc}") from exc
-    ages = payload.get("ages")
+        raise ValueError(f"{age_list_path} 파싱 실패: {exc}") from exc
     if not isinstance(ages, list):
-        raise ValueError(f"{CONFIG_PATH} 내 'ages' 배열이 필요합니다.")
+        raise ValueError(f"{age_list_path} 내 배열이 필요합니다.")
     entries = {str(item).strip() for item in ages if str(item).strip()}
     _AGE_KEYWORDS = entries
     return entries

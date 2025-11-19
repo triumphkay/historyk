@@ -72,7 +72,7 @@ const AppNavigator = () => (
       <Stack.Screen name="Home" component={HomeScreen} options={{ title: '홈' }} />
       <Stack.Screen name="KeywordList" component={KeywordListScreen} options={{ title: '키워드 목록' }} />
       <Stack.Screen name="Quiz" component={QuizScreen} options={{ title: '키워드 문제' }} />
-      <Stack.Screen name="KeywordEraQuiz" component={KeywordEraQuizScreen} options={{ title: '키워드 시대' }} />
+      <Stack.Screen name="KeywordEraQuizScreen" component={KeywordEraQuizScreen} options={{ title: '키워드 시대' }} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: '설정' }} />
     </Stack.Navigator>
   </NavigationContainer>

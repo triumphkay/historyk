@@ -112,7 +112,14 @@ def apply_times_suffix(keyword: str, session_type: str, config: dict, session_id
 def apply_age_rule(keyword: str, config: dict, session_id: str, session_type: str) -> tuple[str, str]:
     if session_type != "시기":
         return keyword.strip(), ""
-    ages = {item.strip() for item in config.get("ages", []) if item.strip()}
+    age_list_path = Path("database/age-list.json")
+    if not age_list_path.exists():
+        die(f"[ERROR] 나이 목록 파일을 찾을 수 없습니다: {age_list_path}")
+    try:
+        ages_list = json.loads(age_list_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        die(f"[ERROR] {age_list_path} JSON 파싱 실패")
+    ages = {item.strip() for item in ages_list if item.strip()}
     candidate = keyword.strip()
     if candidate not in ages:
         return candidate, ""

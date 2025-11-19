@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Surface, Text, useTheme } from 'react-native-paper';
 import { pickDisplayType } from '../utils/types';
 import { TypeDetail } from '../types/TypeDetail';
-import typeMetadata from '../keywordTypesSource';
+import typeMetadata from '../../assets/keyword-types.json';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 

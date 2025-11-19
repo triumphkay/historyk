@@ -14,7 +14,13 @@ interface EraAnswerModalProps {
 
 const EraAnswerModal: React.FC<EraAnswerModalProps> = ({ visible, times, years, onClose, onNext }) => {
   const theme = useTheme();
-  const eraText = times.length === 2 ? `${times[0]} / ${times[1]}` : '정보 없음';
+  const [group, period] = times || [];
+  const trimmedGroup = (group || '').trim();
+  const trimmedPeriod = (period || '').trim();
+  const eraText =
+    trimmedGroup && trimmedPeriod
+      ? `${trimmedGroup} ${trimmedPeriod}`
+      : trimmedGroup || trimmedPeriod || '정보 없음';
 
   return (
     <Portal>

@@ -10,7 +10,7 @@ import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 import { mergeReferenceIds } from '../utils/references';
 import { getFrequencyLabel, parseYearParts } from '../utils/eraQuiz';
-import keywordTypes from '../keywordTypesSource';
+import keywordTypes from '../../assets/keyword-types.json';
 
 interface DropdownSelectProps {
   label: string;
@@ -48,7 +48,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({ label, value, options, 
   );
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, 'KeywordEraQuiz'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'KeywordEraQuizScreen'>;
 
 const KeywordEraQuizScreen: React.FC<Props> = () => {
   const theme = useTheme();
@@ -62,7 +62,10 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
   const [referenceVisible, setReferenceVisible] = useState(false);
 
   const keyAgeData = (keywordTypes as { 'key-age': Array<{ nation: string; list: string[] }> })['key-age'] || [];
-  const countryOptions = useMemo(() => keyAgeData.map((item) => item.nation), [keyAgeData]);
+  const countryOptions = useMemo(
+    () => Array.from(new Set(keyAgeData.map((item) => item.nation))),
+    [keyAgeData]
+  );
   const leaderOptions = useMemo(() => {
     const entry = keyAgeData.find((item) => item.nation === country);
     return entry ? entry.list : [];
@@ -104,6 +107,8 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
 
   const handleNumericChange = (value: string, length: number) => value.replace(/[^0-9]/g, '').slice(0, length);
   const showYearInputs = Boolean(yearParts.year);
+  const hasLeaderAnswer = Boolean((currentProblem.times?.[1] || '').trim());
+  const leaderDisabled = !hasLeaderAnswer || !country;
 
   return (
     <Surface style={styles.container}>
@@ -115,7 +120,13 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
 
         <View style={styles.dropdownRow}>
           <DropdownSelect label="국가" value={country} options={countryOptions} onSelect={setCountry} />
-          <DropdownSelect label="왕 / 정부" value={leader} options={leaderOptions} onSelect={setLeader} disabled={!country} />
+          <DropdownSelect
+            label="왕 / 정부"
+            value={leader}
+            options={leaderOptions}
+            onSelect={setLeader}
+            disabled={leaderDisabled}
+          />
         </View>
 
         {showYearInputs ? (

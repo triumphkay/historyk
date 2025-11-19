@@ -3,5 +3,5 @@ export type RootStackParamList = {
   KeywordList: undefined;
   Quiz: undefined;
   Settings: undefined;
-  KeywordEraQuiz: undefined;
+  KeywordEraQuizScreen: undefined;
 };

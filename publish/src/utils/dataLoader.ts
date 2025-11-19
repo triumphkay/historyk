@@ -1,6 +1,6 @@
 import keywordData from '../keywordsSource';
-import keywordTypes from '../keywordTypesSource';
-import eventsData from '../eventsSource';
+import keywordTypes from '../../assets/keyword-types.json';
+import eventsData from '../../assets/events.json';
 import { Keyword } from '../types/Keyword';
 import { TypeDetail } from '../types/TypeDetail';
 import { EventItem } from '../types/EventItem';

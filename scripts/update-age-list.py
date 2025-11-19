@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate database/ages-list.txt from database/timetable.json."""
+"""Generate database/age-list.json from database/timetable.json."""
 
 from __future__ import annotations
 
@@ -103,7 +103,10 @@ def generate_lines(timetable: list) -> List[str]:
 
 
 def write_output(output_path: Path, lines: List[str]) -> None:
-    output_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    output_path.write_text(
+        json.dumps(lines, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def main() -> None:
@@ -112,7 +115,7 @@ def main() -> None:
     project_root = script_dir.parent
     database_dir = project_root / "database"
     timetable_path = database_dir / "timetable.json"
-    output_path = database_dir / "ages-list.txt"
+    output_path = database_dir / "age-list.json"
 
     ensure_directories(script_dir, database_dir)
 

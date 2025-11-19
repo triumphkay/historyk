@@ -39,6 +39,7 @@ def ensure_sessions_schema(cur: sqlite3.Cursor) -> None:
             "id",
             "session",
             "number",
+            "y_check",
             "passage_analyze",
             "passage_result",
             "passage_result_detail",
@@ -63,6 +64,7 @@ def ensure_sessions_schema(cur: sqlite3.Cursor) -> None:
                 score INTEGER,
                 question TEXT,
                 type TEXT,
+                y_check TEXT NOT NULL DEFAULT '',
                 passage TEXT,
                 passage_analyze TEXT,
                 passage_result TEXT,
@@ -240,6 +242,7 @@ def upsert_problem(cur: sqlite3.Cursor, file_name: str, row: dict, fallback_numb
     form = row.get("form")
     if isinstance(form, (list, dict)):
         form = json.dumps(form, ensure_ascii=False)
+    y_check = "true" if row.get("years") is True else ""
     passage_analyze = row.get("passage-analyze")
     analyze = row.get("analyze")
     (
@@ -274,6 +277,7 @@ def upsert_problem(cur: sqlite3.Cursor, file_name: str, row: dict, fallback_numb
             score,
             question,
             type,
+            y_check,
             passage,
             passage_analyze,
             passage_result,
@@ -284,7 +288,7 @@ def upsert_problem(cur: sqlite3.Cursor, file_name: str, row: dict, fallback_numb
             option_result,
             option_result_detail,
             answer
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             problem_id,
@@ -294,6 +298,7 @@ def upsert_problem(cur: sqlite3.Cursor, file_name: str, row: dict, fallback_numb
             row.get("score"),
             row.get("question"),
             row.get("type"),
+            y_check,
             json.dumps(row.get("passage"), ensure_ascii=False),
             json.dumps(processed_passage_left, ensure_ascii=False),
             json.dumps(passage_right, ensure_ascii=False),
