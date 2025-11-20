@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View, Pressable } from 'react-native';
 import { ActivityIndicator, Button, Surface, Text, useTheme } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import AnswerBoxes from '../components/AnswerBoxes';
@@ -15,6 +15,17 @@ import { typography } from '../theme/typography';
 import { mergeReferenceIds } from '../utils/references';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Quiz'>;
+
+const selectRandomDescriptions = (descriptions: string[]) => {
+  if (descriptions.length <= 3) {
+    return descriptions;
+  }
+  const shuffled = [...descriptions]
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+  return shuffled.slice(0, 3);
+};
 
 const QuizScreen: React.FC<Props> = () => {
   const { currentProblem, currentIndex, totalProblems, goToNext, goToPrevious, answer, setAnswer, resetKey, loading } =
@@ -34,6 +45,10 @@ const QuizScreen: React.FC<Props> = () => {
     return mergeReferenceIds(currentProblem.ref_id, currentProblem.q_ref_id);
   }, [currentProblem]);
   const referenceCount = referenceEntries.length;
+  const displayDescriptions = useMemo(
+    () => selectRandomDescriptions(currentProblem?.descriptions || []),
+    [currentProblem?.id, currentProblem?.descriptions]
+  );
 
   if (loading) {
     return (
@@ -64,15 +79,24 @@ const QuizScreen: React.FC<Props> = () => {
           </Button>
         </Surface>
 
-        <TypeLabel types={currentProblem.types} />
-        <DescriptionList descriptions={currentProblem.descriptions} />
+        <Surface style={styles.card} elevation={3}>
+          <View style={styles.infoRow}>
+            <ScoreFrequencyLabel scores={currentProblem.score} textStyle={styles.frequencyText} />
+            <Pressable
+              onPress={() => setReferenceModalVisible(true)}
+              accessibilityRole="button"
+              hitSlop={8}
+            >
+              <Text style={[styles.referenceText, { color: theme.colors.primary }]}>
+                {`${referenceCount}회 출제`}
+              </Text>
+            </Pressable>
+          </View>
 
-        <AnswerBoxes keyword={currentProblem.keyword} onAnswerChange={setAnswer} resetKey={resetKey} />
-        <ScoreFrequencyLabel scores={currentProblem.score} />
-
-        <Button mode="outlined" style={styles.referenceButton} onPress={() => setReferenceModalVisible(true)}>
-          {`${referenceCount}회 출제`}
-        </Button>
+          <TypeLabel types={currentProblem.types} />
+          <DescriptionList descriptions={displayDescriptions} />
+          <AnswerBoxes keyword={currentProblem.keyword} onAnswerChange={setAnswer} resetKey={resetKey} />
+        </Surface>
 
         <Button
           mode="contained"
@@ -127,11 +151,34 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold
   },
-  referenceButton: {
-    marginTop: spacing.md
-  },
   submitButton: {
     marginTop: spacing.md
+  },
+  frequencyRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: spacing.md,
+    marginBottom: spacing.md
+  },
+  frequencyText: {
+    fontSize: typography.sizes.md
+  },
+  referenceText: {
+    fontSize: typography.sizes.md,
+    textDecorationLine: 'underline'
+  },
+  card: {
+    marginTop: spacing.md,
+    marginBottom: spacing.md,
+    padding: spacing.lg,
+    borderRadius: spacing.md
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md
   }
 });
 

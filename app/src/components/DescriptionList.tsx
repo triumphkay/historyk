@@ -14,22 +14,16 @@ const DescriptionList: React.FC<DescriptionListProps> = ({ descriptions }) => {
   return (
     <Surface elevation={0} style={styles.container}>
       <View style={styles.chipRow}>
-        {descriptions.map((description, index) => {
-          const sanitized = description.replace(/\d+/g, '').trim();
-          if (!sanitized) {
-            return null;
-          }
-          return (
-            <Chip
-              key={`${index}-${sanitized.slice(0, 8)}`}
-              mode="outlined"
-              style={[styles.chip, { borderColor: theme.colors.outline }]}
-              textStyle={[styles.chipText, { color: theme.colors.onSurface }]}
-            >
-              {sanitized}
-            </Chip>
-          );
-        })}
+        {descriptions.map((description, index) => (
+          <Chip
+            key={`${index}-${description.slice(0, 8)}`}
+            mode="outlined"
+            style={[styles.chip, { borderColor: theme.colors.outline }]}
+            textStyle={[styles.chipText, { color: theme.colors.onSurface }]}
+          >
+            {description}
+          </Chip>
+        ))}
       </View>
     </Surface>
   );

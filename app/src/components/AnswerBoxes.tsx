@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Surface, TextInput, useTheme } from 'react-native-paper';
+import { Surface, TextInput, Text, useTheme } from 'react-native-paper';
 import { spacing } from '../theme/spacing';
+import { typography } from '../theme/typography';
 
 interface AnswerBoxesProps {
   keyword: string;
@@ -11,10 +12,11 @@ interface AnswerBoxesProps {
 
 interface SlotMeta {
   isSpace: boolean;
+  char: string;
   key: string;
 }
 
-const BOX_SIZE = 48;
+const BOX_SIZE = 32;
 
 const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, resetKey }) => {
   const theme = useTheme();
@@ -23,6 +25,7 @@ const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, rese
     () =>
       keyword.split('').map((char, index) => ({
         isSpace: char === ' ',
+        char,
         key: `${keyword}-${index}`
       })),
     [keyword]
@@ -51,7 +54,21 @@ const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, rese
     <Surface elevation={0} style={styles.wrapper}>
       {slots.map((slot, index) => {
         if (slot.isSpace) {
-          return <View key={slot.key} style={{ width: BOX_SIZE }} />;
+          return <View key={slot.key} style={{ width: BOX_SIZE * 0.15 }} />;
+        }
+        if (slot.char && (slot.char === '.' || slot.char === '·')) {
+          return (
+            <View key={slot.key} style={[styles.punctuation, { width: BOX_SIZE * 0.15 }]}>
+              <Text
+                style={{
+                  color: theme.colors.onSurface,
+                  fontSize: typography.sizes.md
+                }}
+              >
+                {slot.char}
+              </Text>
+            </View>
+          );
         }
 
         return (
@@ -83,6 +100,11 @@ const styles = StyleSheet.create({
   },
   box: {
     textAlign: 'center'
+  },
+  punctuation: {
+    height: BOX_SIZE,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

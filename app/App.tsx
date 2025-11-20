@@ -9,6 +9,7 @@ import KeywordListScreen from './src/screens/KeywordListScreen';
 import QuizScreen from './src/screens/QuizScreen';
 import KeywordEraQuizScreen from './src/screens/KeywordEraQuizScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import KeywordDetailScreen from './src/screens/KeywordDetailScreen';
 import { QuizProvider } from './src/context/QuizContext';
 import { EraQuizProvider } from './src/context/EraQuizContext';
 import { ThemePreferenceProvider, useThemePreference } from './src/context/ThemePreferenceContext';
@@ -20,7 +21,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const NavigationHeader: React.FC<NativeStackHeaderProps> = ({ navigation, route, options }) => {
   const theme = useTheme();
   const isHome = route.name === 'Home';
-  const iconColor = theme.dark ? '#FFFFFF' : undefined;
+  const iconColor = '#ff685b';
 
   if (isHome) {
     return (
@@ -73,6 +74,7 @@ const AppNavigator = () => (
       <Stack.Screen name="KeywordList" component={KeywordListScreen} options={{ title: '키워드 목록' }} />
       <Stack.Screen name="Quiz" component={QuizScreen} options={{ title: '키워드 문제' }} />
       <Stack.Screen name="KeywordEraQuizScreen" component={KeywordEraQuizScreen} options={{ title: '키워드 시대' }} />
+      <Stack.Screen name="KeywordDetail" component={KeywordDetailScreen} options={{ title: '키워드 정보' }} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: '설정' }} />
     </Stack.Navigator>
   </NavigationContainer>

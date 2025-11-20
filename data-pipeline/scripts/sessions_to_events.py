@@ -240,6 +240,11 @@ def _split_time_year(detail: str | None) -> tuple[str, str]:
     if special_time:
         years = _validate_year_segment(_extract_year_segment(detail, start_offset=start_offset))
         return special_time, years
+    bce_index = detail.find(_BCE_TOKEN)
+    if bce_index != -1:
+        times = detail[:bce_index].strip()
+        years = _validate_year_segment(detail[bce_index:].strip())
+        return times, years
     match = DIGIT_PATTERN.search(detail)
     if not match:
         return detail, ""
@@ -252,6 +257,11 @@ def _extract_year_segment(detail: str, *, start_offset: int = 0) -> str:
     match = DIGIT_PATTERN.search(detail, start_offset)
     if not match:
         return ""
+    prefix_start = detail.rfind(_BCE_TOKEN, 0, match.start())
+    if prefix_start != -1:
+        candidate = detail[prefix_start:].strip()
+        trimmed = re.sub(r"[)\]\.,]+$", "", candidate).strip()
+        return trimmed
     return detail[match.start():].strip()
 
 
@@ -290,7 +300,7 @@ def _normalize_years(years: str | None) -> tuple[str, str, str]:
 def _strip_bce_token(value: str) -> str:
     if not value:
         return ""
-    cleaned = value.replace(_BCE_TOKEN, " ").strip()
+    cleaned = value.strip()
     return " ".join(cleaned.split())
 
 

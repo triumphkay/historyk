@@ -8,7 +8,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const DB_PATH = path.join(ROOT, 'database', 'korean-history.db');
-const KEYWORD_OUTPUT_PATH = path.join(ROOT, 'publish', 'assets', 'db.json');
+const KEYWORD_OUTPUT_PATH = path.join(ROOT, '..', 'app', 'assets', 'db.json');
 const EVENTS_JSON_PATH = path.join(ROOT, 'database', 'events.json');
 
 const ensureArray = (value) => {

@@ -14,6 +14,6 @@ export const prepareProblems = (records: Keyword[] = []): QuizItem[] => {
   const randomized = shuffle(eligible);
   return randomized.map((record) => ({
     ...record,
-    descriptions: pickRandomItems(record.descriptions, 3)
+    descriptions: record.descriptions
   }));
 };

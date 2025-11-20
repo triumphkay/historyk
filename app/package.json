@@ -4,7 +4,7 @@
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "generate:db": "node ../scripts/generate-db-json.js",
+    "generate:db": "node ../data-pipeline/scripts/generate-db-json.js",
     "copy:json": "node scripts/copy-json.js",
     "prestart": "npm run generate:db && npm run copy:json",
     "preandroid": "npm run generate:db && npm run copy:json",
