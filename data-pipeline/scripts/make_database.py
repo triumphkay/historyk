@@ -123,6 +123,26 @@ def main() -> None:
             str(key_age_script),
         ],
     )
+    
+    newwords_script = scripts_dir / "create_newwords_table.py"
+    run_command(
+        "newwords 테이블 생성",
+        [
+            sys.executable,
+            str(newwords_script),
+            "--db",
+            str(args.db),
+        ],
+    )
+
+    populate_script = scripts_dir / "populate_newwords.py"
+    run_command(
+        "newwords 데이터 채우기",
+        [
+            sys.executable,
+            str(populate_script),
+        ],
+    )
     print("[build] 완료되었습니다.")
 
 
