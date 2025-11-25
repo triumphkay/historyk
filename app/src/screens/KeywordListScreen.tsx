@@ -1,55 +1,45 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
-import { ActivityIndicator, List, SegmentedButtons, Surface, Text, useTheme, Searchbar } from 'react-native-paper';
+import React, { useMemo, useState, useEffect } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, IconButton, List, Surface, Text, useTheme, Searchbar, Dialog, Portal, Button } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuiz } from '../context/QuizContext';
 import { RootStackParamList } from '../types/navigation';
 import { spacing } from '../theme/spacing';
-import { typography } from '../theme/typography';
 import { QuizItem } from '../types/QuizItem';
 import { getScoreFrequencyLabel } from '../utils/score';
-import { loadEventData } from '../utils/dataLoader';
-import keywordTypes from '../../assets/keyword-types.json';
-import { EventItem } from '../types/EventItem';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'KeywordList'>;
-
-interface KeyAgeEntry {
-  nation: string;
-  list: string[];
-}
-
-const keyAgeList = ((keywordTypes as { 'key-age'?: KeyAgeEntry[] })['key-age']) || [];
-const groupOrderMap = new Map<string, number>();
-const itemOrderMap = new Map<string, number>();
-
-keyAgeList.forEach((entry, groupIndex) => {
-  groupOrderMap.set(entry.nation, groupIndex);
-  entry.list.forEach((name, itemIndex) => {
-    itemOrderMap.set(name, itemIndex);
-  });
-});
-
-const getEraOrder = (event: EventItem): [number, number] => {
-  const groupKey = event.t_group?.[0] || '';
-  const itemKey = event.t_item?.[0] || '';
-  const groupOrder = groupOrderMap.get(groupKey) ?? Number.MAX_SAFE_INTEGER;
-  const itemOrder = itemOrderMap.get(itemKey);
-  return [groupOrder, itemOrder ?? Number.MAX_SAFE_INTEGER];
-};
+type SortType = 'alphabetical' | 'importance';
 
 const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
   const { problems, loading } = useQuiz();
   const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'keyword' | 'era'>('keyword');
-  const [eventItems, setEventItems] = useState<EventItem[]>([]);
-  const [eventsLoading, setEventsLoading] = useState(true);
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [sortType, setSortType] = useState<SortType>('alphabetical');
+  const [sortDialogVisible, setSortDialogVisible] = useState(false);
 
-  const sortedProblems = useMemo(
-    () => problems.slice().sort((a, b) => a.keyword.localeCompare(b.keyword, 'ko-KR')),
-    [problems]
-  );
+  // Expose search toggle function to parent via navigation params
+  React.useLayoutEffect(() => {
+    navigation.setParams({ 
+      toggleSearch: () => setSearchVisible(prev => !prev),
+      toggleSortDialog: () => setSortDialogVisible(true)
+    } as any);
+  }, [navigation]);
+
+  const sortedProblems = useMemo(() => {
+    const sorted = [...problems];
+    if (sortType === 'alphabetical') {
+      return sorted.sort((a, b) => a.keyword.localeCompare(b.keyword, 'ko-KR'));
+    } else {
+      // Sort by importance (score total)
+      return sorted.sort((a, b) => {
+        const scoreA = (a.score || []).reduce<number>((sum, val) => sum + (typeof val === 'number' ? val : Number(val) || 0), 0);
+        const scoreB = (b.score || []).reduce<number>((sum, val) => sum + (typeof val === 'number' ? val : Number(val) || 0), 0);
+        return scoreB - scoreA; // Descending order (highest first)
+      });
+    }
+  }, [problems, sortType]);
 
   const filteredProblems = useMemo(() => {
     if (!searchQuery.trim()) {
@@ -60,56 +50,6 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
     );
   }, [sortedProblems, searchQuery]);
 
-  useEffect(() => {
-    let mounted = true;
-    const fetchEvents = async () => {
-      try {
-        const events = await loadEventData();
-        if (mounted) {
-          setEventItems(events);
-        }
-      } catch {
-        // ignore
-      } finally {
-        if (mounted) {
-          setEventsLoading(false);
-        }
-      }
-    };
-    fetchEvents();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const eraItems = useMemo(() => {
-    const map = new Map<string, EventItem>();
-    eventItems.forEach((event) => {
-      if (!map.has(event.keyword)) {
-        map.set(event.keyword, event);
-      }
-    });
-    return Array.from(map.values()).sort((a, b) => {
-      const [groupA, itemA] = getEraOrder(a);
-      const [groupB, itemB] = getEraOrder(b);
-      if (groupA !== groupB) {
-        return groupA - groupB;
-      }
-      if (itemA !== itemB) {
-        return itemA - itemB;
-      }
-      return a.keyword.localeCompare(b.keyword, 'ko-KR');
-    });
-  }, [eventItems]);
-
-  const filteredEraItems = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return eraItems;
-    }
-    const lowered = searchQuery.toLowerCase();
-    return eraItems.filter((item) => item.keyword.toLowerCase().includes(lowered));
-  }, [eraItems, searchQuery]);
-
   if (loading) {
     return (
       <Surface style={styles.center}>
@@ -118,32 +58,6 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
       </Surface>
     );
   }
-
-  const renderEraItem = ({ item, index }: { item: EventItem; index: number }) => {
-    const eraLabel = [item.t_group?.[0], item.t_item?.[0]].filter(Boolean).join(' ');
-    const descriptionParts = [eraLabel, item.years].filter(Boolean);
-    const description = descriptionParts.join(' | ');
-
-    return (
-      <List.Item
-        title={item.keyword}
-        description={description}
-        titleNumberOfLines={1}
-        descriptionNumberOfLines={1}
-        style={styles.listItem}
-        left={() => (
-          <Surface
-            elevation={0}
-            style={[styles.indexBadge, { backgroundColor: theme.colors.primaryContainer }]}
-          >
-            <Text style={[styles.indexText, { color: theme.colors.onPrimaryContainer }]}>
-              {index + 1}
-            </Text>
-          </Surface>
-        )}
-      />
-    );
-  };
 
   const renderItem = ({ item, index }: { item: QuizItem; index: number }) => {
     const importanceLabel = getScoreFrequencyLabel(item.score);
@@ -182,40 +96,54 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <Surface style={styles.container}>
-      <Searchbar
-        placeholder="키워드 검색"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        style={styles.searchBar}
-      />
-      <SegmentedButtons
-        value={viewMode}
-        onValueChange={(value) => setViewMode(value as 'keyword' | 'era')}
-        buttons={[
-          { value: 'keyword', label: `키워드(${filteredProblems.length})` },
-          { value: 'era', label: `시기(${filteredEraItems.length})` }
-        ]}
-        style={styles.segmented}
-      />
-      {viewMode === 'keyword' ? (
-        <FlatList
-          data={filteredProblems}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.list}
-        />
-      ) : eventsLoading ? (
-        <Surface style={styles.placeholder}>
-          <ActivityIndicator animating color={theme.colors.primary} />
-        </Surface>
-      ) : (
-        <FlatList
-          data={filteredEraItems}
-          keyExtractor={(item) => item.keyword}
-          renderItem={renderEraItem}
-          contentContainerStyle={styles.list}
+      {searchVisible && (
+        <Searchbar
+          placeholder="키워드 검색"
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+          style={styles.searchBar}
         />
       )}
+      <Surface style={styles.countContainer} elevation={1}>
+        <Text style={styles.countText}>
+          {filteredProblems.length}개의 키워드가 있습니다
+        </Text>
+      </Surface>
+      <FlatList
+        data={filteredProblems}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        contentContainerStyle={styles.list}
+      />
+      <Portal>
+        <Dialog visible={sortDialogVisible} onDismiss={() => setSortDialogVisible(false)}>
+          <Dialog.Title>정렬 방식 선택</Dialog.Title>
+          <Dialog.Content>
+            <Button 
+              mode={sortType === 'alphabetical' ? 'contained' : 'outlined'}
+              onPress={() => {
+                setSortType('alphabetical');
+                setSortDialogVisible(false);
+              }}
+              style={{ marginBottom: spacing.sm }}
+            >
+              가나다순
+            </Button>
+            <Button 
+              mode={sortType === 'importance' ? 'contained' : 'outlined'}
+              onPress={() => {
+                setSortType('importance');
+                setSortDialogVisible(false);
+              }}
+            >
+              중요도순
+            </Button>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setSortDialogVisible(false)}>취소</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </Surface>
   );
 };
@@ -223,6 +151,36 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  countContainer: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.08)'
+  },
+  countText: {
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center'
+  },
+  titleContainer: {
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.08)'
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  titleText: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  iconButtons: {
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   searchBar: {
     margin: spacing.md,
@@ -252,18 +210,6 @@ const styles = StyleSheet.create({
   indexText: {
     fontSize: 16,
     fontWeight: 'bold'
-  },
-  segmented: {
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.md
-  },
-  placeholder: {
-    padding: spacing.md,
-    alignItems: 'center'
-  },
-  emptyText: {
-    fontSize: typography.sizes.md,
-    textAlign: 'center'
   }
 });
 

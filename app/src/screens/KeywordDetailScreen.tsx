@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Surface, Text, Divider, useTheme } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
@@ -20,17 +20,51 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
   return (
     <Surface style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={[styles.title, { color: theme.colors.primary }]}>{keyword.keyword}</Text>
+        <View style={styles.headerContainer}>
+          <Text style={[styles.title, { color: theme.colors.primary }]}>{keyword.keyword}</Text>
+          <Surface elevation={0} style={[styles.importanceBadge, { backgroundColor: theme.colors.secondaryContainer }]}>
+            <Text style={[styles.importanceText, { color: theme.colors.onSecondaryContainer }]}>
+              {importanceLabel || '중요도 없음'}
+            </Text>
+          </Surface>
+        </View>
+
         <Divider style={styles.divider} />
 
-        <Surface elevation={0} style={styles.infoSection}>
-          <Text style={[styles.label, { color: theme.colors.onSurfaceVariant }]}>중요도</Text>
-          <Text style={[styles.value, { color: theme.colors.onSurface }]}>
-            {importanceLabel || '알 수 없음'}
-          </Text>
-        </Surface>
+        {/* Era Information Block */}
+        {(keyword.era && keyword.era.length > 0) || keyword.years ? (
+          <>
+            <Surface elevation={1} style={[styles.eraCard, { backgroundColor: theme.colors.surfaceVariant }]}>
+              {/* Era Script Header */}
+              {keyword.era_script && keyword.era_script.length > 0 && keyword.era_script[0] ? (
+                <Text style={[styles.eraScriptTitle, { color: theme.colors.onSurface }]}>
+                  {keyword.keyword} {keyword.era_script[0]}
+                </Text>
+              ) : null}
 
-        <Divider style={styles.divider} />
+              <View style={styles.eraInfoGrid}>
+                <View style={styles.eraTextContainer}>
+                  {[
+                    ...(keyword.era || []),
+                    ...(keyword.sub_era || []),
+                    ...(keyword.det_era || [])
+                  ].filter(Boolean).map((text, i) => (
+                    <Text key={`era-text-${i}`} style={[styles.eraValue, { color: theme.colors.onSurface, marginRight: spacing.sm }]}>
+                      {text}
+                    </Text>
+                  ))}
+                </View>
+
+                {keyword.years ? (
+                  <Text style={[styles.eraValue, { color: theme.colors.onSurfaceVariant, marginTop: spacing.xs }]}>
+                    {keyword.years}
+                  </Text>
+                ) : null}
+              </View>
+            </Surface>
+            <Divider style={styles.divider} />
+          </>
+        ) : null}
 
         <Text style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>설명</Text>
         {keyword.descriptions && keyword.descriptions.length > 0 ? (
@@ -113,7 +147,45 @@ const styles = StyleSheet.create({
   title: {
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
+    flex: 1
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: spacing.md
+  },
+  importanceBadge: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginLeft: spacing.md
+  },
+  importanceText: {
+    fontSize: typography.sizes.xs,
+    fontWeight: typography.weights.bold
+  },
+  eraCard: {
+    padding: spacing.md,
+    borderRadius: spacing.md,
+    marginBottom: spacing.md
+  },
+  eraScriptTitle: {
+    fontSize: typography.sizes.md,
+    fontWeight: typography.weights.bold,
+    marginBottom: spacing.md,
+    textAlign: 'center'
+  },
+  eraInfoGrid: {
+    gap: spacing.sm
+  },
+  eraTextContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center'
+  },
+  eraValue: {
+    fontSize: typography.sizes.md
   },
   divider: {
     marginVertical: spacing.md

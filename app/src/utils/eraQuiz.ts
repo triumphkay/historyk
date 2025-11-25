@@ -1,7 +1,10 @@
 import { EventItem } from '../types/EventItem';
 
-export const getFrequencyLabel = (scores: number[] = []): string => {
-  const total = (scores || []).reduce((sum, value) => sum + (Number.isFinite(value) ? Number(value) : 0), 0);
+export const getFrequencyLabel = (scores: Array<string | number> = []): string => {
+  const total = (scores || []).reduce((sum, value) => {
+    const num = typeof value === 'string' ? parseFloat(value) : value;
+    return sum + (Number.isFinite(num) ? num : 0);
+  }, 0);
   if (total >= 20) {
     return '출제빈도: 매우 높음';
   }

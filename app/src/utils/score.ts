@@ -15,11 +15,14 @@ export const getScoreFrequencyLabel = (scores: Array<number | string> = []): str
     return null;
   }
 
-  if (total < 10) {
+  if (total < 5) {
     return '낮음';
   }
-  if (total < 20) {
+  if (total < 10) {
     return '보통';
   }
-  return '높음';
+  if (total < 20) {
+    return '높음';
+  }
+  return '매우 높음';
 };

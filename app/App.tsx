@@ -1,9 +1,8 @@
 import React from 'react';
-import { useColorScheme, Pressable, View } from 'react-native';
+import { useColorScheme, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackHeaderProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Appbar, PaperProvider, useTheme } from 'react-native-paper';
-import HeadIcon from './assets/head.svg';
+import { Appbar, PaperProvider, useTheme, Text } from 'react-native-paper';
 import HomeScreen from './src/screens/HomeScreen';
 import KeywordListScreen from './src/screens/KeywordListScreen';
 import QuizScreen from './src/screens/QuizScreen';
@@ -11,33 +10,45 @@ import KeywordEraQuizScreen from './src/screens/KeywordEraQuizScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import KeywordDetailScreen from './src/screens/KeywordDetailScreen';
 import { QuizProvider } from './src/context/QuizContext';
-import { EraQuizProvider } from './src/context/EraQuizContext';
+import { NewWordEraQuizProvider } from './src/context/NewWordEraQuizContext';
 import { ThemePreferenceProvider, useThemePreference } from './src/context/ThemePreferenceContext';
 import { RootStackParamList } from './src/types/navigation';
 import { darkTheme, lightTheme } from './src/theme';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const getScreenTitle = (routeName: string): string => {
+  switch (routeName) {
+    case 'Home':
+      return '한국사 키워드 학습';
+    case 'KeywordList':
+      return '한국사 키워드';
+    case 'Quiz':
+      return '키워드 퀴즈';
+    case 'KeywordEraQuizScreen':
+      return '한국사 시대 퀴즈';
+    case 'KeywordDetail':
+      return '키워드 정보';
+    case 'Settings':
+      return '설정';
+    default:
+      return '한국사 키워드 학습';
+  }
+};
+
 const NavigationHeader: React.FC<NativeStackHeaderProps> = ({ navigation, route, options }) => {
   const theme = useTheme();
   const isHome = route.name === 'Home';
-  const iconColor = '#ff685b';
+  const isKeywordList = route.name === 'KeywordList';
+  const title = getScreenTitle(route.name);
 
   if (isHome) {
     return (
       <Appbar.Header elevated theme={theme}>
-        <View style={{ flex: 1 }} />
-        <Pressable
-          onPress={() => (navigation as NativeStackNavigationProp<RootStackParamList>).navigate('Home')}
-          style={{ width: 120, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <HeadIcon width={100} fill={iconColor} />
-        </Pressable>
-        <View style={{ flex: 1, alignItems: 'flex-end' }}>
-          <Appbar.Action
-            icon="cog"
-            onPress={() => (navigation as NativeStackNavigationProp<RootStackParamList>).navigate('Settings')}
-          />
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text variant="titleLarge" style={{ fontWeight: 'bold', color: theme.colors.onSurface }}>
+            {title}
+          </Text>
         </View>
       </Appbar.Header>
     );
@@ -46,18 +57,36 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({ navigation, route,
   return (
     <Appbar.Header elevated theme={theme}>
       <Appbar.BackAction onPress={() => navigation.goBack()} />
-      <View style={{ flex: 1, alignItems: 'center' }}>
-        <Pressable
-          onPress={() => (navigation as NativeStackNavigationProp<RootStackParamList>).navigate('Home')}
-          style={{ width: 120, justifyContent: 'center', alignItems: 'center' }}
-        >
-          <HeadIcon width={100} fill={iconColor} />
-        </Pressable>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 0, right: 0, pointerEvents: 'none' }}>
+        <Text variant="titleLarge" style={{ fontWeight: 'bold', color: theme.colors.onSurface }}>
+          {title}
+        </Text>
       </View>
-      <Appbar.Action
-        icon="cog"
-        onPress={() => (navigation as NativeStackNavigationProp<RootStackParamList>).navigate('Settings')}
-      />
+      <View style={{ flex: 1 }} />
+      {isKeywordList ? (
+        <View style={{ flexDirection: 'row' }}>
+          <Appbar.Action 
+            icon="magnify" 
+            onPress={() => {
+              const params = route.params as any;
+              if (params?.toggleSearch) {
+                params.toggleSearch();
+              }
+            }} 
+          />
+          <Appbar.Action 
+            icon="sort" 
+            onPress={() => {
+              const params = route.params as any;
+              if (params?.toggleSortDialog) {
+                params.toggleSortDialog();
+              }
+            }} 
+          />
+        </View>
+      ) : (
+        <View style={{ width: 48 }} />
+      )}
     </Appbar.Header>
   );
 };
@@ -93,9 +122,9 @@ const ThemedApp: React.FC = () => {
   return (
     <PaperProvider theme={currentTheme}>
       <QuizProvider>
-        <EraQuizProvider>
+        <NewWordEraQuizProvider>
           <AppNavigator />
-        </EraQuizProvider>
+        </NewWordEraQuizProvider>
       </QuizProvider>
     </PaperProvider>
   );

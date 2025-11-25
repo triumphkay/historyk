@@ -165,6 +165,7 @@ def main():
     # Fetch Sessions
     cur.execute("SELECT id, type, y_check, passage_result, passage_analyze, passage_result_detail, option_result, option_analyze, option_result_detail, answer FROM sessions")
     rows = cur.fetchall()
+    conn.close() # Close read connection
     
     # Cache: keyword -> NewWordEntry
     newwords_cache = {}
@@ -214,6 +215,39 @@ def main():
             entry.keyword = kw
             newwords_cache[kw] = entry
         return newwords_cache[kw]
+
+    def merge_era_tuples(existing_tuples, new_tuple):
+        new_era, new_sub, new_det = new_tuple
+        
+        # Try to find a matching era in existing tuples
+        for i, (ex_era, ex_sub, ex_det) in enumerate(existing_tuples):
+            if ex_era == new_era:
+                # Found match, merge logic
+                
+                # Merge sub_era
+                merged_sub = ex_sub
+                if not ex_sub and new_sub:
+                    merged_sub = new_sub
+                elif ex_sub and new_sub:
+                    # Both exist, pick longer
+                    if len(new_sub) > len(ex_sub):
+                        merged_sub = new_sub
+                
+                # Merge det_era
+                merged_det = ex_det
+                if not ex_det and new_det:
+                    merged_det = new_det
+                elif ex_det and new_det:
+                    # Both exist, pick longer
+                    if len(new_det) > len(ex_det):
+                        merged_det = new_det
+                
+                # Update the tuple in place
+                existing_tuples[i] = (ex_era, merged_sub, merged_det)
+                return
+
+        # If no match found, append
+        existing_tuples.append(new_tuple)
 
     def process_result_set(row_id, row_type, row_y_check, result_json, analyze_json, detail_json, answer_val=None, is_option=False):
         if not result_json:
@@ -280,8 +314,8 @@ def main():
                     entry.era_script.add(script_to_add)
                 
                 if extra_sub_era:
-                    # Add as tuple with the extracted sub_era
-                    entry.era_tuples.append((p_era, extra_sub_era, p_det))
+                    # Add as tuple with the extracted sub_era using merge logic
+                    merge_era_tuples(entry.era_tuples, (p_era, extra_sub_era, p_det))
                 
                 # 2. Descriptions
                 if i < len(analyzes) and analyzes[i]:
@@ -324,10 +358,10 @@ def main():
                             p_era, p_sub, p_det = parsed
                             if final_keyword == "국민교육헌장":
                                 print(f"[DEBUG] Keyword: {final_keyword}, Input: {time_text}, Parsed: {parsed}")
-                            # Add as tuple to maintain relationship
+                            
+                            # Add as tuple to maintain relationship using merge logic
                             era_tuple = (p_era or "", p_sub or "", p_det or "")
-                            if era_tuple not in entry.era_tuples:
-                                entry.era_tuples.append(era_tuple)
+                            merge_era_tuples(entry.era_tuples, era_tuple)
                             
                             # Recursively parse remaining text to extract pure year info
                             remaining_text = info
@@ -341,8 +375,7 @@ def main():
                                     # Found more era info in remaining text
                                     r_era, r_sub, r_det = parsed_remaining
                                     era_tuple_r = (r_era or "", r_sub or "", r_det or "")
-                                    if era_tuple_r not in entry.era_tuples:
-                                        entry.era_tuples.append(era_tuple_r)
+                                    merge_era_tuples(entry.era_tuples, era_tuple_r)
                                     remaining_text = info_remaining
                                 else:
                                     # No more era info, this is the pure year
@@ -373,9 +406,87 @@ def main():
         # Process Options (is_option=True)
         process_result_set(r_id, r_type, r_y_check, o_res, o_an, o_det, answer_val=r_answer, is_option=True)
 
+    # Post-processing: Analyze descriptions to update ref_ids and scores
+    print("Post-processing analyze fields...")
+    for row in rows:
+        (r_id, r_type, r_y_check, 
+         p_res, p_an, p_det, 
+         o_res, o_an, o_det, r_answer) = row
+
+        # 1. Passage Analyze
+        if p_an:
+            try:
+                p_analyzes = json.loads(p_an)
+                for analyze_str in p_analyzes:
+                    if not analyze_str: continue
+                    # Split by comma as in process_result_set
+                    parts = [p.strip() for p in analyze_str.split(",") if p.strip()]
+                    for part in parts:
+                        # Clean part using times_keys
+                        clean_part = part
+                        for tk in times_keys:
+                            if part.endswith(tk):
+                                clean_part = part[:-len(tk)].strip()
+                                break
+                                
+                        if clean_part in newwords_cache:
+                            entry = newwords_cache[clean_part]
+                            if r_id not in entry.q_ref_id:
+                                entry.q_ref_id.add(r_id)
+                                entry.scores.append("3")
+            except (json.JSONDecodeError, TypeError):
+                pass
+
+        # 2. Option Analyze
+        if o_an:
+            try:
+                o_analyzes = json.loads(o_an)
+                for analyze_str in o_analyzes:
+                    if not analyze_str: continue
+                    parts = [p.strip() for p in analyze_str.split(",") if p.strip()]
+                    for part in parts:
+                        # Clean part using times_keys
+                        clean_part = part
+                        for tk in times_keys:
+                            if part.endswith(tk):
+                                clean_part = part[:-len(tk)].strip()
+                                break
+                                
+                        if clean_part in newwords_cache:
+                            entry = newwords_cache[clean_part]
+                            if r_id not in entry.ref_id:
+                                entry.ref_id.add(r_id)
+                                entry.scores.append("1")
+            except (json.JSONDecodeError, TypeError):
+                pass
+
+    # Post-processing 2: Cross-reference descriptions
+    print("Post-processing cross-references...")
+    updates = defaultdict(set)
+    
+    for source_kw, source_entry in newwords_cache.items():
+        for desc in source_entry.descriptions:
+            # Check if description is a keyword (Exact match)
+            if desc in newwords_cache and desc != source_kw:
+                # desc is the Target Keyword (A), source_kw is the Source Keyword (B)
+                # Add Source (B) to Target (A)'s descriptions
+                updates[desc].add(source_kw)
+    
+    count_updates = 0
+    for target_kw, sources in updates.items():
+        entry = newwords_cache[target_kw]
+        original_len = len(entry.descriptions)
+        entry.descriptions.update(sources)
+        if len(entry.descriptions) > original_len:
+            count_updates += 1
+            
+    print(f"Updated descriptions for {count_updates} keywords based on cross-references.")
+
     # Write to DB
     # Clear table first? The user said "korean-history.db의 테이블을 추가하고 싶다", 
     # and we created it. It should be empty. But safe to clear or replace.
+    conn = sqlite3.connect(repo_root / DB_PATH)
+    cur = conn.cursor()
     cur.execute("DELETE FROM newwords")
     
     insert_sql = """

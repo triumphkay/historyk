@@ -11,11 +11,20 @@ const typeDetails = (typeMetadata as { 'types-details': TypeDetail[] })['types-d
 
 interface TypeLabelProps {
   types: string[];
+  preferEraType?: boolean; // If true, prefer types ending with -시기
 }
 
-const TypeLabel: React.FC<TypeLabelProps> = ({ types }) => {
+const TypeLabel: React.FC<TypeLabelProps> = ({ types, preferEraType = false }) => {
   const theme = useTheme();
-  const selectedType = useMemo(() => pickDisplayType(types), [types]);
+  
+  const selectedType = useMemo(() => {
+    if (preferEraType) {
+      // For era quiz, prefer types ending with -시기
+      const eraType = types.find(type => type.endsWith('-시기') || type === '시기');
+      return eraType || pickDisplayType(types);
+    }
+    return pickDisplayType(types);
+  }, [types, preferEraType]);
 
   const questionText = useMemo(() => {
     if (!selectedType) {

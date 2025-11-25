@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { ScrollView, StyleSheet, View, Pressable, Animated } from 'react-native';
 import { ActivityIndicator, Button, Menu, Surface, Text, TextInput, useTheme } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import EraAnswerModal from '../components/EraAnswerModal';
 import ReferenceModal from '../components/ReferenceModal';
-import { useEraQuiz } from '../context/EraQuizContext';
+import TypeLabel from '../components/TypeLabel';
+import { useNewWordEraQuiz } from '../context/NewWordEraQuizContext';
 import { RootStackParamList } from '../types/navigation';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
@@ -13,6 +13,7 @@ import { getFrequencyLabel, parseYearParts } from '../utils/eraQuiz';
 import keywordTypes from '../../assets/keyword-types.json';
 import { TypeDetail } from '../types/TypeDetail';
 import { pickDisplayType } from '../utils/types';
+import { quizScreenStyles, eraQuizStyles } from '../theme/quizStyles';
 
 interface DropdownSelectProps {
   label: string;
@@ -54,13 +55,14 @@ type Props = NativeStackScreenProps<RootStackParamList, 'KeywordEraQuizScreen'>;
 
 const KeywordEraQuizScreen: React.FC<Props> = () => {
   const theme = useTheme();
-  const { problems, currentProblem, currentIndex, totalProblems, goToNext, goToPrevious, loading, resetKey } = useEraQuiz();
+  const { problems, currentProblem, selectedEraIndex, currentIndex, totalProblems, goToNext, goToPrevious, loading, resetKey } = useNewWordEraQuiz();
   const [country, setCountry] = useState('');
   const [leader, setLeader] = useState('');
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
-  const [answerModalVisible, setAnswerModalVisible] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
   const [referenceVisible, setReferenceVisible] = useState(false);
+  const flipAnimation = useRef(new Animated.Value(0)).current;
 
   const metadata = keywordTypes as {
     'key-age': Array<{ nation: string; list: string[] }>;
@@ -68,37 +70,66 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
   };
   const keyAgeData = metadata['key-age'] || [];
   const typeDetails = metadata['types-details'] || [];
+  
+  // Get selected era and det_era based on selectedEraIndex
+  const selectedEra = useMemo(() => {
+    if (!currentProblem || !currentProblem.era[selectedEraIndex]) return '';
+    return currentProblem.era[selectedEraIndex];
+  }, [currentProblem, selectedEraIndex]);
+
+  const selectedDetEra = useMemo(() => {
+    if (!currentProblem || !currentProblem.det_era[selectedEraIndex]) return '';
+    return currentProblem.det_era[selectedEraIndex];
+  }, [currentProblem, selectedEraIndex]);
+
+  // Determine if this is nation-only (no det_era) or nation+leader
+  const hasLeaderAnswer = Boolean(selectedDetEra.trim());
+
   const countryOptions = useMemo(
     () => Array.from(new Set(keyAgeData.map((item) => item.nation))),
     [keyAgeData]
   );
+  
   const leaderOptions = useMemo(() => {
-    const entry = keyAgeData.find((item) => item.nation === country);
+    const entry = keyAgeData.find((item) => item.nation === selectedEra);
     return entry ? entry.list : [];
-  }, [country, keyAgeData]);
+  }, [selectedEra, keyAgeData]);
 
   useEffect(() => {
-    const group = currentProblem?.times?.[0] || '';
-    setCountry(group);
+    // Set country based on selected era
+    setCountry(hasLeaderAnswer ? selectedEra : '');
     setLeader('');
     setYear('');
     setMonth('');
-  }, [currentProblem, resetKey]);
+    // Reset flip when problem changes
+    setIsFlipped(false);
+    flipAnimation.setValue(0);
+  }, [currentProblem, resetKey, selectedEra, hasLeaderAnswer, flipAnimation]);
 
   const yearParts = useMemo(() => parseYearParts(currentProblem?.years || ''), [currentProblem]);
   const referenceEntries = useMemo(() => mergeReferenceIds(currentProblem?.ref_id || [], currentProblem?.q_ref_id || []), [currentProblem]);
-  const frequencyLabel = useMemo(() => getFrequencyLabel(currentProblem?.score || []), [currentProblem]);
-  const questionText = useMemo(() => {
-    if (!currentProblem) {
-      return '';
-    }
-    const selectedType = pickDisplayType(currentProblem.types);
-    if (!selectedType) {
-      return '';
-    }
-    const detail = typeDetails.find((item) => item.title === selectedType);
-    return detail?.question || selectedType;
-  }, [currentProblem, typeDetails]);
+  const frequencyLabel = useMemo(() => getFrequencyLabel(currentProblem?.scores || []), [currentProblem]);
+
+  const handleFlip = () => {
+    const toValue = isFlipped ? 0 : 1;
+    Animated.spring(flipAnimation, {
+      toValue,
+      friction: 8,
+      tension: 10,
+      useNativeDriver: true,
+    }).start();
+    setIsFlipped(!isFlipped);
+  };
+
+  const frontInterpolate = flipAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
+  });
+
+  const backInterpolate = flipAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['180deg', '360deg'],
+  });
 
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < totalProblems - 1;
@@ -124,9 +155,8 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
   }
 
   const handleNumericChange = (value: string, length: number) => value.replace(/[^0-9]/g, '').slice(0, length);
-  const shouldShowYearInputs = currentProblem.y_check === 'true';
-  const hasLeaderAnswer = Boolean((currentProblem.times?.[1] || '').trim());
-  const leaderDisabled = !hasLeaderAnswer || !country;
+  const shouldShowYearInputs = currentProblem.years_check === 'true';
+  const leaderDisabled = !hasLeaderAnswer || (hasLeaderAnswer && !country);
 
   return (
     <Surface style={styles.container}>
@@ -141,81 +171,133 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
           </Button>
         </Surface>
 
-        <Surface style={styles.card} elevation={1}>
-          {questionText ? (
-            <Text style={[styles.hintLabel, { color: theme.colors.onSurfaceVariant }]}>{questionText}</Text>
-          ) : null}
-          <Text style={[styles.keyword, { color: theme.colors.onSurface }]}>{currentProblem.keyword}</Text>
-        </Surface>
+        <View style={{ position: 'relative', minHeight: 400 }}>
+          {/* Front Side */}
+          <Animated.View
+            style={[
+              flipStyles.flipCard,
+              { transform: [{ rotateY: frontInterpolate }] },
+              isFlipped && flipStyles.flipCardFrontHidden
+            ]}
+          >
+            <Surface style={styles.card} elevation={3}>
+              <View style={styles.infoRow}>
+                <Text style={[styles.frequencyText, { color: theme.colors.onSurfaceVariant }]}>
+                  {frequencyLabel}
+                </Text>
+                <Pressable
+                  onPress={() => setReferenceVisible(true)}
+                  accessibilityRole="button"
+                  hitSlop={8}
+                >
+                  <Text style={[styles.referenceText, { color: theme.colors.primary }]}>
+                    {`${referenceEntries.length}회 출제`}
+                  </Text>
+                </Pressable>
+              </View>
 
-        <View style={styles.dropdownRow}>
-          <DropdownSelect label="시기" value={country} options={countryOptions} onSelect={setCountry} disabled />
-          {hasLeaderAnswer ? (
-            <DropdownSelect
-              label="상세"
-              value={leader}
-              options={leaderOptions}
-              onSelect={setLeader}
-              disabled={leaderDisabled}
-            />
-          ) : null}
+              <TypeLabel types={currentProblem.types} preferEraType={true} />
+
+              <Text style={[styles.keyword, { color: theme.colors.onSurface }]}>
+                {currentProblem.keyword}
+                {currentProblem.era_script && currentProblem.era_script.length > 0 && currentProblem.era_script[0] 
+                  ? ` ${currentProblem.era_script[0]}` 
+                  : ''}
+              </Text>
+
+              <View style={styles.dropdownRow}>
+                <DropdownSelect 
+                  label="시기" 
+                  value={country} 
+                  options={countryOptions} 
+                  onSelect={setCountry} 
+                  disabled={hasLeaderAnswer} 
+                />
+                {hasLeaderAnswer ? (
+                  <DropdownSelect
+                    label="상세"
+                    value={leader}
+                    options={leaderOptions}
+                    onSelect={setLeader}
+                    disabled={false}
+                  />
+                ) : null}
+              </View>
+
+              {shouldShowYearInputs ? (
+                <View style={styles.yearContainer}>
+                  <Text style={[styles.hintLabel, { color: theme.colors.onSurfaceVariant }]}>연도</Text>
+                  <View style={styles.yearRow}>
+                    <TextInput
+                      mode="outlined"
+                      label="YYYY"
+                      keyboardType="numeric"
+                      value={year}
+                      onChangeText={(text) => setYear(handleNumericChange(text, 4))}
+                      style={styles.yearInput}
+                      placeholder="0000"
+                    />
+                    <Text style={styles.yearSuffix}>년</Text>
+                    {yearParts.month ? (
+                      <>
+                        <TextInput
+                          mode="outlined"
+                          label="MM"
+                          keyboardType="numeric"
+                          value={month}
+                          onChangeText={(text) => setMonth(handleNumericChange(text, 2))}
+                          style={styles.yearInput}
+                          placeholder="00"
+                        />
+                        <Text style={styles.yearSuffix}>월</Text>
+                      </>
+                    ) : null}
+                  </View>
+                </View>
+              ) : null}
+            </Surface>
+          </Animated.View>
+
+          {/* Back Side */}
+          <Animated.View
+            style={[
+              flipStyles.flipCard,
+              flipStyles.flipCardBack,
+              { transform: [{ rotateY: backInterpolate }] }
+            ]}
+          >
+            <Surface style={[styles.card, flipStyles.answerCard]} elevation={3}>
+              <Text style={flipStyles.answerTitle}>정답</Text>
+              <Text style={flipStyles.answerKeyword}>{currentProblem.keyword}</Text>
+              <View style={flipStyles.answerDetails}>
+                <Text style={flipStyles.answerLabel}>시대</Text>
+                <Text style={flipStyles.answerValue}>{selectedEra}</Text>
+                {selectedDetEra && (
+                  <>
+                    <Text style={flipStyles.answerLabel}>상세</Text>
+                    <Text style={flipStyles.answerValue}>{selectedDetEra}</Text>
+                  </>
+                )}
+                {currentProblem.years && (
+                  <>
+                    <Text style={flipStyles.answerLabel}>연도</Text>
+                    <Text style={flipStyles.answerValue}>{currentProblem.years}</Text>
+                  </>
+                )}
+              </View>
+            </Surface>
+          </Animated.View>
         </View>
 
-        {shouldShowYearInputs ? (
-          <Surface elevation={0} style={styles.yearContainer}>
-            <Text style={[styles.hintLabel, { color: theme.colors.onSurfaceVariant }]}>연도</Text>
-            <View style={styles.yearRow}>
-              <TextInput
-                mode="outlined"
-                label="YYYY"
-                keyboardType="numeric"
-                value={year}
-                onChangeText={(text) => setYear(handleNumericChange(text, 4))}
-                style={styles.yearInput}
-                placeholder="0000"
-              />
-              <Text style={styles.yearSuffix}>년</Text>
-              {yearParts.month ? (
-                <>
-                  <TextInput
-                    mode="outlined"
-                    label="MM"
-                    keyboardType="numeric"
-                    value={month}
-                    onChangeText={(text) => setMonth(handleNumericChange(text, 2))}
-                    style={styles.yearInput}
-                    placeholder="00"
-                  />
-                  <Text style={styles.yearSuffix}>월</Text>
-                </>
-              ) : null}
-            </View>
-          </Surface>
-        ) : null}
-
-        <Text style={[styles.frequency, { color: theme.colors.onSurfaceVariant }]}>{frequencyLabel}</Text>
-
-        <Button mode="outlined" onPress={() => setReferenceVisible(true)} style={styles.referenceButton}>
-          {`${referenceEntries.length}회 출제`}
-        </Button>
-
-        <Button mode="contained" onPress={() => setAnswerModalVisible(true)}>
-          확인하기
+        <Button 
+          mode="contained" 
+          style={styles.submitButton}
+          onPress={handleFlip}
+        >
+          {isFlipped ? '문제로 돌아가기' : '확인하기'}
         </Button>
       </ScrollView>
 
-      <EraAnswerModal
-        visible={answerModalVisible}
-        times={currentProblem.times}
-        years={currentProblem.years}
-        onClose={() => setAnswerModalVisible(false)}
-        onNext={() => {
-          setAnswerModalVisible(false);
-          if (canGoNext) {
-            goToNext();
-          }
-        }}
-      />
       <ReferenceModal
         visible={referenceVisible}
         entries={referenceEntries}
@@ -225,71 +307,51 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
+const styles = { ...quizScreenStyles, ...eraQuizStyles };
+
+const flipStyles = StyleSheet.create({
+  flipCard: {
+    width: '100%',
+    backfaceVisibility: 'hidden',
   },
-  scrollContent: {
+  flipCardFrontHidden: {},
+  flipCardBack: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  answerCard: {
     padding: spacing.lg,
-    gap: spacing.md
-  },
-  card: {
-    padding: spacing.md,
-    borderRadius: spacing.md
-  },
-  hintLabel: {
-    fontSize: typography.sizes.sm
-  },
-  keyword: {
-    fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
-    marginTop: spacing.xs
-  },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.md,
-    gap: spacing.sm
+    justifyContent: 'center',
+    minHeight: 300,
   },
-  counter: {
+  answerTitle: {
     fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold
+    fontWeight: typography.weights.medium,
+    marginBottom: spacing.md,
   },
-  dropdownRow: {
-    flexDirection: 'row',
-    gap: spacing.sm
+  answerKeyword: {
+    fontSize: typography.sizes.xxl,
+    fontWeight: typography.weights.bold,
+    marginBottom: spacing.lg,
   },
-  dropdownButton: {
-    flex: 1
-  },
-  yearContainer: {
-    padding: spacing.md,
-    borderRadius: spacing.md
-  },
-  yearRow: {
-    flexDirection: 'row',
+  answerDetails: {
     alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: spacing.xs
+    marginTop: spacing.md,
   },
-  yearInput: {
-    width: 80
+  answerLabel: {
+    fontSize: typography.sizes.md,
+    fontWeight: typography.weights.medium,
+    marginTop: spacing.sm,
+    opacity: 0.7,
   },
-  yearSuffix: {
-    fontSize: typography.sizes.md
+  answerValue: {
+    fontSize: typography.sizes.lg,
+    fontWeight: typography.weights.bold,
+    marginBottom: spacing.xs,
   },
-  frequency: {
-    fontSize: typography.sizes.md
-  },
-  referenceButton: {
-    marginTop: spacing.sm
-  },
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
 });
 
 export default KeywordEraQuizScreen;

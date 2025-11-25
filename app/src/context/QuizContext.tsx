@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { QuizItem } from '../types/QuizItem';
-import { loadKeywordData } from '../utils/dataLoader';
-import { prepareProblems } from '../utils/filters';
+import { loadNewWordData } from '../utils/dataLoader';
+import { prepareNewWordProblems, prepareNewWordQuizProblems } from '../utils/filters';
 
 interface QuizContextValue {
-  problems: QuizItem[];
+  problems: QuizItem[]; // All problems for keyword list
+  quizProblems: QuizItem[]; // Filtered problems for quiz (descriptions >= 3)
   currentProblem: QuizItem | null;
   currentIndex: number;
   totalProblems: number;
@@ -20,7 +21,8 @@ interface QuizContextValue {
 const QuizContext = createContext<QuizContextValue | undefined>(undefined);
 
 export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [problems, setProblems] = useState<QuizItem[]>([]);
+  const [problems, setProblems] = useState<QuizItem[]>([]); // All problems
+  const [quizProblems, setQuizProblems] = useState<QuizItem[]>([]); // Filtered for quiz
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [resetKey, setResetKey] = useState(0);
@@ -28,9 +30,11 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const bootstrap = async () => {
-      const rawKeywords = await loadKeywordData();
-      const prepared = prepareProblems(rawKeywords);
-      setProblems(prepared);
+      const newWords = await loadNewWordData();
+      const allPrepared = prepareNewWordProblems(newWords); // All without filtering
+      const quizPrepared = prepareNewWordQuizProblems(newWords); // Filtered for quiz
+      setProblems(allPrepared);
+      setQuizProblems(quizPrepared);
       setLoading(false);
     };
 
@@ -38,11 +42,11 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const currentProblem = useMemo(() => {
-    if (!problems.length) {
+    if (!quizProblems.length) {
       return null;
     }
-    return problems[currentIndex];
-  }, [currentIndex, problems]);
+    return quizProblems[currentIndex];
+  }, [currentIndex, quizProblems]);
 
   const resetAnswer = () => {
     setAnswer('');
@@ -50,7 +54,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const goToNext = () => {
-    if (currentIndex < problems.length - 1) {
+    if (currentIndex < quizProblems.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       resetAnswer();
     }
@@ -64,10 +68,11 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const value: QuizContextValue = {
-    problems,
+    problems, // All problems for keyword list
+    quizProblems, // Filtered problems for quiz
     currentProblem,
     currentIndex,
-    totalProblems: problems.length,
+    totalProblems: quizProblems.length,
     goToNext,
     goToPrevious,
     answer,

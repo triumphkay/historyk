@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Surface, TextInput, Text, useTheme } from 'react-native-paper';
+import { StyleSheet, View, TextInput } from 'react-native';
+import { Surface, Text, useTheme } from 'react-native-paper';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 
@@ -16,7 +16,7 @@ interface SlotMeta {
   key: string;
 }
 
-const BOX_SIZE = 32;
+const BOX_SIZE = 40;
 
 const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, resetKey }) => {
   const theme = useTheme();
@@ -72,18 +72,25 @@ const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, rese
         }
 
         return (
-          <TextInput
-            key={slot.key}
-            mode="outlined"
-            style={{ ...styles.box, width: BOX_SIZE, height: BOX_SIZE }}
-            textAlign="center"
-            maxLength={1}
-            value={values[index] || ''}
-            onChangeText={(text) => handleChange(text, index)}
-            outlineColor={theme.colors.outline}
-            activeOutlineColor={theme.colors.primary}
-            theme={theme}
-          />
+          <View key={slot.key} style={{ width: BOX_SIZE, height: BOX_SIZE }}>
+            <TextInput
+              style={{
+                width: BOX_SIZE,
+                height: BOX_SIZE,
+                borderWidth: 1,
+                borderColor: values[index] ? theme.colors.primary : theme.colors.outline,
+                borderRadius: 4,
+                textAlign: 'center',
+                fontSize: typography.sizes.lg,
+                color: theme.colors.onSurface,
+                backgroundColor: theme.colors.surface,
+                padding: 0
+              }}
+              maxLength={1}
+              value={values[index] || ''}
+              onChangeText={(text) => handleChange(text, index)}
+            />
+          </View>
         );
       })}
     </Surface>
