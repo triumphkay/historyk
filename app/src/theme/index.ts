@@ -1,4 +1,44 @@
-import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
+import { MD3DarkTheme, MD3LightTheme, configureFonts } from 'react-native-paper';
+
+const regularFont = {
+  fontFamily: 'NotoSansKR-Regular',
+  fontWeight: '400',
+  letterSpacing: 0,
+};
+
+const mediumFont = {
+  fontFamily: 'NotoSansKR-Medium',
+  fontWeight: '500',
+  letterSpacing: 0,
+};
+
+const boldFont = {
+  fontFamily: 'NotoSansKR-Bold',
+  fontWeight: '700',
+  letterSpacing: 0,
+};
+
+const fontConfig = {
+  displayLarge: regularFont,
+  displayMedium: regularFont,
+  displaySmall: regularFont,
+  headlineLarge: regularFont,
+  headlineMedium: regularFont,
+  headlineSmall: regularFont,
+  titleLarge: boldFont,
+  titleMedium: mediumFont,
+  titleSmall: mediumFont,
+  bodyLarge: regularFont,
+  bodyMedium: regularFont,
+  bodySmall: regularFont,
+  labelLarge: mediumFont,
+  labelMedium: mediumFont,
+  labelSmall: regularFont,
+};
+
+const paperFonts = configureFonts({
+  config: fontConfig,
+});
 
 // Ivory-gray grayscale theme (key color #ff685b reserved for future use)
 const lightThemeColors = {
@@ -88,6 +128,7 @@ const darkThemeColors = {
 
 export const lightTheme = {
   ...MD3LightTheme,
+  fonts: paperFonts,
   colors: {
     ...MD3LightTheme.colors,
     ...lightThemeColors
@@ -96,6 +137,7 @@ export const lightTheme = {
 
 export const darkTheme = {
   ...MD3DarkTheme,
+  fonts: paperFonts,
   colors: {
     ...MD3DarkTheme.colors,
     ...darkThemeColors

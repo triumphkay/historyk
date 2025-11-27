@@ -7,6 +7,7 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import { Appbar, PaperProvider, useTheme, Text } from "react-native-paper";
+import { useFonts } from "expo-font";
 import HomeScreen from "./src/screens/HomeScreen";
 import KeywordListScreen from "./src/screens/KeywordListScreen";
 import QuizScreen from "./src/screens/QuizScreen";
@@ -171,6 +172,11 @@ const AppNavigator = () => (
 const ThemedApp: React.FC = () => {
   const colorScheme = useColorScheme();
   const { preference, isReady } = useThemePreference();
+  const [fontsLoaded] = useFonts({
+    "NotoSansKR-Regular": require("./assets/fonts/NotoSansKR_400Regular.ttf"),
+    "NotoSansKR-Medium": require("./assets/fonts/NotoSansKR_500Medium.ttf"),
+    "NotoSansKR-Bold": require("./assets/fonts/NotoSansKR_700Bold.ttf"),
+  });
 
   // Add global CSS for Korean word-break on web
   useEffect(() => {
@@ -193,7 +199,7 @@ const ThemedApp: React.FC = () => {
     preference === "system" ? colorScheme ?? "light" : preference;
   const currentTheme = resolvedPreference === "dark" ? darkTheme : lightTheme;
 
-  if (!isReady) {
+  if (!isReady || !fontsLoaded) {
     return null;
   }
 

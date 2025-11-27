@@ -6,11 +6,12 @@
   "scripts": {
     "generate:db": "node ../data-pipeline/scripts/generate-db-json.js",
     "copy:json": "node scripts/copy-json.js",
-    "prestart": "npm run generate:db && npm run copy:json",
-    "preandroid": "npm run generate:db && npm run copy:json",
-    "preios": "npm run generate:db && npm run copy:json",
-    "preweb": "npm run generate:db && npm run copy:json",
-    "prebuild": "npm run generate:db && npm run copy:json",
+    "sync:data": "npm run generate:db && npm run copy:json",
+    "prestart": "node scripts/prep-data.js",
+    "preandroid": "node scripts/prep-data.js",
+    "preios": "node scripts/prep-data.js",
+    "preweb": "node scripts/prep-data.js",
+    "prebuild": "npm run sync:data",
     "prepare": "npm run copy:json",
     "start": "expo start",
     "android": "expo start --android",
@@ -19,6 +20,7 @@
     "build": "expo build"
   },
   "dependencies": {
+    "@expo-google-fonts/noto-sans-kr": "^0.4.2",
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "^2.2.0",
