@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Chip, Surface, useTheme } from 'react-native-paper';
+import { Chip, Surface, Text, useTheme } from 'react-native-paper';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 
@@ -15,14 +15,15 @@ const DescriptionList: React.FC<DescriptionListProps> = ({ descriptions }) => {
     <Surface elevation={0} style={styles.container}>
       <View style={styles.chipRow}>
         {descriptions.map((description, index) => (
-          <Chip
+          <Surface
             key={`${index}-${description.slice(0, 8)}`}
-            mode="outlined"
-            style={[styles.chip, { borderColor: theme.colors.outline }]}
-            textStyle={[styles.chipText, { color: theme.colors.onSurface }]}
+            elevation={1}
+            style={[styles.chip, { backgroundColor: theme.colors.secondaryContainer }]}
           >
-            {description}
-          </Chip>
+            <Text style={[styles.chipText, { color: theme.colors.onSecondaryContainer }]}>
+              {description}
+            </Text>
+          </Surface>
         ))}
       </View>
     </Surface>
@@ -31,23 +32,25 @@ const DescriptionList: React.FC<DescriptionListProps> = ({ descriptions }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: spacing.lg
+    marginVertical: spacing.lg,
+    width: '100%',
   },
   chipRow: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: spacing.sm
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    gap: spacing.sm,
   },
   chip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: spacing.md,
-    alignSelf: 'center'
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 16,
+    marginBottom: spacing.xs,
   },
   chipText: {
     fontSize: typography.sizes.md,
-    lineHeight: 22
-  }
+    lineHeight: 22,
+  },
 });
 
 export default DescriptionList;

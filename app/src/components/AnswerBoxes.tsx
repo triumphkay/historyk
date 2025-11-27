@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
-import { Surface, Text, useTheme } from 'react-native-paper';
-import { spacing } from '../theme/spacing';
-import { typography } from '../theme/typography';
+import React, { useEffect, useMemo, useState } from "react";
+import { StyleSheet, View, TextInput } from "react-native";
+import { Surface, Text, useTheme } from "react-native-paper";
+import { spacing } from "../theme/spacing";
+import { typography } from "../theme/typography";
 
 interface AnswerBoxesProps {
   keyword: string;
@@ -18,31 +18,37 @@ interface SlotMeta {
 
 const BOX_SIZE = 40;
 
-const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, resetKey }) => {
+const AnswerBoxes: React.FC<AnswerBoxesProps> = ({
+  keyword,
+  onAnswerChange,
+  resetKey,
+}) => {
   const theme = useTheme();
 
   const slots = useMemo<SlotMeta[]>(
     () =>
-      keyword.split('').map((char, index) => ({
-        isSpace: char === ' ',
+      keyword.split("").map((char, index) => ({
+        isSpace: char === " ",
         char,
-        key: `${keyword}-${index}`
+        key: `${keyword}-${index}`,
       })),
     [keyword]
   );
 
-  const [values, setValues] = useState<string[]>(slots.map((slot) => (slot.isSpace ? ' ' : '')));
+  const [values, setValues] = useState<string[]>(
+    slots.map((slot) => (slot.isSpace ? " " : ""))
+  );
 
   useEffect(() => {
-    setValues(slots.map((slot) => (slot.isSpace ? ' ' : '')));
+    setValues(slots.map((slot) => (slot.isSpace ? " " : "")));
   }, [resetKey, slots]);
 
   useEffect(() => {
-    onAnswerChange?.(values.join(''));
+    onAnswerChange?.(values.join(""));
   }, [onAnswerChange, values]);
 
   const handleChange = (text: string, index: number) => {
-    const cleanChar = text.replace(/\s/g, '').slice(-1);
+    const cleanChar = text.replace(/\s/g, "").slice(-1);
     setValues((prev) => {
       const next = [...prev];
       next[index] = cleanChar;
@@ -56,13 +62,16 @@ const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, rese
         if (slot.isSpace) {
           return <View key={slot.key} style={{ width: BOX_SIZE * 0.15 }} />;
         }
-        if (slot.char && (slot.char === '.' || slot.char === '·')) {
+        if (slot.char && (slot.char === "." || slot.char === "·")) {
           return (
-            <View key={slot.key} style={[styles.punctuation, { width: BOX_SIZE * 0.15 }]}>
+            <View
+              key={slot.key}
+              style={[styles.punctuation, { width: BOX_SIZE * 0.15 }]}
+            >
               <Text
                 style={{
                   color: theme.colors.onSurface,
-                  fontSize: typography.sizes.md
+                  fontSize: typography.sizes.md,
                 }}
               >
                 {slot.char}
@@ -72,22 +81,27 @@ const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, rese
         }
 
         return (
-          <View key={slot.key} style={{ width: BOX_SIZE, height: BOX_SIZE }}>
+          <View
+            key={slot.key}
+            style={{ width: BOX_SIZE * 0.75, height: BOX_SIZE }}
+          >
             <TextInput
               style={{
-                width: BOX_SIZE,
+                width: BOX_SIZE * 0.75,
                 height: BOX_SIZE,
                 borderWidth: 1,
-                borderColor: values[index] ? theme.colors.primary : theme.colors.outline,
+                borderColor: values[index]
+                  ? theme.colors.primary
+                  : theme.colors.outline,
                 borderRadius: 4,
-                textAlign: 'center',
+                textAlign: "center",
                 fontSize: typography.sizes.lg,
                 color: theme.colors.onSurface,
                 backgroundColor: theme.colors.surface,
-                padding: 0
+                padding: 0,
               }}
               maxLength={1}
-              value={values[index] || ''}
+              value={values[index] || ""}
               onChangeText={(text) => handleChange(text, index)}
             />
           </View>
@@ -99,20 +113,20 @@ const AnswerBoxes: React.FC<AnswerBoxesProps> = ({ keyword, onAnswerChange, rese
 
 const styles = StyleSheet.create({
   wrapper: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     columnGap: spacing.sm,
     rowGap: spacing.md,
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   box: {
-    textAlign: 'center'
+    textAlign: "center",
   },
   punctuation: {
     height: BOX_SIZE,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default AnswerBoxes;

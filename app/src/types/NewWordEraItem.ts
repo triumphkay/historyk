@@ -11,4 +11,5 @@ export interface NewWordEraItem {
   years: string;
   years_check: string;
   era_script: string[];
+  descriptions: string[];
 }

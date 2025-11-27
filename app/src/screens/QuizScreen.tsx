@@ -1,20 +1,32 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
-import { ScrollView, StyleSheet, View, Pressable, Animated } from 'react-native';
-import { ActivityIndicator, Button, Surface, Text, useTheme } from 'react-native-paper';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import AnswerBoxes from '../components/AnswerBoxes';
-import DescriptionList from '../components/DescriptionList';
-import ReferenceModal from '../components/ReferenceModal';
-import ScoreFrequencyLabel from '../components/ScoreFrequencyLabel';
-import TypeLabel from '../components/TypeLabel';
-import { useQuiz } from '../context/QuizContext';
-import { RootStackParamList } from '../types/navigation';
-import { spacing } from '../theme/spacing';
-import { typography } from '../theme/typography';
-import { mergeReferenceIds } from '../utils/references';
-import { quizScreenStyles } from '../theme/quizStyles';
+import React, { useMemo, useState, useRef, useEffect } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Pressable,
+  Animated,
+} from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  IconButton,
+  Surface,
+  Text,
+  useTheme,
+  TextInput,
+} from "react-native-paper";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import DescriptionList from "../components/DescriptionList";
+import ScoreFrequencyLabel from "../components/ScoreFrequencyLabel";
+import TypeLabel from "../components/TypeLabel";
+import { useQuiz } from "../context/QuizContext";
+import { RootStackParamList } from "../types/navigation";
+import { spacing } from "../theme/spacing";
+import { typography } from "../theme/typography";
+import { mergeReferenceIds } from "../utils/references";
+import { quizScreenStyles } from "../theme/quizStyles";
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Quiz'>;
+type Props = NativeStackScreenProps<RootStackParamList, "Quiz">;
 
 const selectRandomDescriptions = (descriptions: string[]) => {
   if (descriptions.length <= 3) {
@@ -25,20 +37,37 @@ const selectRandomDescriptions = (descriptions: string[]) => {
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value);
   return shuffled.slice(0, 3);
+  return shuffled.slice(0, 3);
 };
 
+const POINT_COLOR_1 = '#f75d00';
+
 const QuizScreen: React.FC<Props> = ({ navigation }) => {
-  const { currentProblem, currentIndex, totalProblems, goToNext, goToPrevious, answer, setAnswer, resetKey, loading } =
-    useQuiz();
+  const {
+    currentProblem,
+    currentIndex,
+    totalProblems,
+    goToNext,
+    goToPrevious,
+    answer,
+    setAnswer,
+    resetKey,
+    loading,
+  } = useQuiz();
   const theme = useTheme();
   const [isFlipped, setIsFlipped] = useState(false);
-  const [referenceModalVisible, setReferenceModalVisible] = useState(false);
   const flipAnimation = useRef(new Animated.Value(0)).current;
 
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < totalProblems - 1;
-  const isCorrect = useMemo(() => (currentProblem ? answer === currentProblem.keyword : false), [answer, currentProblem]);
-  const headerText = useMemo(() => `${currentIndex + 1} / ${totalProblems}`, [currentIndex, totalProblems]);
+  const isCorrect = useMemo(
+    () => (currentProblem ? answer.replace(/\s/g, "") === currentProblem.keyword.replace(/\s/g, "") : false),
+    [answer, currentProblem]
+  );
+  const headerText = useMemo(
+    () => `${currentIndex + 1} / ${totalProblems}`,
+    [currentIndex, totalProblems]
+  );
   const referenceEntries = useMemo(() => {
     if (!currentProblem) {
       return [];
@@ -50,6 +79,10 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
     () => selectRandomDescriptions(currentProblem?.descriptions || []),
     [currentProblem?.id, currentProblem?.descriptions]
   );
+  const answerLength = useMemo(() => {
+    if (!currentProblem) return 0;
+    return currentProblem.keyword.replace(/[ ·.]/g, "").length;
+  }, [currentProblem]);
 
   // Reset flip when problem changes
   useEffect(() => {
@@ -70,12 +103,12 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
 
   const frontInterpolate = flipAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
+    outputRange: ["0deg", "180deg"],
   });
 
   const backInterpolate = flipAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: ['180deg', '360deg'],
+    outputRange: ["180deg", "360deg"],
   });
 
   if (loading) {
@@ -96,37 +129,70 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <Surface style={quizScreenStyles.container}>
-      <ScrollView contentContainerStyle={quizScreenStyles.scrollContent}>
-        <Surface style={styles.countContainer} elevation={1}>
-          <Text style={styles.countText}>{headerText}</Text>
-        </Surface>
-
-        <View style={{ position: 'relative', minHeight: 400 }}>
+      <Surface style={[styles.navigationBar, { backgroundColor: theme.colors.background }]} elevation={1}>
+        <IconButton
+          icon="chevron-left"
+          onPress={goToPrevious}
+          disabled={!canGoPrevious}
+          size={32}
+        />
+        <Text variant="bodyLarge" style={{ fontWeight: 'bold', color: theme.colors.primary }}>
+          {headerText}
+        </Text>
+        <IconButton
+          icon="chevron-right"
+          onPress={goToNext}
+          disabled={!canGoNext}
+          size={32}
+        />
+      </Surface>
+      
+      <ScrollView
+        contentContainerStyle={quizScreenStyles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={{ position: 'relative', height: 360 }}>
           {/* Front Side */}
           <Animated.View
             style={[
               styles.flipCard,
               { transform: [{ rotateY: frontInterpolate }] },
-              isFlipped && styles.flipCardFrontHidden // Hide front when flipped
+              isFlipped && styles.flipCardFrontHidden,
             ]}
+            pointerEvents={isFlipped ? 'none' : 'auto'}
           >
-            <Surface style={quizScreenStyles.card} elevation={3}>
-              <View style={quizScreenStyles.infoRow}>
-                <ScoreFrequencyLabel scores={currentProblem.score} textStyle={quizScreenStyles.frequencyText} />
-                <Pressable
-                  onPress={() => setReferenceModalVisible(true)}
-                  accessibilityRole="button"
-                  hitSlop={8}
-                >
-                  <Text style={[quizScreenStyles.referenceText, { color: theme.colors.primary }]}>
-                    {`${referenceCount}회 출제`}
-                  </Text>
-                </Pressable>
+            <Surface style={[quizScreenStyles.card, styles.fixedCard, { backgroundColor: '#000000' }]} elevation={3}>
+              {/* Header Section */}
+              <View style={styles.cardHeader}>
+                <ScoreFrequencyLabel
+                  scores={currentProblem.score}
+                  textStyle={[quizScreenStyles.frequencyText, { color: 'rgba(255, 255, 255, 0.7)' }]}
+                />
+                <TypeLabel types={currentProblem.types} />
               </View>
 
-              <TypeLabel types={currentProblem.types} />
-              <DescriptionList descriptions={displayDescriptions} />
-              <AnswerBoxes keyword={currentProblem.keyword} onAnswerChange={setAnswer} resetKey={resetKey} />
+              {/* Hint Section (Centered) */}
+              <View style={styles.cardHint}>
+                <DescriptionList descriptions={displayDescriptions} />
+              </View>
+
+              {/* Answer Section (Bottom) */}
+              <View style={styles.cardAnswer}>
+                <Text style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: 12, marginBottom: 4, marginLeft: 4 }}>
+                  정답 ({answerLength}자)
+                </Text>
+                <TextInput
+                  mode="flat"
+                  value={answer}
+                  onChangeText={setAnswer}
+                  placeholder="답을 입력하세요"
+                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                  textColor={POINT_COLOR_1}
+                  underlineColor="rgba(255, 255, 255, 0.5)"
+                  activeUnderlineColor={theme.colors.primary}
+                  style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: typography.sizes.lg, height: 42 }}
+                />
+              </View>
             </Surface>
           </Animated.View>
 
@@ -135,38 +201,63 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
             style={[
               styles.flipCard,
               styles.flipCardBack,
-              { transform: [{ rotateY: backInterpolate }] }
+              { transform: [{ rotateY: backInterpolate }] },
             ]}
+            pointerEvents={isFlipped ? 'auto' : 'none'}
           >
-            <Surface style={[quizScreenStyles.card, styles.answerCard]} elevation={3}>
-              <Text style={[styles.resultText, { color: isCorrect ? theme.colors.secondary : theme.colors.error }]}>
-                {isCorrect ? '정답입니다' : '오답입니다'}
-              </Text>
-              
-              <View style={styles.keywordRow}>
-                <Text style={styles.answerKeyword}>{currentProblem.keyword}</Text>
-                <Pressable 
-                  onPress={() => {
-                    navigation.navigate('KeywordDetail', { keyword: currentProblem });
-                  }}
-                  style={styles.detailButton}
+            <Surface
+              style={[quizScreenStyles.card, styles.answerCard, styles.fixedCard]}
+              elevation={3}
+            >
+              {/* Top Section: Result & Keyword */}
+              <View>
+                <Text
+                  style={[
+                    styles.resultText,
+                    {
+                      color: theme.colors.secondary,
+                      opacity: answer && answer.trim().length > 0 ? 1 : 0,
+                    },
+                  ]}
                 >
-                  <Text style={[styles.detailButtonText, { color: theme.colors.primary }]}>_더보기</Text>
-                </Pressable>
-              </View>
-
-              <View style={styles.descriptionsContainer}>
-                <Text 
-                  style={styles.descriptionsText}
-                  numberOfLines={3}
-                  ellipsizeMode="tail"
-                >
-                  {currentProblem.descriptions.join(', ')}
+                  {isCorrect ? "정답입니다" : "오답입니다"}
                 </Text>
+
+                <View style={styles.keywordRow}>
+                  <Text style={[styles.answerKeyword, { color: POINT_COLOR_1 }]}>
+                    {currentProblem.keyword}
+                  </Text>
+                  <IconButton
+                    icon="information-outline"
+                    size={20}
+                    onPress={() => {
+                      navigation.navigate("KeywordDetail", {
+                        keyword: currentProblem,
+                      });
+                    }}
+                    style={{ margin: 0 }}
+                  />
+                </View>
               </View>
 
+              {/* Center Section: Descriptions */}
+              <View style={styles.centerSection}>
+                <View style={{ maxHeight: 150, overflow: 'hidden' }}>
+                  <DescriptionList 
+                    descriptions={[
+                      ...currentProblem.descriptions.slice(0, 7),
+                      ...(currentProblem.descriptions.length > 7 ? ['...'] : [])
+                    ]} 
+                  />
+                </View>
+              </View>
+
+              {/* Bottom Section: Info */}
               <View style={styles.infoRowBottom}>
-                <ScoreFrequencyLabel scores={currentProblem.score} textStyle={styles.importanceText} />
+                <ScoreFrequencyLabel
+                  scores={currentProblem.score}
+                  textStyle={styles.importanceText}
+                />
                 <Text style={styles.referenceCountText}>
                   출제 횟수: {referenceCount}회
                 </Text>
@@ -174,59 +265,97 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
             </Surface>
           </Animated.View>
         </View>
-
-        <View style={styles.bottomButtonRow}>
-          <Button 
-            mode="outlined" 
-            onPress={goToPrevious} 
-            disabled={!canGoPrevious}
-            style={styles.navButton}
-          >
-            ← 이전
-          </Button>
-          <Button
-            mode="contained"
-            style={styles.submitButton}
-            buttonColor={isCorrect ? theme.colors.secondary : theme.colors.primary}
-            onPress={handleFlip}
-          >
-            {isFlipped ? '문제로 돌아가기' : '확인하기'}
-          </Button>
-          <Button 
-            mode="outlined" 
-            onPress={goToNext} 
-            disabled={!canGoNext}
-            style={styles.navButton}
-          >
-            다음 →
-          </Button>
-        </View>
       </ScrollView>
 
-      <ReferenceModal
-        visible={referenceModalVisible}
-        entries={referenceEntries}
-        onClose={() => setReferenceModalVisible(false)}
-      />
+      <View style={styles.fixedButtonContainer}>
+        <Button
+          mode="contained"
+          style={[
+            styles.submitButton,
+            isFlipped && {
+              borderWidth: 1,
+              borderColor: theme.dark
+                ? theme.colors.onSurface
+                : theme.colors.onPrimary,
+            },
+          ]}
+          icon={isFlipped ? "undo" : "check"}
+          buttonColor={
+            isFlipped
+              ? theme.dark
+                ? theme.colors.surface
+                : theme.colors.primary
+              : isCorrect
+                ? theme.colors.secondary
+                : theme.colors.primary
+          }
+          textColor={
+            isFlipped
+              ? theme.dark
+                ? theme.colors.onSurface
+                : theme.colors.onPrimary
+              : undefined
+          }
+          onPress={handleFlip}
+          labelStyle={{
+            fontSize: typography.sizes.lg,
+            fontWeight: typography.weights.medium,
+          }}
+          contentStyle={{
+            height: 48,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {isFlipped ? "문제 보기" : "정답 확인"}
+        </Button>
+      </View>
     </Surface>
   );
 };
 
 const styles = StyleSheet.create({
+  navigationBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  fixedCard: {
+    height: 360,
+    justifyContent: 'space-between',
+  },
+  cardHeader: {
+    paddingTop: spacing.sm,
+  },
+  cardHint: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardAnswer: {
+    paddingBottom: spacing.md,
+  },
+  fixedButtonContainer: {
+    padding: spacing.md,
+    paddingBottom: spacing.lg,
+    alignItems: 'center',
+  },
   countContainer: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.lg,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.08)',
+    borderBottomColor: "rgba(0, 0, 0, 0.08)",
   },
   countText: {
     fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   flipCard: {
-    width: '100%',
-    backfaceVisibility: 'hidden',
+    width: "100%",
+    backfaceVisibility: "hidden",
   },
   flipCardFrontHidden: {
     // This style is applied to the front card when it's flipped to ensure it's visually hidden
@@ -236,15 +365,15 @@ const styles = StyleSheet.create({
     // but it can help with z-index issues or ensuring content isn't clickable.
   },
   flipCardBack: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
   },
   answerCard: {
     padding: spacing.lg,
-    alignItems: 'stretch',
-    justifyContent: 'flex-start',
+    alignItems: "stretch",
+    justifyContent: "flex-start",
     minHeight: 300,
   },
   answerTitle: {
@@ -259,7 +388,7 @@ const styles = StyleSheet.create({
   keywordRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     marginBottom: spacing.md,
   },
   detailButton: {
@@ -274,15 +403,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
     paddingHorizontal: spacing.sm,
   },
-  descriptionsText: {
-    fontSize: typography.sizes.md,
-    lineHeight: 22,
-    textAlign: 'center',
-  },
+
   infoRowBottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: spacing.sm,
     paddingHorizontal: spacing.sm,
   },
@@ -292,24 +417,25 @@ const styles = StyleSheet.create({
   referenceCountText: {
     fontSize: typography.sizes.sm,
   },
-  resultContainer: {
-    alignItems: 'center',
-    marginTop: spacing.md,
-  },
+
   resultText: {
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     marginBottom: spacing.md,
-    textAlign: 'center',
+    textAlign: 'left',
+  },
+  centerSection: {
+    flex: 1,
+    justifyContent: 'center',
   },
   userAnswerText: {
     fontSize: typography.sizes.md,
     opacity: 0.7,
   },
   bottomButtonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: spacing.lg,
     gap: spacing.sm,
   },
@@ -317,7 +443,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   submitButton: {
-    flex: 2,
+    width: 200,
+    height: 48,
+    alignSelf: 'center',
+    borderRadius: 999,
   },
 });
 

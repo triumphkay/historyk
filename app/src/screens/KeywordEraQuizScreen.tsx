@@ -1,19 +1,22 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { ScrollView, StyleSheet, View, Pressable, Animated } from 'react-native';
-import { ActivityIndicator, Button, Menu, Surface, Text, TextInput, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Button, IconButton, Menu, Surface, Text, TextInput, useTheme } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import ReferenceModal from '../components/ReferenceModal';
 import TypeLabel from '../components/TypeLabel';
+
+import ScoreFrequencyLabel from '../components/ScoreFrequencyLabel';
 import { useNewWordEraQuiz } from '../context/NewWordEraQuizContext';
 import { RootStackParamList } from '../types/navigation';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 import { mergeReferenceIds } from '../utils/references';
-import { getFrequencyLabel, parseYearParts } from '../utils/eraQuiz';
+import { parseYearParts } from '../utils/eraQuiz';
 import keywordTypes from '../../assets/keyword-types.json';
 import { TypeDetail } from '../types/TypeDetail';
 import { pickDisplayType } from '../utils/types';
 import { quizScreenStyles, eraQuizStyles } from '../theme/quizStyles';
+
+const YEAR_INPUTS_ENABLED = false; // TODO: 연도 입력 UX가 준비되면 true로 전환
 
 interface DropdownSelectProps {
   label: string;
@@ -23,16 +26,31 @@ interface DropdownSelectProps {
   disabled?: boolean;
 }
 
+const POINT_COLOR_1 = '#f75d00';
+
 const DropdownSelect: React.FC<DropdownSelectProps> = ({ label, value, options, onSelect, disabled }) => {
   const [visible, setVisible] = useState(false);
   const theme = useTheme();
+  const showIcon = !disabled;
   return (
     <Menu
       visible={visible}
       onDismiss={() => setVisible(false)}
       anchor={
-        <Button mode="outlined" onPress={() => setVisible(true)} disabled={disabled} style={styles.dropdownButton}>
-          {value || label}
+        <Button
+          mode="outlined"
+          onPress={() => setVisible(true)}
+          disabled={disabled}
+          style={styles.dropdownButton}
+          textColor={theme.colors.primary}
+          icon={showIcon ? "chevron-down" : undefined}
+        >
+          <Text 
+            variant="labelLarge" 
+            style={{ color: (disabled || value) ? POINT_COLOR_1 : theme.colors.primary }}
+          >
+            {value || label}
+          </Text>
         </Button>
       }
     >
@@ -53,7 +71,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({ label, value, options, 
 
 type Props = NativeStackScreenProps<RootStackParamList, 'KeywordEraQuizScreen'>;
 
-const KeywordEraQuizScreen: React.FC<Props> = () => {
+const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
   const { problems, currentProblem, selectedEraIndex, currentIndex, totalProblems, goToNext, goToPrevious, loading, resetKey } = useNewWordEraQuiz();
   const [country, setCountry] = useState('');
@@ -61,7 +79,6 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
   const [isFlipped, setIsFlipped] = useState(false);
-  const [referenceVisible, setReferenceVisible] = useState(false);
   const flipAnimation = useRef(new Animated.Value(0)).current;
 
   const metadata = keywordTypes as {
@@ -70,7 +87,7 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
   };
   const keyAgeData = metadata['key-age'] || [];
   const typeDetails = metadata['types-details'] || [];
-  
+
   // Get selected era and det_era based on selectedEraIndex
   const selectedEra = useMemo(() => {
     if (!currentProblem || !currentProblem.era[selectedEraIndex]) return '';
@@ -82,6 +99,11 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
     return currentProblem.det_era[selectedEraIndex];
   }, [currentProblem, selectedEraIndex]);
 
+  const selectedSubEra = useMemo(() => {
+    if (!currentProblem || !currentProblem.sub_era || !currentProblem.sub_era[selectedEraIndex]) return '';
+    return currentProblem.sub_era[selectedEraIndex];
+  }, [currentProblem, selectedEraIndex]);
+
   // Determine if this is nation-only (no det_era) or nation+leader
   const hasLeaderAnswer = Boolean(selectedDetEra.trim());
 
@@ -89,7 +111,7 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
     () => Array.from(new Set(keyAgeData.map((item) => item.nation))),
     [keyAgeData]
   );
-  
+
   const leaderOptions = useMemo(() => {
     const entry = keyAgeData.find((item) => item.nation === selectedEra);
     return entry ? entry.list : [];
@@ -108,7 +130,27 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
 
   const yearParts = useMemo(() => parseYearParts(currentProblem?.years || ''), [currentProblem]);
   const referenceEntries = useMemo(() => mergeReferenceIds(currentProblem?.ref_id || [], currentProblem?.q_ref_id || []), [currentProblem]);
-  const frequencyLabel = useMemo(() => getFrequencyLabel(currentProblem?.scores || []), [currentProblem]);
+
+
+  const isCorrect = useMemo(() => {
+    if (!currentProblem) return false;
+
+    // Check Era (Country)
+    if (country !== selectedEra) return false;
+
+    // Check Detail Era (Leader)
+    const hasLeaderAnswer = Boolean(selectedDetEra.trim());
+    if (hasLeaderAnswer && leader !== selectedDetEra) return false;
+
+    // Check Year
+    const shouldShowYearInputs = YEAR_INPUTS_ENABLED && currentProblem.years_check === 'true';
+    if (shouldShowYearInputs) {
+      if (year !== yearParts.year) return false;
+      if (yearParts.month && month !== yearParts.month) return false;
+    }
+
+    return true;
+  }, [currentProblem, country, leader, year, month, selectedEra, selectedDetEra, yearParts]);
 
   const handleFlip = () => {
     const toValue = isFlipped ? 0 : 1;
@@ -155,23 +197,31 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
   }
 
   const handleNumericChange = (value: string, length: number) => value.replace(/[^0-9]/g, '').slice(0, length);
-  const shouldShowYearInputs = currentProblem.years_check === 'true';
+  const shouldShowYearInputs = YEAR_INPUTS_ENABLED && currentProblem.years_check === 'true';
   const leaderDisabled = !hasLeaderAnswer || (hasLeaderAnswer && !country);
 
   return (
     <Surface style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Surface style={styles.headerRow} elevation={0}>
-          <Button mode="outlined" onPress={goToPrevious} disabled={!canGoPrevious}>
-            ← 이전
-          </Button>
-          <Text style={styles.counter}>{headerText}</Text>
-          <Button mode="outlined" onPress={goToNext} disabled={!canGoNext}>
-            다음 →
-          </Button>
-        </Surface>
-
-        <View style={{ position: 'relative', minHeight: 400 }}>
+      <Surface style={[styles.navigationBar, { backgroundColor: theme.colors.background }]} elevation={1}>
+        <IconButton
+          icon="chevron-left"
+          onPress={goToPrevious}
+          disabled={!canGoPrevious}
+          size={32}
+        />
+        <Text variant="bodyLarge" style={{ fontWeight: 'bold', color: theme.colors.primary }}>
+          {headerText}
+        </Text>
+        <IconButton
+          icon="chevron-right"
+          onPress={goToNext}
+          disabled={!canGoNext}
+          size={32}
+        />
+      </Surface>
+      
+      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="always">
+        <View style={{ position: 'relative', height: 360 }}>
           {/* Front Side */}
           <Animated.View
             style={[
@@ -179,82 +229,85 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
               { transform: [{ rotateY: frontInterpolate }] },
               isFlipped && flipStyles.flipCardFrontHidden
             ]}
+            pointerEvents={isFlipped ? 'none' : 'auto'}
           >
-            <Surface style={styles.card} elevation={3}>
-              <View style={styles.infoRow}>
-                <Text style={[styles.frequencyText, { color: theme.colors.onSurfaceVariant }]}>
-                  {frequencyLabel}
-                </Text>
-                <Pressable
-                  onPress={() => setReferenceVisible(true)}
-                  accessibilityRole="button"
-                  hitSlop={8}
-                >
-                  <Text style={[styles.referenceText, { color: theme.colors.primary }]}>
-                    {`${referenceEntries.length}회 출제`}
-                  </Text>
-                </Pressable>
+            <Surface style={[styles.card, styles.fixedCard, { backgroundColor: '#000000' }]} elevation={3}>
+              {/* Header Section */}
+              <View style={styles.cardHeader}>
+                <ScoreFrequencyLabel
+                  scores={currentProblem.scores}
+                  textStyle={[styles.frequencyText, { color: 'rgba(255, 255, 255, 0.7)' }]}
+                />
+                <TypeLabel types={currentProblem.types} preferEraType={true} />
               </View>
 
-              <TypeLabel types={currentProblem.types} preferEraType={true} />
+              {/* Hint Section (Centered) */}
+              <View style={styles.cardHint}>
+                <Text style={[styles.keyword, { color: '#FFFFFF' }]}>
+                  {currentProblem.keyword}
+                  {currentProblem.era_script && currentProblem.era_script.length > 0 && currentProblem.era_script[0]
+                    ? ` ${currentProblem.era_script[0]}`
+                    : ''}
+                </Text>
+              </View>
 
-              <Text style={[styles.keyword, { color: theme.colors.onSurface }]}>
-                {currentProblem.keyword}
-                {currentProblem.era_script && currentProblem.era_script.length > 0 && currentProblem.era_script[0] 
-                  ? ` ${currentProblem.era_script[0]}` 
-                  : ''}
-              </Text>
-
-              <View style={styles.dropdownRow}>
-                <DropdownSelect 
-                  label="시기" 
-                  value={country} 
-                  options={countryOptions} 
-                  onSelect={setCountry} 
-                  disabled={hasLeaderAnswer} 
+              {/* Answer Section (Bottom) */}
+              <View style={styles.cardAnswer}>
+                <View style={styles.dropdownRow}>
+                <DropdownSelect
+                    label="시대"
+                  value={country}
+                  options={countryOptions}
+                  onSelect={setCountry}
+                  disabled={hasLeaderAnswer}
                 />
                 {hasLeaderAnswer ? (
                   <DropdownSelect
-                    label="상세"
+                    label="상세 시기"
                     value={leader}
                     options={leaderOptions}
                     onSelect={setLeader}
                     disabled={false}
                   />
+                  ) : null}
+                </View>
+
+                {shouldShowYearInputs ? (
+                  <View style={styles.yearContainer}>
+                    <Text style={[styles.hintLabel, { color: 'rgba(255, 255, 255, 0.7)' }]}>연도</Text>
+                    <View style={styles.yearRow}>
+                      <TextInput
+                        mode="outlined"
+                        label="YYYY"
+                        keyboardType="numeric"
+                        value={year}
+                        onChangeText={(text) => setYear(handleNumericChange(text, 4))}
+                        style={styles.yearInput}
+                        placeholder="0000"
+                        textColor="#FFFFFF"
+                        theme={{ colors: { onSurfaceVariant: 'rgba(255,255,255,0.7)' } }}
+                      />
+                      <Text style={[styles.yearSuffix, { color: '#FFFFFF' }]}>년</Text>
+                      {yearParts.month ? (
+                        <>
+                          <TextInput
+                            mode="outlined"
+                            label="MM"
+                            keyboardType="numeric"
+                            value={month}
+                            onChangeText={(text) => setMonth(handleNumericChange(text, 2))}
+                            style={styles.yearInput}
+                            placeholder="00"
+                            textColor="#FFFFFF"
+                            theme={{ colors: { onSurfaceVariant: 'rgba(255,255,255,0.7)' } }}
+                          />
+                          <Text style={[styles.yearSuffix, { color: '#FFFFFF' }]}>월</Text>
+                        </>
+                      ) : null}
+                    </View>
+                  </View>
                 ) : null}
               </View>
-
-              {shouldShowYearInputs ? (
-                <View style={styles.yearContainer}>
-                  <Text style={[styles.hintLabel, { color: theme.colors.onSurfaceVariant }]}>연도</Text>
-                  <View style={styles.yearRow}>
-                    <TextInput
-                      mode="outlined"
-                      label="YYYY"
-                      keyboardType="numeric"
-                      value={year}
-                      onChangeText={(text) => setYear(handleNumericChange(text, 4))}
-                      style={styles.yearInput}
-                      placeholder="0000"
-                    />
-                    <Text style={styles.yearSuffix}>년</Text>
-                    {yearParts.month ? (
-                      <>
-                        <TextInput
-                          mode="outlined"
-                          label="MM"
-                          keyboardType="numeric"
-                          value={month}
-                          onChangeText={(text) => setMonth(handleNumericChange(text, 2))}
-                          style={styles.yearInput}
-                          placeholder="00"
-                        />
-                        <Text style={styles.yearSuffix}>월</Text>
-                      </>
-                    ) : null}
-                  </View>
-                </View>
-              ) : null}
             </Surface>
           </Animated.View>
 
@@ -265,49 +318,159 @@ const KeywordEraQuizScreen: React.FC<Props> = () => {
               flipStyles.flipCardBack,
               { transform: [{ rotateY: backInterpolate }] }
             ]}
+            pointerEvents={isFlipped ? 'auto' : 'none'}
           >
-            <Surface style={[styles.card, flipStyles.answerCard]} elevation={3}>
-              <Text style={flipStyles.answerTitle}>정답</Text>
-              <Text style={flipStyles.answerKeyword}>{currentProblem.keyword}</Text>
-              <View style={flipStyles.answerDetails}>
-                <Text style={flipStyles.answerLabel}>시대</Text>
-                <Text style={flipStyles.answerValue}>{selectedEra}</Text>
-                {selectedDetEra && (
-                  <>
-                    <Text style={flipStyles.answerLabel}>상세</Text>
-                    <Text style={flipStyles.answerValue}>{selectedDetEra}</Text>
-                  </>
-                )}
-                {currentProblem.years && (
-                  <>
-                    <Text style={flipStyles.answerLabel}>연도</Text>
-                    <Text style={flipStyles.answerValue}>{currentProblem.years}</Text>
-                  </>
-                )}
+            <Surface style={[styles.card, flipStyles.answerCard, styles.fixedCard]} elevation={3}>
+              {/* Top Section: Result & Keyword */}
+              <View>
+                <Text style={[flipStyles.resultText, { 
+                  color: theme.colors.secondary,
+                  opacity: (country && leader) ? 1 : 0
+                }]}>
+                  {isCorrect ? '정답입니다' : '오답입니다'}
+                </Text>
+
+                <View style={flipStyles.keywordRow}>
+                  <Text style={[flipStyles.answerKeyword, { color: POINT_COLOR_1 }]}>{currentProblem.keyword}</Text>
+                  <IconButton
+                    icon="information-outline"
+                    size={20}
+                    onPress={() => {
+                      navigation.navigate('KeywordDetail', {
+                        keyword: {
+                          ...currentProblem,
+                          score: currentProblem.scores
+                        } as any
+                      });
+                    }}
+                    style={{ margin: 0 }}
+                  />
+                </View>
+              </View>
+
+              {/* Center Section: Era Info */}
+              <View style={flipStyles.centerSection}>
+                <View style={flipStyles.eraInfoContainer}>
+                  <Text style={[flipStyles.eraText, { color: theme.colors.onSurface, fontSize: 24 }]}>
+                    {[selectedEra, selectedSubEra, selectedDetEra].filter(Boolean).join(' ')}
+                  </Text>
+                  {currentProblem.years && (
+                    <Text style={{ color: theme.colors.onSurface, fontSize: 24, fontWeight: '300', marginTop: 8 }}>
+                      {currentProblem.years}
+                    </Text>
+                  )}
+                </View>
+              </View>
+
+              {/* Bottom Section: Info */}
+              <View style={flipStyles.infoRowBottom}>
+                <ScoreFrequencyLabel
+                  scores={currentProblem.scores}
+                  textStyle={flipStyles.importanceText}
+                />
+                <Text style={flipStyles.referenceCountText}>
+                  출제 횟수: {referenceEntries.length}회
+                </Text>
               </View>
             </Surface>
           </Animated.View>
         </View>
-
-        <Button 
-          mode="contained" 
-          style={styles.submitButton}
-          onPress={handleFlip}
-        >
-          {isFlipped ? '문제로 돌아가기' : '확인하기'}
-        </Button>
       </ScrollView>
 
-      <ReferenceModal
-        visible={referenceVisible}
-        entries={referenceEntries}
-        onClose={() => setReferenceVisible(false)}
-      />
+      <View style={styles.fixedButtonContainer}>
+        <Button
+          mode="contained"
+          style={[
+            styles.submitButton,
+            isFlipped && {
+              borderWidth: 1,
+              borderColor: theme.dark
+                ? theme.colors.onSurface
+                : theme.colors.onPrimary,
+            },
+          ]}
+          icon={isFlipped ? "undo" : "check"}
+          buttonColor={
+            isFlipped
+              ? theme.dark
+                ? theme.colors.surface
+                : theme.colors.primary
+              : isCorrect
+                ? theme.colors.secondary
+                : theme.colors.primary
+          }
+          textColor={
+            isFlipped
+              ? theme.dark
+                ? theme.colors.onSurface
+                : theme.colors.onPrimary
+              : undefined
+          }
+          onPress={handleFlip}
+          labelStyle={{
+            fontSize: typography.sizes.lg,
+            fontWeight: typography.weights.medium,
+          }}
+          contentStyle={{
+            height: 48,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {isFlipped ? '문제 보기' : '정답 확인'}
+        </Button>
+      </View>
     </Surface>
   );
 };
 
-const styles = { ...quizScreenStyles, ...eraQuizStyles };
+const styles = StyleSheet.create({
+  ...quizScreenStyles,
+  ...eraQuizStyles,
+  navigationBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  fixedCard: {
+    height: 360,
+    justifyContent: 'space-between',
+  },
+  cardHeader: {
+    paddingTop: spacing.sm,
+  },
+  cardHint: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardAnswer: {
+    paddingBottom: spacing.md,
+  },
+  fixedButtonContainer: {
+    padding: spacing.md,
+    paddingBottom: spacing.lg,
+    alignItems: 'center',
+  },
+  bottomButtonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: spacing.lg,
+    gap: spacing.sm,
+  },
+  navButton: {
+    flex: 1,
+  },
+  submitButton: {
+    width: 200,
+    height: 48,
+    alignSelf: 'center',
+    borderRadius: 999,
+  },
+});
 
 const flipStyles = StyleSheet.create({
   flipCard: {
@@ -323,8 +486,8 @@ const flipStyles = StyleSheet.create({
   },
   answerCard: {
     padding: spacing.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
     minHeight: 300,
   },
   answerTitle: {
@@ -335,22 +498,69 @@ const flipStyles = StyleSheet.create({
   answerKeyword: {
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
-    marginBottom: spacing.lg,
   },
-  answerDetails: {
+  keywordRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: spacing.md,
+    justifyContent: 'flex-start',
+    marginBottom: spacing.md,
   },
-  answerLabel: {
+  detailButton: {
+    marginLeft: spacing.xs,
+    paddingHorizontal: spacing.xs,
+  },
+  detailButtonText: {
+    fontSize: typography.sizes.sm,
+    textDecorationLine: 'underline',
+  },
+  descriptionsContainer: {
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.sm,
+  },
+  descriptionsText: {
     fontSize: typography.sizes.md,
-    fontWeight: typography.weights.medium,
+    lineHeight: 22,
+    textAlign: 'left',
+  },
+  infoRowBottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: spacing.sm,
-    opacity: 0.7,
+    paddingHorizontal: spacing.sm,
+  },
+  importanceText: {
+    fontSize: typography.sizes.sm,
+  },
+  referenceCountText: {
+    fontSize: typography.sizes.sm,
+  },
+  resultText: {
+    fontSize: typography.sizes.xl,
+    fontWeight: typography.weights.bold,
+    marginBottom: spacing.md,
+    textAlign: 'left',
   },
   answerValue: {
     fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold,
     marginBottom: spacing.xs,
+  },
+  centerSection: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  eraInfoContainer: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.sm,
+  },
+  eraText: {
+    fontSize: typography.sizes.lg,
+    fontWeight: typography.weights.bold,
+    marginBottom: spacing.xs,
+    textAlign: 'left',
   },
 });
 

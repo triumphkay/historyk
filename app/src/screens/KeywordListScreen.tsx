@@ -7,46 +7,43 @@ import { RootStackParamList } from '../types/navigation';
 import { spacing } from '../theme/spacing';
 import { QuizItem } from '../types/QuizItem';
 import { getScoreFrequencyLabel } from '../utils/score';
+import ScoreFrequencyLabel from '../components/ScoreFrequencyLabel';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'KeywordList'>;
-type SortType = 'alphabetical' | 'importance';
 
-const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
+const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   const { problems, loading } = useQuiz();
   const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchVisible, setSearchVisible] = useState(false);
-  const [sortType, setSortType] = useState<SortType>('alphabetical');
+  const [sortMode, setSortMode] = useState<'alphabetical' | 'importance'>('alphabetical');
   const [sortDialogVisible, setSortDialogVisible] = useState(false);
 
-  // Expose search toggle function to parent via navigation params
-  React.useLayoutEffect(() => {
-    navigation.setParams({ 
-      toggleSearch: () => setSearchVisible(prev => !prev),
-      toggleSortDialog: () => setSortDialogVisible(true)
+  // Set navigation options for search and sort buttons
+  useEffect(() => {
+    navigation.setParams({
+      toggleSearch: () => setSearchVisible(!searchVisible),
+      toggleSortDialog: () => setSortDialogVisible(true),
     } as any);
-  }, [navigation]);
+  }, [navigation, searchVisible]);
 
   const sortedProblems = useMemo(() => {
-    const sorted = [...problems];
-    if (sortType === 'alphabetical') {
-      return sorted.sort((a, b) => a.keyword.localeCompare(b.keyword, 'ko-KR'));
-    } else {
-      // Sort by importance (score total)
-      return sorted.sort((a, b) => {
+    if (sortMode === 'importance') {
+      return [...problems].sort((a, b) => {
         const scoreA = (a.score || []).reduce<number>((sum, val) => sum + (typeof val === 'number' ? val : Number(val) || 0), 0);
         const scoreB = (b.score || []).reduce<number>((sum, val) => sum + (typeof val === 'number' ? val : Number(val) || 0), 0);
-        return scoreB - scoreA; // Descending order (highest first)
+        return scoreB - scoreA;
       });
     }
-  }, [problems, sortType]);
+    return [...problems].sort((a, b) => a.keyword.localeCompare(b.keyword, 'ko'));
+  }, [problems, sortMode]);
 
   const filteredProblems = useMemo(() => {
     if (!searchQuery.trim()) {
       return sortedProblems;
     }
-    return sortedProblems.filter((item) =>
-      item.keyword.toLowerCase().includes(searchQuery.toLowerCase())
+    return sortedProblems.filter((problem) =>
+      problem.keyword.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [sortedProblems, searchQuery]);
 
@@ -60,13 +57,14 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
   }
 
   const renderItem = ({ item, index }: { item: QuizItem; index: number }) => {
-    const importanceLabel = getScoreFrequencyLabel(item.score);
     const descriptionCount = item.descriptions?.length || 0;
     
     return (
       <List.Item 
         title={`${item.keyword} (${descriptionCount})`} 
-        description={`중요도: ${importanceLabel || '알 수 없음'}`}
+        description={() => (
+          <ScoreFrequencyLabel scores={item.score} />
+        )}
         titleNumberOfLines={1} 
         style={styles.listItem}
         onPress={() => {
@@ -95,7 +93,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <Surface style={styles.container}>
+    <Surface style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {searchVisible && (
         <Searchbar
           placeholder="키워드 검색"
@@ -120,9 +118,9 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
           <Dialog.Title>정렬 방식 선택</Dialog.Title>
           <Dialog.Content>
             <Button 
-              mode={sortType === 'alphabetical' ? 'contained' : 'outlined'}
+              mode={sortMode === 'alphabetical' ? 'contained' : 'outlined'}
               onPress={() => {
-                setSortType('alphabetical');
+                setSortMode('alphabetical');
                 setSortDialogVisible(false);
               }}
               style={{ marginBottom: spacing.sm }}
@@ -130,9 +128,9 @@ const KeywordListScreen: React.FC<Props> = ({ navigation }) => {
               가나다순
             </Button>
             <Button 
-              mode={sortType === 'importance' ? 'contained' : 'outlined'}
+              mode={sortMode === 'importance' ? 'contained' : 'outlined'}
               onPress={() => {
-                setSortType('importance');
+                setSortMode('importance');
                 setSortDialogVisible(false);
               }}
             >

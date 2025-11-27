@@ -3,6 +3,7 @@
     "name": "history-keyword-quiz",
     "slug": "history-keyword-quiz",
     "version": "1.0.0",
+    "sdkVersion": "54.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
