@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     // marginBottom: spacing.sm,
   },
   text: {
-    fontSize: typography.sizes.md,
+    fontSize: typography.sizes.xl,
     fontWeight: typography.weights.medium,
   },
 });

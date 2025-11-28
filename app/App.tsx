@@ -9,6 +9,15 @@ import {
 import { Appbar, PaperProvider, useTheme, Text } from "react-native-paper";
 import { ThemeProvider } from "styled-components/native";
 import { useFonts } from "expo-font";
+import {
+  NotoSansKR_200ExtraLight,
+  NotoSansKR_400Regular,
+  NotoSansKR_800ExtraBold,
+} from "@expo-google-fonts/noto-sans-kr";
+import {
+  NanumMyeongjo_400Regular,
+  NanumMyeongjo_800ExtraBold,
+} from "@expo-google-fonts/nanum-myeongjo";
 import HomeScreen from "./src/screens/HomeScreen";
 import KeywordListScreen from "./src/screens/KeywordListScreen";
 import QuizScreen from "./src/screens/QuizScreen";
@@ -57,10 +66,7 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
   }
 
   return (
-    <Appbar.Header
-      mode="small"
-      style={{ backgroundColor: theme.colors.background }}
-    >
+    <Appbar.Header mode="small">
       <Appbar.BackAction onPress={() => navigation.goBack()} />
       <View
         style={{
@@ -73,12 +79,7 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
           pointerEvents: "none",
         }}
       >
-        <Text
-          variant="titleLarge"
-          style={{ fontWeight: "bold", color: theme.colors.onSurface }}
-        >
-          {title}
-        </Text>
+        <Text variant="titleLarge">{title}</Text>
       </View>
       <View style={{ flex: 1 }} />
       {isKeywordList ? (
@@ -153,9 +154,11 @@ const AppNavigator = () => (
 
 const ThemedApp: React.FC = () => {
   const [fontsLoaded] = useFonts({
-    "NotoSansKR-Regular": require("./assets/fonts/NotoSansKR_400Regular.ttf"),
-    "NotoSansKR-Medium": require("./assets/fonts/NotoSansKR_500Medium.ttf"),
-    "NotoSansKR-Bold": require("./assets/fonts/NotoSansKR_700Bold.ttf"),
+    "NotoSansKR-200": NotoSansKR_200ExtraLight,
+    "NotoSansKR-400": NotoSansKR_400Regular,
+    "NotoSansKR-800": NotoSansKR_800ExtraBold,
+    "NanumMyeongjo-400": NanumMyeongjo_400Regular,
+    "NanumMyeongjo-800": NanumMyeongjo_800ExtraBold,
   });
 
   // Add global CSS for Korean word-break on web

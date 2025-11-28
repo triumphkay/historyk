@@ -14,5 +14,6 @@
       "@theme/*": ["src/theme/*"],
       "@types/*": ["src/types/*"]
     }
-  }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"]
 }

@@ -1,33 +1,36 @@
 import React, { useMemo } from "react";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import type { TextStyle, StyleProp } from "react-native";
+import type { TextStyle, StyleProp, ViewStyle } from "react-native";
 import { typography } from "../theme/typography";
 import { getScoreFrequencyLabel } from "../utils/score";
+import { colors, frequency } from "@theme/colors";
 
 interface ScoreFrequencyLabelProps {
   scores: Array<number | string>;
   textStyle?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
 }
 
 const getImportanceColor = (label: string): string => {
   switch (label) {
     case "매우 높음":
-      return "#FF0000"; // 빨간색
+      return frequency.veryHigh; // 빨간색
     case "높음":
-      return "#FF8C00"; // 주황색
+      return frequency.high; // 주황색
     case "보통":
-      return "#FFD700"; // 노란색
+      return frequency.normal; // 노란색
     case "낮음":
-      return "#00FF00"; // 초록색
+      return frequency.low; // 초록색
     default:
-      return "#808080"; // 회색 (기본값)
+      return colors.primary; // 회색 (기본값)
   }
 };
 
 const ScoreFrequencyLabel: React.FC<ScoreFrequencyLabelProps> = ({
   scores,
   textStyle,
+  style,
 }) => {
   const theme = useTheme();
   const label = useMemo(() => getScoreFrequencyLabel(scores), [scores]);
@@ -39,10 +42,11 @@ const ScoreFrequencyLabel: React.FC<ScoreFrequencyLabelProps> = ({
   const color = getImportanceColor(label);
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-      <Text
-        style={[styles.text, { color: theme.colors.onSurfaceVariant }, textStyle]}
-      >{`중요도: ${label}`}</Text>
+    <View
+      style={[{ flexDirection: "row", alignItems: "center", gap: 6 }, style]}
+    >
+      <Text style={[styles.text, textStyle]}>중요도:</Text>
+      <Text style={[styles.text, textStyle]}>{label}</Text>
       <View
         style={{
           width: 8,
@@ -57,7 +61,8 @@ const ScoreFrequencyLabel: React.FC<ScoreFrequencyLabelProps> = ({
 
 const styles = {
   text: {
-    fontSize: typography.sizes.md,
+    fontSize: typography.sizes.xs,
+    fontWeight: typography.weights.medium,
   },
 };
 

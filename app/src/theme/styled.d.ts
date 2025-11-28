@@ -4,6 +4,7 @@ import { colors } from './colors';
 // styled-components 테마 타입 확장
 declare module 'styled-components/native' {
   export interface DefaultTheme {
+    // colors includes level0-level11 and other theme colors
     colors: typeof colors;
     spacing: {
       xs: number;

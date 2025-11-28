@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import { spacing } from "./spacing";
 import { typography } from "./typography";
+import { colors } from "./colors";
 
 /**
  * 퀴즈 화면들(키워드 문제, 키워드 시기)에서 공유하는 스타일
@@ -11,6 +12,7 @@ export const quizScreenStyles = StyleSheet.create({
   // 전체 컨테이너
   container: {
     flex: 1,
+    backgroundColor: colors.level3,
   },
 
   // 스크롤 영역

@@ -5,12 +5,103 @@ import {
 } from "react-native-paper";
 import { colors, darkColors } from "./colors";
 
+const FONT = {
+  notoLight: "NotoSansKR-200",
+  notoRegular: "NotoSansKR-400",
+  notoBold: "NotoSansKR-800",
+  myeongRegular: "NanumMyeongjo-400",
+  myeongBold: "NanumMyeongjo-800",
+};
+
+type FontEntry = (typeof MD3LightTheme.fonts)[keyof typeof MD3LightTheme.fonts];
+
+const buildFontEntry = (
+  source: FontEntry,
+  family: string,
+  weight: FontEntry["fontWeight"]
+): FontEntry => ({
+  ...source,
+  fontFamily: family,
+  fontWeight: weight,
+});
+
 const fontConfig = {
   ...MD3LightTheme.fonts,
-  default: {
-    ...MD3LightTheme.fonts.default,
-    fontFamily: "NotoSansKR-Regular",
-  },
+  displayLarge: buildFontEntry(
+    MD3LightTheme.fonts.displayLarge,
+    FONT.myeongBold,
+    "800"
+  ),
+  displayMedium: buildFontEntry(
+    MD3LightTheme.fonts.displayMedium,
+    FONT.myeongRegular,
+    "400"
+  ),
+  displaySmall: buildFontEntry(
+    MD3LightTheme.fonts.displaySmall,
+    FONT.myeongRegular,
+    "400"
+  ),
+  headlineLarge: buildFontEntry(
+    MD3LightTheme.fonts.headlineLarge,
+    FONT.myeongBold,
+    "800"
+  ),
+  headlineMedium: buildFontEntry(
+    MD3LightTheme.fonts.headlineMedium,
+    FONT.myeongRegular,
+    "400"
+  ),
+  headlineSmall: buildFontEntry(
+    MD3LightTheme.fonts.headlineSmall,
+    FONT.myeongRegular,
+    "400"
+  ),
+  titleLarge: buildFontEntry(
+    MD3LightTheme.fonts.titleLarge,
+    FONT.notoBold,
+    "800"
+  ),
+  titleMedium: buildFontEntry(
+    MD3LightTheme.fonts.titleMedium,
+    FONT.notoRegular,
+    "400"
+  ),
+  titleSmall: buildFontEntry(
+    MD3LightTheme.fonts.titleSmall,
+    FONT.notoRegular,
+    "400"
+  ),
+  bodyLarge: buildFontEntry(
+    MD3LightTheme.fonts.bodyLarge,
+    FONT.notoRegular,
+    "400"
+  ),
+  bodyMedium: buildFontEntry(
+    MD3LightTheme.fonts.bodyMedium,
+    FONT.notoRegular,
+    "400"
+  ),
+  bodySmall: buildFontEntry(
+    MD3LightTheme.fonts.bodySmall,
+    FONT.notoLight,
+    "200"
+  ),
+  labelLarge: buildFontEntry(
+    MD3LightTheme.fonts.labelLarge,
+    FONT.notoBold,
+    "800"
+  ),
+  labelMedium: buildFontEntry(
+    MD3LightTheme.fonts.labelMedium,
+    FONT.notoRegular,
+    "400"
+  ),
+  labelSmall: buildFontEntry(
+    MD3LightTheme.fonts.labelSmall,
+    FONT.notoLight,
+    "200"
+  ),
 };
 
 const paperFonts = configureFonts({
@@ -21,14 +112,20 @@ export const lightTheme = {
   ...MD3LightTheme,
   dark: false,
   fonts: paperFonts,
-  colors: colors,
+  colors: {
+    ...MD3LightTheme.colors,
+    ...colors,
+  },
 };
 
 export const darkTheme = {
   ...MD3DarkTheme,
   dark: true,
   fonts: paperFonts,
-  colors: darkColors,
+  colors: {
+    ...MD3DarkTheme.colors,
+    ...darkColors,
+  },
 };
 
 // Re-export colors for direct use in components
