@@ -20,6 +20,7 @@
     "build": "expo build"
   },
   "dependencies": {
+    "@expo-google-fonts/nanum-myeongjo": "^0.4.1",
     "@expo-google-fonts/noto-sans-kr": "^0.4.2",
     "@expo/metro-runtime": "~6.1.2",
     "@expo/vector-icons": "^15.0.3",
@@ -39,12 +40,14 @@
     "react-native-svg": "15.12.1",
     "react-native-svg-transformer": "^1.5.2",
     "react-native-vector-icons": "^10.3.0",
-    "react-native-web": "^0.21.0"
+    "react-native-web": "^0.21.0",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",
     "@types/react": "~19.1.10",
     "@types/react-dom": "~19.1.7",
+    "@types/styled-components-react-native": "^5.2.5",
     "typescript": "~5.9.2"
   }
 }

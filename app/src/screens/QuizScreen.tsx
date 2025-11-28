@@ -1,7 +1,9 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import {
+  ScrollView,
   StyleSheet,
   View,
+  Pressable,
   Animated,
 } from "react-native";
 import {
@@ -38,7 +40,7 @@ const selectRandomDescriptions = (descriptions: string[]) => {
   return shuffled.slice(0, 3);
 };
 
-const POINT_COLOR_1 = '#f75d00';
+const POINT_COLOR_1 = "#f75d00";
 
 const QuizScreen: React.FC<Props> = ({ navigation }) => {
   const {
@@ -59,7 +61,11 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
   const canGoPrevious = currentIndex > 0;
   const canGoNext = currentIndex < totalProblems - 1;
   const isCorrect = useMemo(
-    () => (currentProblem ? answer.replace(/\s/g, "") === currentProblem.keyword.replace(/\s/g, "") : false),
+    () =>
+      currentProblem
+        ? answer.replace(/\s/g, "") ===
+          currentProblem.keyword.replace(/\s/g, "")
+        : false,
     [answer, currentProblem]
   );
   const headerText = useMemo(
@@ -127,14 +133,23 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <Surface style={quizScreenStyles.container}>
-      <Surface style={[styles.navigationBar, { backgroundColor: theme.colors.background }]} elevation={1}>
+      <Surface
+        style={[
+          styles.navigationBar,
+          { backgroundColor: theme.colors.background },
+        ]}
+        elevation={1}
+      >
         <IconButton
           icon="chevron-left"
           onPress={goToPrevious}
           disabled={!canGoPrevious}
           size={32}
         />
-        <Text variant="bodyLarge" style={{ fontWeight: 'bold', color: theme.colors.primary }}>
+        <Text
+          variant="bodyLarge"
+          style={{ fontWeight: "bold", color: theme.colors.primary }}
+        >
           {headerText}
         </Text>
         <IconButton
@@ -144,9 +159,9 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
           size={32}
         />
       </Surface>
-      
-      <View style={quizScreenStyles.scrollContent}>
-        <View style={{ position: 'relative', height: 360 }}>
+
+      <ScrollView contentContainerStyle={quizScreenStyles.scrollContent}>
+        <View style={{ position: "relative", height: 360 }}>
           {/* Front Side */}
           <Animated.View
             style={[
@@ -154,14 +169,23 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
               { transform: [{ rotateY: frontInterpolate }] },
               isFlipped && styles.flipCardFrontHidden,
             ]}
-            pointerEvents={isFlipped ? 'none' : 'auto'}
           >
-            <Surface style={[quizScreenStyles.card, styles.fixedCard, { backgroundColor: '#000000' }]} elevation={3}>
+            <Surface
+              style={[
+                quizScreenStyles.card,
+                styles.fixedCard,
+                { backgroundColor: "#000000" },
+              ]}
+              elevation={3}
+            >
               {/* Header Section */}
               <View style={styles.cardHeader}>
                 <ScoreFrequencyLabel
                   scores={currentProblem.score}
-                  textStyle={[quizScreenStyles.frequencyText, { color: 'rgba(255, 255, 255, 0.7)' }]}
+                  textStyle={[
+                    quizScreenStyles.frequencyText,
+                    { color: "rgba(255, 255, 255, 0.7)" },
+                  ]}
                 />
                 <TypeLabel types={currentProblem.types} />
               </View>
@@ -173,7 +197,14 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
 
               {/* Answer Section (Bottom) */}
               <View style={styles.cardAnswer}>
-                <Text style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: 12, marginBottom: 4, marginLeft: 4 }}>
+                <Text
+                  style={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    fontSize: 12,
+                    marginBottom: 4,
+                    marginLeft: 4,
+                  }}
+                >
                   정답 ({answerLength}자)
                 </Text>
                 <TextInput
@@ -185,7 +216,12 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
                   textColor={POINT_COLOR_1}
                   underlineColor="rgba(255, 255, 255, 0.5)"
                   activeUnderlineColor={theme.colors.primary}
-                  style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: typography.sizes.lg, height: 42 }}
+                  style={{
+                    backgroundColor: "transparent",
+                    textAlign: "center",
+                    fontSize: typography.sizes.lg,
+                    height: 42,
+                  }}
                 />
               </View>
             </Surface>
@@ -198,10 +234,13 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
               styles.flipCardBack,
               { transform: [{ rotateY: backInterpolate }] },
             ]}
-            pointerEvents={isFlipped ? 'auto' : 'none'}
           >
             <Surface
-              style={[quizScreenStyles.card, styles.answerCard, styles.fixedCard]}
+              style={[
+                quizScreenStyles.card,
+                styles.answerCard,
+                styles.fixedCard,
+              ]}
               elevation={3}
             >
               {/* Top Section: Result & Keyword */}
@@ -219,7 +258,9 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
                 </Text>
 
                 <View style={styles.keywordRow}>
-                  <Text style={[styles.answerKeyword, { color: POINT_COLOR_1 }]}>
+                  <Text
+                    style={[styles.answerKeyword, { color: POINT_COLOR_1 }]}
+                  >
                     {currentProblem.keyword}
                   </Text>
                   <IconButton
@@ -237,12 +278,14 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
 
               {/* Center Section: Descriptions */}
               <View style={styles.centerSection}>
-                <View style={{ maxHeight: 150, overflow: 'hidden' }}>
-                  <DescriptionList 
+                <View style={{ maxHeight: 150, overflow: "hidden" }}>
+                  <DescriptionList
                     descriptions={[
                       ...currentProblem.descriptions.slice(0, 7),
-                      ...(currentProblem.descriptions.length > 7 ? ['...'] : [])
-                    ]} 
+                      ...(currentProblem.descriptions.length > 7
+                        ? ["..."]
+                        : []),
+                    ]}
                   />
                 </View>
               </View>
@@ -260,7 +303,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
             </Surface>
           </Animated.View>
         </View>
-      </View>
+      </ScrollView>
 
       <View style={styles.fixedButtonContainer}>
         <Button
@@ -281,8 +324,8 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
                 ? theme.colors.surface
                 : theme.colors.primary
               : isCorrect
-                ? theme.colors.secondary
-                : theme.colors.primary
+              ? theme.colors.secondary
+              : theme.colors.primary
           }
           textColor={
             isFlipped
@@ -298,8 +341,8 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
           }}
           contentStyle={{
             height: 48,
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           {isFlipped ? "문제 보기" : "정답 확인"}
@@ -319,15 +362,15 @@ const styles = StyleSheet.create({
   },
   fixedCard: {
     height: 360,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   cardHeader: {
     paddingTop: spacing.sm,
   },
   cardHint: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   cardAnswer: {
     paddingBottom: spacing.md,
@@ -335,7 +378,7 @@ const styles = StyleSheet.create({
   fixedButtonContainer: {
     padding: spacing.md,
     paddingBottom: spacing.lg,
-    alignItems: 'center',
+    alignItems: "center",
   },
   countContainer: {
     paddingVertical: spacing.sm,
@@ -381,9 +424,9 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.bold,
   },
   keywordRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     marginBottom: spacing.md,
   },
   detailButton: {
@@ -392,7 +435,7 @@ const styles = StyleSheet.create({
   },
   detailButtonText: {
     fontSize: typography.sizes.sm,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
   },
   descriptionsContainer: {
     marginBottom: spacing.md,
@@ -417,11 +460,11 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     marginBottom: spacing.md,
-    textAlign: 'left',
+    textAlign: "left",
   },
   centerSection: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   userAnswerText: {
     fontSize: typography.sizes.md,
@@ -440,7 +483,7 @@ const styles = StyleSheet.create({
   submitButton: {
     width: 200,
     height: 48,
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 999,
   },
 });

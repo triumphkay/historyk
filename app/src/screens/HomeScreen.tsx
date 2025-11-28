@@ -1,16 +1,9 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import {
-  Button,
-  Surface,
-  Text,
-  useTheme,
-  IconButton,
-} from "react-native-paper";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { Surface, Text, useTheme, IconButton } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
-import { typography } from "../theme/typography";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -19,32 +12,87 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <Surface
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      style={[styles.container, { backgroundColor: theme.colors.primary }]}
     >
+      {/* Settings Icon - Top Right */}
       <View style={styles.settingsButtonContainer}>
         <IconButton
           icon="cog"
-          size={24}
+          size={28}
+          iconColor={theme.colors.primaryContainer}
           onPress={() => navigation.navigate("Settings")}
         />
       </View>
+
+      {/* Main Content */}
       <View style={styles.content}>
-        <Button
-          mode="contained"
+        {/* Title */}
+        <Text style={[styles.title, { color: theme.colors.onPrimary }]}>
+          한국사{"\n"}키워드로{"\n"}공부하기
+        </Text>
+
+        {/* Main Buttons */}
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={[
+              styles.mainButton,
+              { backgroundColor: theme.colors.primaryContainer },
+            ]}
+            onPress={() => navigation.navigate("Quiz")}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                { color: theme.colors.onPrimaryContainer },
+              ]}
+            >
+              키워드 퀴즈
+            </Text>
+            <IconButton
+              icon="arrow-right"
+              size={24}
+              iconColor={theme.colors.onPrimaryContainer}
+              style={styles.buttonIcon}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.mainButton,
+              { backgroundColor: theme.colors.primaryContainer },
+            ]}
+            onPress={() => navigation.navigate("KeywordEraQuizScreen")}
+            activeOpacity={0.7}
+          >
+            <Text
+              style={[
+                styles.buttonText,
+                { color: theme.colors.onPrimaryContainer },
+              ]}
+            >
+              한국사 시대 퀴즈
+            </Text>
+            <IconButton
+              icon="arrow-right"
+              size={24}
+              iconColor={theme.colors.onPrimaryContainer}
+              style={styles.buttonIcon}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Bottom Link */}
+      <View style={styles.bottomLinkContainer}>
+        <TouchableOpacity
           onPress={() => navigation.navigate("KeywordList")}
-          style={styles.button}
+          activeOpacity={0.7}
         >
-          전체 키워드
-        </Button>
-        <Button mode="contained" onPress={() => navigation.navigate("Quiz")}>
-          키워드 퀴즈
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate("KeywordEraQuizScreen")}
-        >
-          한국사 시대 퀴즈
-        </Button>
+          <Text style={[styles.bottomLink, { color: theme.colors.onPrimary }]}>
+            전체 키워드 보기
+          </Text>
+        </TouchableOpacity>
       </View>
     </Surface>
   );
@@ -53,24 +101,56 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: spacing.lg,
+    paddingTop: spacing.xl,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xxl,
   },
   settingsButtonContainer: {
     alignItems: "flex-end",
-    marginBottom: spacing.md,
   },
   content: {
     flex: 1,
-    justifyContent: "center",
-    gap: spacing.md,
+    // justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: spacing.xxl * 2,
   },
   title: {
-    fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
-    textAlign: "center",
+    fontSize: 48,
+    fontFamily: "NanumMyeongjo-Regular",
+    // fontWeight: "700",
+    lineHeight: 60,
+    marginBottom: spacing.xxl * 2,
+    textAlign: "left",
+    alignSelf: "flex-start",
   },
-  button: {
-    marginBottom: spacing.sm,
+  buttonsContainer: {
+    width: "100%",
+    gap: spacing.md,
+  },
+  mainButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.lg,
+    borderRadius: 12,
+    minHeight: 60,
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: "600",
+    flex: 1,
+  },
+  buttonIcon: {
+    margin: 0,
+  },
+  bottomLinkContainer: {
+    alignItems: "center",
+    paddingBottom: spacing.lg,
+  },
+  bottomLink: {
+    fontSize: 16,
+    textDecorationLine: "underline",
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useColorScheme, View, Platform } from "react-native";
+import { View, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
@@ -7,6 +7,7 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import { Appbar, PaperProvider, useTheme, Text } from "react-native-paper";
+import { ThemeProvider } from "styled-components/native";
 import { useFonts } from "expo-font";
 import HomeScreen from "./src/screens/HomeScreen";
 import KeywordListScreen from "./src/screens/KeywordListScreen";
@@ -16,12 +17,9 @@ import SettingsScreen from "./src/screens/SettingsScreen";
 import KeywordDetailScreen from "./src/screens/KeywordDetailScreen";
 import { QuizProvider } from "./src/context/QuizContext";
 import { NewWordEraQuizProvider } from "./src/context/NewWordEraQuizContext";
-import {
-  ThemePreferenceProvider,
-  useThemePreference,
-} from "./src/context/ThemePreferenceContext";
 import { RootStackParamList } from "./src/types/navigation";
-import { darkTheme, lightTheme } from "./src/theme";
+import { lightTheme } from "./src/theme";
+import { styledTheme } from "./src/theme/styledTheme";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -55,23 +53,7 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
   const title = getScreenTitle(route.name);
 
   if (isHome) {
-    return (
-      <Appbar.Header
-        mode="small"
-        style={{ backgroundColor: theme.colors.background }}
-      >
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text
-            variant="titleLarge"
-            style={{ fontWeight: "bold", color: theme.colors.onSurface }}
-          >
-            {title}
-          </Text>
-        </View>
-      </Appbar.Header>
-    );
+    return null;
   }
 
   return (
@@ -170,8 +152,6 @@ const AppNavigator = () => (
 );
 
 const ThemedApp: React.FC = () => {
-  const colorScheme = useColorScheme();
-  const { preference, isReady } = useThemePreference();
   const [fontsLoaded] = useFonts({
     "NotoSansKR-Regular": require("./assets/fonts/NotoSansKR_400Regular.ttf"),
     "NotoSansKR-Medium": require("./assets/fonts/NotoSansKR_500Medium.ttf"),
@@ -195,29 +175,26 @@ const ThemedApp: React.FC = () => {
     }
   }, []);
 
-  const resolvedPreference =
-    preference === "system" ? colorScheme ?? "light" : preference;
-  const currentTheme = resolvedPreference === "dark" ? darkTheme : lightTheme;
+  // Always use light theme
+  const currentTheme = lightTheme;
 
-  if (!isReady || !fontsLoaded) {
+  if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <PaperProvider theme={currentTheme}>
-      <QuizProvider>
-        <NewWordEraQuizProvider>
-          <AppNavigator />
-        </NewWordEraQuizProvider>
-      </QuizProvider>
-    </PaperProvider>
+    <ThemeProvider theme={styledTheme}>
+      <PaperProvider theme={currentTheme}>
+        <QuizProvider>
+          <NewWordEraQuizProvider>
+            <AppNavigator />
+          </NewWordEraQuizProvider>
+        </QuizProvider>
+      </PaperProvider>
+    </ThemeProvider>
   );
 };
 
 export default function App() {
-  return (
-    <ThemePreferenceProvider>
-      <ThemedApp />
-    </ThemePreferenceProvider>
-  );
+  return <ThemedApp />;
 }

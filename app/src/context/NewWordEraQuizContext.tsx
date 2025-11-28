@@ -3,16 +3,21 @@ import { NewWordEraItem } from '../types/NewWordEraItem';
 import { loadNewWordData } from '../utils/dataLoader';
 import { shuffle } from '../utils/random';
 
+export type ExtendedNewWordEraItem = NewWordEraItem & { selectedEraIndex: number };
+
 interface NewWordEraQuizContextValue {
-  problems: NewWordEraItem[];
-  currentProblem: NewWordEraItem | null;
-  selectedEraIndex: number; // Index of selected era from parallel arrays
+  problems: ExtendedNewWordEraItem[];
+  currentProblem: ExtendedNewWordEraItem | null;
+  selectedEraIndex: number;
   currentIndex: number;
   totalProblems: number;
   goToNext: () => void;
   goToPrevious: () => void;
+  setCurrentIndex: (index: number) => void;
   loading: boolean;
   resetKey: number;
+  cardStates: Record<number, { country: string; leader: string; year: string; month: string; isFlipped: boolean }>;
+  updateCardState: (index: number, state: Partial<{ country: string; leader: string; year: string; month: string; isFlipped: boolean }>) => void;
 }
 
 const NewWordEraQuizContext = createContext<NewWordEraQuizContextValue | undefined>(undefined);
@@ -31,11 +36,11 @@ const selectRandomEraIndex = (eraArray: string[]): number => {
 };
 
 export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [problems, setProblems] = useState<NewWordEraItem[]>([]);
+  const [problems, setProblems] = useState<ExtendedNewWordEraItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedEraIndex, setSelectedEraIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [resetKey, setResetKey] = useState(0);
+  const [cardStates, setCardStates] = useState<Record<number, { country: string; leader: string; year: string; month: string; isFlipped: boolean }>>({});
 
   useEffect(() => {
     const bootstrap = async () => {
@@ -47,17 +52,28 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
       );
       
       const shuffled = shuffle(eligible);
-      setProblems(shuffled);
       
-      // Select random era index for first problem
-      if (shuffled.length > 0) {
-        setSelectedEraIndex(selectRandomEraIndex(shuffled[0].era));
-      }
+      // Pre-calculate selectedEraIndex for all items
+      const extendedProblems = shuffled.map(item => ({
+        ...item,
+        selectedEraIndex: selectRandomEraIndex(item.era)
+      }));
       
+      setProblems(extendedProblems);
       setLoading(false);
     };
     bootstrap();
   }, []);
+
+  const updateCardState = (index: number, state: Partial<{ country: string; leader: string; year: string; month: string; isFlipped: boolean }>) => {
+    setCardStates((prev) => ({
+      ...prev,
+      [index]: {
+        ...(prev[index] || { country: '', leader: '', year: '', month: '', isFlipped: false }),
+        ...state,
+      },
+    }));
+  };
 
   const currentProblem = useMemo(() => {
     if (!problems.length) {
@@ -68,20 +84,14 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
 
   const goToNext = () => {
     if (currentIndex < problems.length - 1) {
-      const nextIndex = currentIndex + 1;
-      setCurrentIndex(nextIndex);
-      // Select random era index for next problem
-      setSelectedEraIndex(selectRandomEraIndex(problems[nextIndex].era));
+      setCurrentIndex((prev) => prev + 1);
       setResetKey((prev) => prev + 1);
     }
   };
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
-      const prevIndex = currentIndex - 1;
-      setCurrentIndex(prevIndex);
-      // Select random era index for previous problem
-      setSelectedEraIndex(selectRandomEraIndex(problems[prevIndex].era));
+      setCurrentIndex((prev) => prev - 1);
       setResetKey((prev) => prev + 1);
     }
   };
@@ -89,13 +99,16 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
   const value: NewWordEraQuizContextValue = {
     problems,
     currentProblem,
-    selectedEraIndex,
+    selectedEraIndex: currentProblem ? currentProblem.selectedEraIndex : 0,
     currentIndex,
     totalProblems: problems.length,
     goToNext,
     goToPrevious,
+    setCurrentIndex,
     loading,
-    resetKey
+    resetKey,
+    cardStates,
+    updateCardState,
   };
 
   return <NewWordEraQuizContext.Provider value={value}>{children}</NewWordEraQuizContext.Provider>;

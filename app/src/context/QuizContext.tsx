@@ -11,11 +11,14 @@ interface QuizContextValue {
   totalProblems: number;
   goToNext: () => void;
   goToPrevious: () => void;
+  setCurrentIndex: (index: number) => void;
   answer: string;
   setAnswer: (value: string) => void;
   resetAnswer: () => void;
   resetKey: number;
   loading: boolean;
+  cardStates: Record<number, { answer: string; isFlipped: boolean }>;
+  updateCardState: (index: number, state: Partial<{ answer: string; isFlipped: boolean }>) => void;
 }
 
 const QuizContext = createContext<QuizContextValue | undefined>(undefined);
@@ -24,9 +27,10 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [problems, setProblems] = useState<QuizItem[]>([]); // All problems
   const [quizProblems, setQuizProblems] = useState<QuizItem[]>([]); // Filtered for quiz
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState(''); // Deprecated, keep for compatibility if needed or remove
   const [resetKey, setResetKey] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [cardStates, setCardStates] = useState<Record<number, { answer: string; isFlipped: boolean }>>({});
 
   useEffect(() => {
     const bootstrap = async () => {
@@ -40,6 +44,16 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     bootstrap();
   }, []);
+
+  const updateCardState = (index: number, state: Partial<{ answer: string; isFlipped: boolean }>) => {
+    setCardStates((prev) => ({
+      ...prev,
+      [index]: {
+        ...(prev[index] || { answer: '', isFlipped: false }),
+        ...state,
+      },
+    }));
+  };
 
   const currentProblem = useMemo(() => {
     if (!quizProblems.length) {
@@ -56,14 +70,14 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const goToNext = () => {
     if (currentIndex < quizProblems.length - 1) {
       setCurrentIndex((prev) => prev + 1);
-      resetAnswer();
+      // resetAnswer(); // No longer needed as state is per-card
     }
   };
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
-      resetAnswer();
+      // resetAnswer();
     }
   };
 
@@ -75,11 +89,14 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     totalProblems: quizProblems.length,
     goToNext,
     goToPrevious,
+    setCurrentIndex,
     answer,
     setAnswer,
     resetAnswer,
     resetKey,
-    loading
+    loading,
+    cardStates,
+    updateCardState,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
