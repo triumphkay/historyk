@@ -1,9 +1,7 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import {
-  ScrollView,
   StyleSheet,
   View,
-  Pressable,
   Animated,
 } from "react-native";
 import {
@@ -147,10 +145,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
         />
       </Surface>
       
-      <ScrollView
-        contentContainerStyle={quizScreenStyles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
+      <View style={quizScreenStyles.scrollContent}>
         <View style={{ position: 'relative', height: 360 }}>
           {/* Front Side */}
           <Animated.View
@@ -265,7 +260,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
             </Surface>
           </Animated.View>
         </View>
-      </ScrollView>
+      </View>
 
       <View style={styles.fixedButtonContainer}>
         <Button

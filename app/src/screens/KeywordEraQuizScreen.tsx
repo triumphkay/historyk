@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
-import { ScrollView, StyleSheet, View, Pressable, Animated } from 'react-native';
+import { StyleSheet, View, Pressable, Animated } from 'react-native';
 import { ActivityIndicator, Button, IconButton, Menu, Surface, Text, TextInput, useTheme } from 'react-native-paper';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import TypeLabel from '../components/TypeLabel';
@@ -220,7 +220,7 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
         />
       </Surface>
       
-      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="always">
+      <View style={styles.scrollContent}>
         <View style={{ position: 'relative', height: 360 }}>
           {/* Front Side */}
           <Animated.View
@@ -325,7 +325,7 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
               <View>
                 <Text style={[flipStyles.resultText, { 
                   color: theme.colors.secondary,
-                  opacity: (country && leader) ? 1 : 0
+                  opacity: (country && (!hasLeaderAnswer || leader)) ? 1 : 0
                 }]}>
                   {isCorrect ? '정답입니다' : '오답입니다'}
                 </Text>
@@ -375,7 +375,7 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
             </Surface>
           </Animated.View>
         </View>
-      </ScrollView>
+      </View>
 
       <View style={styles.fixedButtonContainer}>
         <Button
