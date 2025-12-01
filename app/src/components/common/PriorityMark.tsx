@@ -2,11 +2,11 @@ import React, { useMemo } from "react";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import type { TextStyle, StyleProp, ViewStyle } from "react-native";
-import { typography } from "../theme/typography";
-import { getScoreFrequencyLabel } from "../utils/score";
+import { typography } from "../../theme/typography";
+import { getScoreFrequencyLabel } from "../../utils/score";
 import { colors, frequency } from "@theme/colors";
 
-interface ScoreFrequencyLabelProps {
+interface PriorityMarkProps {
   scores: Array<number | string>;
   textStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
@@ -27,7 +27,7 @@ const getImportanceColor = (label: string): string => {
   }
 };
 
-const ScoreFrequencyLabel: React.FC<ScoreFrequencyLabelProps> = ({
+const PriorityMark: React.FC<PriorityMarkProps> = ({
   scores,
   textStyle,
   style,
@@ -66,4 +66,4 @@ const styles = {
   },
 };
 
-export default ScoreFrequencyLabel;
+export default PriorityMark;

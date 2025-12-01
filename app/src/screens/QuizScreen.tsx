@@ -8,21 +8,14 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import {
-  ActivityIndicator,
-  Button,
-  IconButton,
-  Surface,
-  Text,
-  useTheme,
-} from "react-native-paper";
+import { ActivityIndicator, Surface, Text, useTheme } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useQuiz } from "../context/QuizContext";
 import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
-import { typography } from "../theme/typography";
 import { quizScreenStyles } from "../theme/quizStyles";
 import QuizCard from "../components/QuizCard";
+import { QuizButton, QuizNavigation } from "../components/QuizLayout";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Quiz">;
 
@@ -53,12 +46,18 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
           index: currentIndex,
           animated: true,
         });
-        isProgrammaticScroll.current = false;
+        // Keep isProgrammaticScroll true until scroll completes
+        setTimeout(() => {
+          isProgrammaticScroll.current = false;
+        }, 300); // Adjust timing based on animation duration
       }
     }
   }, [currentIndex, quizProblems.length]);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    // Skip state update during programmatic scroll
+    if (isProgrammaticScroll.current) return;
+    
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / width);
     if (index !== currentIndex && index >= 0 && index < totalProblems) {
@@ -82,20 +81,20 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
     isFlipped: false,
   };
   const { isFlipped, answer } = currentCardState;
-  const currentProblem = quizProblems[currentIndex];
+  // const currentProblem = quizProblems[currentIndex];
 
   const handleFlip = () => {
     updateCardState(currentIndex, { isFlipped: !isFlipped });
   };
 
-  const isCorrect = useMemo(
-    () =>
-      currentProblem
-        ? answer.replace(/\s/g, "") ===
-          currentProblem.keyword.replace(/\s/g, "")
-        : false,
-    [answer, currentProblem]
-  );
+  // const isCorrect = useMemo(
+  //   () =>
+  //     currentProblem
+  //       ? answer.replace(/\s/g, "") ===
+  //         currentProblem.keyword.replace(/\s/g, "")
+  //       : false,
+  //   [answer, currentProblem]
+  // );
 
   if (loading) {
     return (
@@ -115,23 +114,12 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <Surface style={quizScreenStyles.container}>
-      <Surface style={[styles.navigationBar]} elevation={1}>
-        <IconButton
-          icon="chevron-left"
-          onPress={handlePrev}
-          disabled={currentIndex === 0}
-          size={32}
-        />
-        <Text variant="bodyLarge">
-          {currentIndex + 1} / {totalProblems}
-        </Text>
-        <IconButton
-          icon="chevron-right"
-          onPress={handleNext}
-          disabled={currentIndex === totalProblems - 1}
-          size={32}
-        />
-      </Surface>
+      <QuizNavigation
+        currentIndex={currentIndex}
+        totalProblems={totalProblems}
+        onPrevious={handlePrev}
+        onNext={handleNext}
+      />
 
       <View style={[quizScreenStyles.scrollContent, { padding: 0, flex: 1 }]}>
         <FlatList
@@ -159,70 +147,17 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <View style={styles.fixedButtonContainer}>
-        <Button
-          mode="contained"
-          style={[
-            styles.submitButton,
-            isFlipped && {
-              borderWidth: 1,
-              borderColor: theme.dark
-                ? theme.colors.onSurface
-                : theme.colors.onPrimary,
-            },
-          ]}
-          icon={isFlipped ? "undo" : "check"}
-          buttonColor={
-            isFlipped
-              ? theme.dark
-                ? theme.colors.surface
-                : theme.colors.primary
-              : isCorrect
-              ? theme.colors.secondary
-              : theme.colors.primary
-          }
-          textColor={
-            isFlipped
-              ? theme.dark
-                ? theme.colors.onSurface
-                : theme.colors.onPrimary
-              : undefined
-          }
-          onPress={handleFlip}
-          labelStyle={{
-            fontSize: typography.sizes.lg,
-            fontWeight: typography.weights.medium,
-          }}
-          contentStyle={{
-            height: 48,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {isFlipped ? "문제 보기" : "정답 확인"}
-        </Button>
+        <QuizButton isFlipped={isFlipped} onPress={handleFlip} />
       </View>
     </Surface>
   );
 };
 
 const styles = StyleSheet.create({
-  navigationBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-  },
   fixedButtonContainer: {
     padding: spacing.md,
     paddingBottom: spacing.lg,
     alignItems: "center",
-  },
-  submitButton: {
-    width: 200,
-    height: 48,
-    alignSelf: "center",
-    borderRadius: 999,
   },
 });
 

@@ -1,7 +1,7 @@
-import 'react-native-paper';
+import type { MD3Colors as OriginalMD3Colors } from 'react-native-paper';
 
 declare module 'react-native-paper' {
-  export interface MD3Colors {
+  export interface MD3Colors extends OriginalMD3Colors {
     level0: string;
     level1: string;
     level2: string;

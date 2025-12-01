@@ -4,7 +4,7 @@ import { IconButton, Text, TextInput, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import DescriptionList from "./DescriptionList";
-import ScoreFrequencyLabel from "./ScoreFrequencyLabel";
+import PriorityMark from "./common/PriorityMark";
 import TypeLabel from "./TypeLabel";
 import { QuizItem } from "../types/QuizItem";
 import { RootStackParamList } from "../types/navigation";
@@ -77,7 +77,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
   // --- Front Content ---
   const FrontHeader = (
     <View style={styles.cardHeader}>
-      <ScoreFrequencyLabel scores={problem.score} style={styles.cardScore} />
+      <PriorityMark scores={problem.score} style={styles.cardScore} />
       <TypeLabel types={problem.types} />
     </View>
   );
@@ -121,7 +121,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
         style={[
           styles.resultText,
           {
-            // color: theme.colors.secondary,
+            color: theme.colors.level3,
             opacity: answer && answer.trim().length > 0 ? 1 : 0,
           },
         ]}
@@ -130,12 +130,13 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
       </Text>
 
       <View style={styles.keywordRow}>
-        <Text style={[styles.answerKeyword, { color: POINT_COLOR_1 }]}>
+        <Text style={[styles.answerKeyword, { color: theme.colors.level3 }]}>
           {problem.keyword}
         </Text>
         <IconButton
           icon="information-outline"
           size={20}
+          iconColor={theme.colors.level3}
           onPress={() => {
             navigation.navigate("KeywordDetail", {
               keyword: problem,
@@ -150,6 +151,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
   const BackBody = (
     <View style={{ width: "100%", maxHeight: 150, overflow: "hidden" }}>
       <DescriptionList
+        variant="back"
         descriptions={[
           ...problem.descriptions.slice(0, 7),
           ...(problem.descriptions.length > 7 ? ["..."] : []),
@@ -160,11 +162,11 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
 
   const BackFooter = (
     <View style={styles.infoRowBottom}>
-      <ScoreFrequencyLabel
+      <PriorityMark
         scores={problem.score}
-        textStyle={styles.importanceText}
+        textStyle={[styles.importanceText, { color: theme.colors.level3 }]}
       />
-      <Text style={styles.referenceCountText}>
+      <Text style={[styles.referenceCountText, { color: theme.colors.level3 }]}>
         출제 횟수: {referenceCount}회
       </Text>
     </View>

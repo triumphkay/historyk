@@ -1,33 +1,29 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Chip, Surface, Text, useTheme } from "react-native-paper";
+import { Surface } from "react-native-paper";
 import { spacing } from "../theme/spacing";
-import { typography } from "../theme/typography";
+import KeywordChip from "./KeywordChip";
 
 interface DescriptionListProps {
   descriptions: string[];
   selected?: boolean;
+  variant?: "front" | "back";
 }
 
 const DescriptionList: React.FC<DescriptionListProps> = ({
   descriptions,
   selected,
+  variant = "front",
 }) => {
-  const theme = useTheme();
-
   return (
     <Surface elevation={0} style={styles.container}>
       <View style={styles.chipRow}>
         {descriptions.map((description, index) => (
-          <Surface
+          <KeywordChip
             key={`${index}-${description.slice(0, 8)}`}
-            elevation={1}
-            style={[styles.chip, { backgroundColor: theme.colors.onGrey }]}
-          >
-            <Text style={[styles.chipText, { color: theme.colors.grey }]}>
-              {description}
-            </Text>
-          </Surface>
+            text={description}
+            variant={variant}
+          />
         ))}
       </View>
     </Surface>
@@ -44,17 +40,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "flex-start",
     gap: spacing.sm,
-  },
-  chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    // marginBottom: spacing.xs,
-  },
-  chipText: {
-    fontSize: typography.sizes.lg,
-    fontWeight: 600,
-    // lineHeight: 22,
   },
 });
 

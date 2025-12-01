@@ -3,6 +3,7 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 import { Surface, useTheme } from "react-native-paper";
 import { spacing } from "../../theme/spacing";
 import { quizScreenStyles } from "../../theme/quizStyles";
+import { colors } from "@theme/colors";
 
 interface QuizCardLayoutProps {
   header?: React.ReactNode;
@@ -27,8 +28,8 @@ const QuizCardLayout: React.FC<QuizCardLayoutProps> = ({
         quizScreenStyles.card,
         styles.card,
         variant === "front"
-          ? { backgroundColor: theme.colors.greyContainer }
-          : { backgroundColor: theme.colors.level6 },
+          ? { backgroundColor: colors.greyContainer }
+          : { backgroundColor: colors.level8 },
         style,
       ]}
       elevation={3}

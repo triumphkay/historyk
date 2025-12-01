@@ -4,7 +4,7 @@ import { IconButton, Text, TextInput, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import TypeLabel from "./TypeLabel";
-import ScoreFrequencyLabel from "./ScoreFrequencyLabel";
+import PriorityMark from "./common/PriorityMark";
 import DropdownSelect from "./DropdownSelect";
 import DescriptionList from "./DescriptionList";
 import {
@@ -135,7 +135,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   // --- Front Content ---
   const FrontHeader = (
     <View style={styles.cardHeader}>
-      <ScoreFrequencyLabel
+      <PriorityMark
         scores={problem.scores}
         style={styles.cardScore}
         // textStyle={[
@@ -292,16 +292,13 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
           </Text>
         )}
       </View>
-      <DescriptionList descriptions={problem.descriptions} />
+      {/* <DescriptionList descriptions={problem.descriptions} /> */}
     </View>
   );
 
   const BackFooter = (
     <View style={styles.infoRowBottom}>
-      <ScoreFrequencyLabel
-        scores={problem.scores}
-        textStyle={styles.importanceText}
-      />
+      <PriorityMark scores={problem.scores} textStyle={styles.importanceText} />
       <Text style={styles.referenceCountText}>
         출제 횟수: {referenceEntries.length}회
       </Text>
@@ -355,6 +352,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    color: "white",
   },
   importanceText: {
     fontSize: typography.sizes.sm,
