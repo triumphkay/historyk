@@ -1,31 +1,59 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Surface, Text, Divider, useTheme } from 'react-native-paper';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types/navigation';
-import { spacing } from '../theme/spacing';
-import { typography } from '../theme/typography';
-import { getScoreFrequencyLabel } from '../utils/score';
-import { formatReferenceId } from '../utils/referenceFormatter';
+import React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Surface, Text, Divider, useTheme } from "react-native-paper";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types/navigation";
+import { spacing } from "../theme/spacing";
+import { typography } from "../theme/typography";
+// import { getScoreFrequencyLabel } from "../utils/score";
+import { formatReferenceId } from "../utils/referenceFormatter";
+import PriorityMark from "@components/common/PriorityMark";
+import DescriptionList from "@components/DescriptionList";
 
-type Props = NativeStackScreenProps<RootStackParamList, 'KeywordDetail'>;
+type Props = NativeStackScreenProps<RootStackParamList, "KeywordDetail">;
 
 const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
   const theme = useTheme();
   const { keyword } = route.params;
 
-  const importanceLabel = getScoreFrequencyLabel(keyword.score);
+  // const importanceLabel = getScoreFrequencyLabel(keyword.score);
   const occurrenceCount = keyword.ref_id.length + keyword.q_ref_id.length;
 
+  const ExamChip = ({ id }: { id: string }) => {
+    return (
+      <Surface
+        elevation={0}
+        style={[styles.refChip, { backgroundColor: theme.colors.level3 }]}
+      >
+        <Text style={[styles.refChipText, { color: theme.colors.level8 }]}>
+          {formatReferenceId(id)}
+        </Text>
+      </Surface>
+    );
+  };
+
   return (
-    <Surface style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <Surface
+      style={[styles.container, { backgroundColor: theme.colors.level1 }]}
+    >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerContainer}>
-          <Text style={[styles.title, { color: theme.colors.primary }]}>{keyword.keyword}</Text>
-          <Surface elevation={0} style={[styles.importanceBadge, { backgroundColor: theme.colors.secondaryContainer }]}>
-            <Text style={[styles.importanceText, { color: theme.colors.onSecondaryContainer }]}>
+          <Text style={[styles.title, { color: theme.colors.primary }]}>
+            {keyword.keyword}
+          </Text>
+          <Surface
+            elevation={0}
+            style={
+              [
+                // styles.importanceBadge,
+                // { backgroundColor: theme.colors.secondaryContainer },
+              ]
+            }
+          >
+            <PriorityMark scores={keyword.score} />
+            {/* <Text style={[styles.importanceText, { color: theme.colors.onSecondaryContainer }]}>
               {importanceLabel || '중요도 없음'}
-            </Text>
+            </Text> */}
           </Surface>
         </View>
 
@@ -34,10 +62,20 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
         {/* Era Information Block */}
         {(keyword.era && keyword.era.length > 0) || keyword.years ? (
           <>
-            <Surface elevation={1} style={[styles.eraCard, { backgroundColor: theme.colors.surfaceVariant }]}>
+            <Surface
+              elevation={1}
+              style={[styles.eraCard, { backgroundColor: theme.colors.level3 }]}
+            >
               {/* Era Script Header */}
-              {keyword.era_script && keyword.era_script.length > 0 && keyword.era_script[0] ? (
-                <Text style={[styles.eraScriptTitle, { color: theme.colors.onSurface }]}>
+              {keyword.era_script &&
+              keyword.era_script.length > 0 &&
+              keyword.era_script[0] ? (
+                <Text
+                  style={[
+                    styles.eraScriptTitle,
+                    { color: theme.colors.level7 },
+                  ]}
+                >
                   {keyword.keyword} {keyword.era_script[0]}
                 </Text>
               ) : null}
@@ -47,16 +85,34 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
                   {[
                     ...(keyword.era || []),
                     ...(keyword.sub_era || []),
-                    ...(keyword.det_era || [])
-                  ].filter(Boolean).map((text, i) => (
-                    <Text key={`era-text-${i}`} style={[styles.eraValue, { color: theme.colors.onSurface, marginRight: spacing.sm }]}>
-                      {text}
-                    </Text>
-                  ))}
+                    ...(keyword.det_era || []),
+                  ]
+                    .filter(Boolean)
+                    .map((text, i) => (
+                      <Text
+                        key={`era-text-${i}`}
+                        style={[
+                          styles.eraValue,
+                          {
+                            color: theme.colors.level8,
+                            marginRight: spacing.sm,
+                          },
+                        ]}
+                      >
+                        {text}
+                      </Text>
+                    ))}
                 </View>
 
                 {keyword.years ? (
-                  <Text style={[styles.eraValue, { color: theme.colors.onSurfaceVariant, marginTop: spacing.xs }]}>
+                  <Text
+                    style={[
+                      styles.eraYearValue,
+                      {
+                        color: theme.colors.level10,
+                      },
+                    ]}
+                  >
                     {keyword.years}
                   </Text>
                 ) : null}
@@ -66,29 +122,48 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
           </>
         ) : null}
 
-        <Text style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>설명</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
+          관련 키워드
+        </Text>
         {keyword.descriptions && keyword.descriptions.length > 0 ? (
-          <Surface elevation={0} style={styles.chipsContainer}>
-            {keyword.descriptions.map((desc, index) => (
-              <Surface
-                key={index}
-                elevation={1}
-                style={[styles.chip, { backgroundColor: theme.colors.secondaryContainer }]}
-              >
-                <Text style={[styles.chipText, { color: theme.colors.onSecondaryContainer }]}>
-                  {desc}
-                </Text>
-              </Surface>
-            ))}
-          </Surface>
+          <DescriptionList descriptions={keyword.descriptions} />
         ) : (
-          <Text style={[styles.noData, { color: theme.colors.onSurfaceVariant }]}>설명이 없습니다.</Text>
+          // <Surface elevation={0} style={styles.chipsContainer}>
+          //   {keyword.descriptions.map((desc, index) => (
+          //     <Surface
+          //       key={index}
+          //       elevation={1}
+          //       style={[
+          //         styles.chip,
+          //         { backgroundColor: theme.colors.secondaryContainer },
+          //       ]}
+          //     >
+          //       <Text
+          //         style={[
+          //           styles.chipText,
+          //           { color: theme.colors.onSecondaryContainer },
+          //         ]}
+          //       >
+          //         {desc}
+          //       </Text>
+          //     </Surface>
+          //   ))}
+          // </Surface>
+          <Text
+            style={[styles.noData, { color: theme.colors.onSurfaceVariant }]}
+          >
+            설명이 없습니다.
+          </Text>
         )}
 
         <Divider style={styles.divider} />
 
         <Surface elevation={0} style={styles.infoSection}>
-          <Text style={[styles.label, { color: theme.colors.onSurfaceVariant }]}>출제 횟수</Text>
+          <Text
+            style={[styles.label, { color: theme.colors.onSurfaceVariant }]}
+          >
+            출제 횟수
+          </Text>
           <Text style={[styles.value, { color: theme.colors.onSurface }]}>
             {occurrenceCount}회
           </Text>
@@ -96,18 +171,17 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
 
         {keyword.q_ref_id && keyword.q_ref_id.length > 0 && (
           <Surface elevation={0} style={styles.refSection}>
-            <Text style={[styles.refLabel, { color: theme.colors.onSurfaceVariant }]}>지문 출제</Text>
+            <Text
+              style={[
+                styles.refLabel,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
+            >
+              지문 출제
+            </Text>
             <Surface elevation={0} style={styles.chipsContainer}>
               {keyword.q_ref_id.map((id, index) => (
-                <Surface
-                  key={index}
-                  elevation={1}
-                  style={[styles.refChip, { backgroundColor: theme.colors.surfaceVariant }]}
-                >
-                  <Text style={[styles.refChipText, { color: theme.colors.onSurfaceVariant }]}>
-                    {formatReferenceId(id)}
-                  </Text>
-                </Surface>
+                <ExamChip key={index} id={id} />
               ))}
             </Surface>
           </Surface>
@@ -115,18 +189,17 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
 
         {keyword.ref_id && keyword.ref_id.length > 0 && (
           <Surface elevation={0} style={styles.refSection}>
-            <Text style={[styles.refLabel, { color: theme.colors.onSurfaceVariant }]}>보기 출제</Text>
+            <Text
+              style={[
+                styles.refLabel,
+                { color: theme.colors.onSurfaceVariant },
+              ]}
+            >
+              보기 출제
+            </Text>
             <Surface elevation={0} style={styles.chipsContainer}>
               {keyword.ref_id.map((id, index) => (
-                <Surface
-                  key={index}
-                  elevation={1}
-                  style={[styles.refChip, { backgroundColor: theme.colors.surfaceVariant }]}
-                >
-                  <Text style={[styles.refChipText, { color: theme.colors.onSurfaceVariant }]}>
-                    {formatReferenceId(id)}
-                  </Text>
-                </Surface>
+                <ExamChip key={index} id={id} />
               ))}
             </Surface>
           </Surface>
@@ -138,113 +211,119 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   scrollContent: {
     padding: spacing.lg,
-    paddingBottom: spacing.xl
+    paddingBottom: spacing.xl,
+    paddingTop: spacing.xl,
   },
   title: {
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
-    flex: 1
+    flex: 1,
   },
   headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: spacing.md
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    // marginBottom: spacing.md,
   },
   importanceBadge: {
     paddingHorizontal: spacing.sm,
     paddingVertical: 2,
     borderRadius: 4,
-    marginLeft: spacing.md
+    marginLeft: spacing.md,
   },
   importanceText: {
     fontSize: typography.sizes.xs,
-    fontWeight: typography.weights.bold
+    fontWeight: typography.weights.bold,
   },
   eraCard: {
     padding: spacing.md,
-    borderRadius: spacing.md,
-    marginBottom: spacing.md
+    borderRadius: spacing.sm,
+    // marginBottom: spacing.md,
   },
   eraScriptTitle: {
     fontSize: typography.sizes.md,
     fontWeight: typography.weights.bold,
     marginBottom: spacing.md,
-    textAlign: 'center'
+    // textAlign: "center",
   },
   eraInfoGrid: {
-    gap: spacing.sm
+    gap: spacing.xs,
   },
   eraTextContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center'
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
   },
   eraValue: {
-    fontSize: typography.sizes.md
+    fontSize: typography.sizes.xl,
+    fontWeight: typography.weights.bold,
+  },
+  eraYearValue: {
+    fontSize: typography.sizes.xl,
+    fontWeight: "300",
   },
   divider: {
-    marginVertical: spacing.md
+    marginVertical: spacing.lg,
   },
   infoSection: {
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   label: {
     fontSize: typography.sizes.sm,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs,
   },
   value: {
     fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.medium
+    fontWeight: typography.weights.medium,
   },
   sectionTitle: {
     fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   chipsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.reg,
   },
   chip: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: 16,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs,
   },
   chipText: {
     fontSize: typography.sizes.sm,
-    lineHeight: 18
+    lineHeight: 18,
   },
   noData: {
     fontSize: typography.sizes.md,
-    fontStyle: 'italic',
-    textAlign: 'center',
-    marginVertical: spacing.lg
+    fontStyle: "italic",
+    textAlign: "center",
+    marginVertical: spacing.lg,
   },
   refSection: {
-    marginTop: spacing.md
+    marginTop: spacing.md,
   },
   refLabel: {
     fontSize: typography.sizes.sm,
     marginBottom: spacing.sm,
-    fontWeight: typography.weights.medium
+    fontWeight: typography.weights.medium,
   },
   refChip: {
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: 12,
-    marginBottom: spacing.xs
+    // marginBottom: spacing.xs,
   },
   refChipText: {
     fontSize: typography.sizes.xs,
-    lineHeight: 16
-  }
+    // lineHeight: 16,
+  },
 });
 
 export default KeywordDetailScreen;

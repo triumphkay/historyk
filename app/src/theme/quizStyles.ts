@@ -22,8 +22,8 @@ export const quizScreenStyles = StyleSheet.create({
 
   // 메인 카드 (문제 영역)
   card: {
-    marginTop: spacing.md,
-    marginBottom: spacing.md,
+    // marginTop: spacing.md,
+    // marginBottom: spacing.md,
     padding: spacing.lg,
     borderRadius: spacing.md,
   },

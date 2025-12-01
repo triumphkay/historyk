@@ -32,7 +32,7 @@ const DescriptionList: React.FC<DescriptionListProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: spacing.lg,
+    // marginVertical: spacing.lg,
     width: "100%",
   },
   chipRow: {

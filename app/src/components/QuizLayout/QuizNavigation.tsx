@@ -17,7 +17,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
   onNext,
 }) => {
   return (
-    <Surface style={styles.navigationBar} elevation={1}>
+    <Surface style={styles.navigationBar} elevation={0}>
       <IconButton
         icon="chevron-left"
         onPress={onPrevious}
@@ -25,7 +25,7 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
         size={32}
       />
       <Text variant="bodyLarge">
-        {currentIndex + 1} / {totalProblems}
+        <Text style={styles.current}>{currentIndex + 1}</Text> / {totalProblems}
       </Text>
       <IconButton
         icon="chevron-right"
@@ -43,7 +43,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.sm,
+  },
+  current: {
+    fontWeight: "800",
   },
 });
 

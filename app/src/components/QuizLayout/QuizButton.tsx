@@ -19,13 +19,13 @@ const QuizButton: React.FC<QuizButtonProps> = ({ isFlipped, onPress }) => {
         {
           borderWidth: 1,
           borderColor: isFlipped
-            ? (theme.colors as any).level8
+            ? (theme.colors as any).level6
             : theme.colors.primary,
         },
       ]}
       icon={isFlipped ? "undo" : "check"}
       buttonColor={
-        isFlipped ? (theme.colors as any).level3 : theme.colors.primary
+        isFlipped ? (theme.colors as any).level1 : theme.colors.primary
       }
       textColor={
         isFlipped ? (theme.colors as any).level8 : theme.colors.onPrimary

@@ -43,11 +43,11 @@ const getScreenTitle = (routeName: string): string => {
     case "KeywordEraQuizScreen":
       return "한국사 시대 퀴즈";
     case "KeywordDetail":
-      return "키워드 정보";
+      return "키워드";
     case "Settings":
       return "설정";
     default:
-      return "한국사 키워드 학습1";
+      return "한국사 키워드 학습*";
   }
 };
 
@@ -66,7 +66,11 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
   }
 
   return (
-    <Appbar.Header mode="small">
+    <Appbar.Header
+      mode="small"
+      style={{ backgroundColor: theme.colors.level4 }}
+      elevated
+    >
       <Appbar.BackAction onPress={() => navigation.goBack()} />
       <View
         style={{
@@ -79,7 +83,9 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
           pointerEvents: "none",
         }}
       >
-        <Text variant="titleLarge">{title}</Text>
+        <Text variant="titleLarge" style={{ color: theme.colors.level9 }}>
+          {title}
+        </Text>
       </View>
       <View style={{ flex: 1 }} />
       {isKeywordList ? (
@@ -126,22 +132,22 @@ const AppNavigator = () => (
       <Stack.Screen
         name="KeywordList"
         component={KeywordListScreen}
-        options={{ title: "키워드 목록" }}
+        options={{ title: "한국사 키워드" }}
       />
       <Stack.Screen
         name="Quiz"
         component={QuizScreen}
-        options={{ title: "키워드 문제" }}
+        options={{ title: "키워드 퀴즈" }}
       />
       <Stack.Screen
         name="KeywordEraQuizScreen"
         component={KeywordEraQuizScreen}
-        options={{ title: "키워드 시대" }}
+        options={{ title: "시대 퀴즈" }}
       />
       <Stack.Screen
         name="KeywordDetail"
         component={KeywordDetailScreen}
-        options={{ title: "키워드 정보" }}
+        options={{ title: "키워드" }}
       />
       <Stack.Screen
         name="Settings"

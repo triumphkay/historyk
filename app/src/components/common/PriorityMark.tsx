@@ -46,7 +46,7 @@ const PriorityMark: React.FC<PriorityMarkProps> = ({
       style={[{ flexDirection: "row", alignItems: "center", gap: 6 }, style]}
     >
       <Text style={[styles.text, textStyle]}>중요도:</Text>
-      <Text style={[styles.text, textStyle]}>{label}</Text>
+      <Text style={[styles.point, textStyle]}>{label}</Text>
       <View
         style={{
           width: 8,
@@ -63,6 +63,10 @@ const styles = {
   text: {
     fontSize: typography.sizes.xs,
     fontWeight: typography.weights.medium,
+  },
+  point: {
+    fontSize: typography.sizes.xs,
+    fontWeight: typography.weights.bold,
   },
 };
 

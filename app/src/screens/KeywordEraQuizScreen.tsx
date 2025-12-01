@@ -107,34 +107,34 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
     [currentProblem]
   );
 
-  // const isCorrect = useMemo(() => {
-  //   if (!currentProblem) return false;
+  const isCorrect = useMemo(() => {
+    if (!currentProblem) return false;
 
-  //   // Check Era (Country)
-  //   if (country !== selectedEra) return false;
+    // Check Era (Country)
+    if (country !== selectedEra) return false;
 
-  //   // Check Detail Era (Leader)
-  //   const hasLeaderAnswer = Boolean(selectedDetEra.trim());
-  //   if (hasLeaderAnswer && leader !== selectedDetEra) return false;
+    // Check Detail Era (Leader)
+    const hasLeaderAnswer = Boolean(selectedDetEra.trim());
+    if (hasLeaderAnswer && leader !== selectedDetEra) return false;
 
-  //   // Check Year
-  //   const shouldShowYearInputs = currentProblem.years_check === "true";
-  //   if (shouldShowYearInputs) {
-  //     if (year !== yearParts.year) return false;
-  //     if (yearParts.month && month !== yearParts.month) return false;
-  //   }
+    // Check Year
+    const shouldShowYearInputs = currentProblem.years_check === "true";
+    if (shouldShowYearInputs) {
+      if (year !== yearParts.year) return false;
+      if (yearParts.month && month !== yearParts.month) return false;
+    }
 
-  //   return true;
-  // }, [
-  //   currentProblem,
-  //   country,
-  //   leader,
-  //   year,
-  //   month,
-  //   selectedEra,
-  //   selectedDetEra,
-  //   yearParts,
-  // ]);
+    return true;
+  }, [
+    currentProblem,
+    country,
+    leader,
+    year,
+    month,
+    selectedEra,
+    selectedDetEra,
+    yearParts,
+  ]);
 
   const handleFlip = () => {
     updateCardState(currentIndex, { isFlipped: !isFlipped });

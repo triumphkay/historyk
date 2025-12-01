@@ -19,6 +19,7 @@ import { spacing } from "../theme/spacing";
 import { QuizItem } from "../types/QuizItem";
 import { getScoreFrequencyLabel } from "../utils/score";
 import PriorityMark from "../components/common/PriorityMark";
+import { colors } from "@theme/colors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordList">;
 
@@ -80,12 +81,21 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   }
 
   const renderItem = ({ item, index }: { item: QuizItem; index: number }) => {
-    const descriptionCount = item.descriptions?.length || 0;
+    // const descriptionCount = item.descriptions?.length || 0;
 
     return (
       <List.Item
-        title={`${item.keyword} (${descriptionCount})`}
-        description={() => <PriorityMark scores={item.score} />}
+        title={item.keyword}
+        titleStyle={[
+          styles.titleText,
+          { color: theme.colors.onPrimaryContainer },
+        ]}
+        description={() => (
+          <PriorityMark
+            textStyle={{ color: colors.level6 }}
+            scores={item.score}
+          />
+        )}
         titleNumberOfLines={1}
         style={styles.listItem}
         onPress={() => {
@@ -99,12 +109,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
               { backgroundColor: theme.colors.primaryContainer },
             ]}
           >
-            <Text
-              style={[
-                styles.indexText,
-                { color: theme.colors.onPrimaryContainer },
-              ]}
-            >
+            <Text style={[styles.indexText, { color: colors.level8 }]}>
               {index + 1}
             </Text>
           </Surface>
@@ -115,7 +120,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <Surface
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      style={[styles.container, { backgroundColor: theme.colors.level1 }]}
     >
       {searchVisible && (
         <Searchbar
@@ -199,23 +204,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   titleText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
+    marginBottom: 2,
   },
   iconButtons: {
     flexDirection: "row",
     alignItems: "center",
   },
   searchBar: {
-    margin: spacing.md,
-    marginBottom: spacing.sm,
+    margin: spacing.sm,
+    // marginBottom: spacing.sm,
   },
   list: {
     padding: spacing.md,
     paddingTop: 0,
+    // gap: 20,
   },
   listItem: {
-    marginBottom: spacing.xs,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.level2,
   },
   center: {
     flex: 1,

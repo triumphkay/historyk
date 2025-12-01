@@ -114,6 +114,8 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
     </View>
   );
 
+  const backTextColor = theme.colors.level3;
+
   // --- Back Content ---
   const BackHeader = (
     <View>
@@ -121,7 +123,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
         style={[
           styles.resultText,
           {
-            color: theme.colors.level3,
+            color: backTextColor,
             opacity: answer && answer.trim().length > 0 ? 1 : 0,
           },
         ]}
@@ -130,13 +132,13 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
       </Text>
 
       <View style={styles.keywordRow}>
-        <Text style={[styles.answerKeyword, { color: theme.colors.level3 }]}>
+        <Text style={[styles.answerKeyword, { color: backTextColor }]}>
           {problem.keyword}
         </Text>
         <IconButton
           icon="information-outline"
           size={20}
-          iconColor={theme.colors.level3}
+          iconColor={backTextColor}
           onPress={() => {
             navigation.navigate("KeywordDetail", {
               keyword: problem,
@@ -164,9 +166,9 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
     <View style={styles.infoRowBottom}>
       <PriorityMark
         scores={problem.score}
-        textStyle={[styles.importanceText, { color: theme.colors.level3 }]}
+        textStyle={[styles.importanceText, { color: backTextColor }]}
       />
-      <Text style={[styles.referenceCountText, { color: theme.colors.level3 }]}>
+      <Text style={[styles.referenceCountText, { color: backTextColor }]}>
         출제 횟수: {referenceCount}회
       </Text>
     </View>
@@ -228,10 +230,8 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.sm,
   },
   resultText: {
-    fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontSize: typography.sizes.md,
     marginBottom: spacing.xs,
-    textAlign: "left",
   },
 });
 

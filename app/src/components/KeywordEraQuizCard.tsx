@@ -230,6 +230,8 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
     </View>
   );
 
+  const backTextColor = theme.colors.level3;
+
   // --- Back Content ---
   const BackHeader = (
     <View>
@@ -237,7 +239,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         style={[
           styles.resultText,
           {
-            color: theme.colors.secondary,
+            color: backTextColor,
             opacity: country && (!hasLeaderAnswer || leader) ? 1 : 0,
           },
         ]}
@@ -246,12 +248,13 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
       </Text>
 
       <View style={styles.keywordRow}>
-        <Text style={[styles.answerKeyword, { color: POINT_COLOR_1 }]}>
+        <Text style={[styles.answerKeyword, { color: backTextColor }]}>
           {problem.keyword}
         </Text>
         <IconButton
           icon="information-outline"
           size={20}
+          iconColor={backTextColor}
           onPress={() => {
             navigation.navigate("KeywordDetail", {
               keyword: {
@@ -269,12 +272,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   const BackBody = (
     <View style={{ width: "100%" }}>
       <View style={styles.eraInfoContainer}>
-        <Text
-          style={[
-            styles.eraText,
-            { color: theme.colors.onSurface, fontSize: 24 },
-          ]}
-        >
+        <Text style={[styles.eraText, { color: backTextColor }]}>
           {[selectedEra, selectedSubEra, selectedDetEra]
             .filter(Boolean)
             .join(" ")}
@@ -282,7 +280,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         {problem.years && (
           <Text
             style={{
-              color: theme.colors.onSurface,
+              color: backTextColor,
               fontSize: 24,
               fontWeight: "300",
               marginTop: 8,
@@ -298,8 +296,11 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
 
   const BackFooter = (
     <View style={styles.infoRowBottom}>
-      <PriorityMark scores={problem.scores} textStyle={styles.importanceText} />
-      <Text style={styles.referenceCountText}>
+      <PriorityMark
+        scores={problem.scores}
+        textStyle={[styles.importanceText, { color: backTextColor }]}
+      />
+      <Text style={[styles.referenceCountText, { color: backTextColor }]}>
         출제 횟수: {referenceEntries.length}회
       </Text>
     </View>
@@ -355,22 +356,21 @@ const styles = StyleSheet.create({
     color: "white",
   },
   importanceText: {
-    fontSize: typography.sizes.sm,
+    // fontSize: typography.sizes.sm,
   },
   referenceCountText: {
     fontSize: typography.sizes.sm,
   },
   resultText: {
-    fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
-    marginBottom: spacing.md,
+    fontSize: typography.sizes.md,
+    marginBottom: spacing.xs,
   },
   eraInfoContainer: {
     justifyContent: "center",
     alignItems: "flex-start",
   },
   eraText: {
-    fontSize: typography.sizes.lg,
+    fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
   },
 });
