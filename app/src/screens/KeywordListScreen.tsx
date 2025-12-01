@@ -2,14 +2,13 @@ import React, { useMemo, useState, useEffect } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
-  IconButton,
   List,
   Surface,
   Text,
   useTheme,
   Searchbar,
-  Dialog,
-  Portal,
+  Menu,
+  Divider,
   Button,
 } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -31,15 +30,17 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   const [sortMode, setSortMode] = useState<"alphabetical" | "importance">(
     "alphabetical"
   );
-  const [sortDialogVisible, setSortDialogVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
-  // Set navigation options for search and sort buttons
+  // Set navigation options for search
   useEffect(() => {
     navigation.setParams({
       toggleSearch: () => setSearchVisible(!searchVisible),
-      toggleSortDialog: () => setSortDialogVisible(true),
     } as any);
   }, [navigation, searchVisible]);
+
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
 
   const sortedProblems = useMemo(() => {
     if (sortMode === "importance") {
@@ -114,6 +115,9 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
             </Text>
           </Surface>
         )}
+        right={(props) => (
+          <List.Icon {...props} icon="chevron-right" color={colors.level4} />
+        )}
       />
     );
   };
@@ -132,8 +136,41 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
       )}
       <Surface style={styles.countContainer} elevation={1}>
         <Text style={styles.countText}>
-          {filteredProblems.length}개의 키워드가 있습니다
+          {filteredProblems.length}개의 키워드
         </Text>
+        <Menu
+          visible={menuVisible}
+          onDismiss={closeMenu}
+          anchor={
+            <Button
+              mode="text"
+              onPress={openMenu}
+              icon="sort"
+              contentStyle={{ flexDirection: "row-reverse" }}
+              labelStyle={{ fontSize: 13 }}
+            >
+              {sortMode === "alphabetical" ? "가나다순" : "중요도순"}
+            </Button>
+          }
+        >
+          <Menu.Item
+            onPress={() => {
+              setSortMode("alphabetical");
+              closeMenu();
+            }}
+            title="가나다순"
+            leadingIcon={sortMode === "alphabetical" ? "check" : undefined}
+          />
+          <Divider />
+          <Menu.Item
+            onPress={() => {
+              setSortMode("importance");
+              closeMenu();
+            }}
+            title="중요도순"
+            leadingIcon={sortMode === "importance" ? "check" : undefined}
+          />
+        </Menu>
       </Surface>
       <FlatList
         data={filteredProblems}
@@ -141,38 +178,6 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
         renderItem={renderItem}
         contentContainerStyle={styles.list}
       />
-      <Portal>
-        <Dialog
-          visible={sortDialogVisible}
-          onDismiss={() => setSortDialogVisible(false)}
-        >
-          <Dialog.Title>정렬 방식 선택</Dialog.Title>
-          <Dialog.Content>
-            <Button
-              mode={sortMode === "alphabetical" ? "contained" : "outlined"}
-              onPress={() => {
-                setSortMode("alphabetical");
-                setSortDialogVisible(false);
-              }}
-              style={{ marginBottom: spacing.sm }}
-            >
-              가나다순
-            </Button>
-            <Button
-              mode={sortMode === "importance" ? "contained" : "outlined"}
-              onPress={() => {
-                setSortMode("importance");
-                setSortDialogVisible(false);
-              }}
-            >
-              중요도순
-            </Button>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={() => setSortDialogVisible(false)}>취소</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
     </Surface>
   );
 };
@@ -182,10 +187,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   countContainer: {
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
     paddingHorizontal: spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(0, 0, 0, 0.08)",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   countText: {
     fontSize: 14,
