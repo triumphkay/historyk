@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, Modal, Portal, Surface, Text, useTheme } from 'react-native-paper';
+import { Button, Modal, Portal, Surface, useTheme } from 'react-native-paper';
+import AppText from './common/AppText';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 
@@ -26,9 +27,9 @@ const EraAnswerModal: React.FC<EraAnswerModalProps> = ({ visible, times, years, 
     <Portal>
       <Modal visible={visible} onDismiss={onClose} contentContainerStyle={[styles.container, { backgroundColor: theme.colors.background }]}>
         <Surface elevation={0} style={styles.content}>
-          <Text style={[styles.label, { color: theme.colors.onSurfaceVariant }]}>정답</Text>
-          <Text style={[styles.answer, { color: theme.colors.onSurface }]}>{eraText}</Text>
-          {years ? <Text style={[styles.years, { color: theme.colors.onSurfaceVariant }]}>{years}</Text> : null}
+          <AppText style={[styles.label, { color: theme.colors.onSurfaceVariant }]}>정답</AppText>
+          <AppText style={[styles.answer, { color: theme.colors.onSurface }]}>{eraText}</AppText>
+          {years ? <AppText style={[styles.years, { color: theme.colors.onSurfaceVariant }]}>{years}</AppText> : null}
           <Button mode="outlined" onPress={onClose} style={styles.button}>
             닫기
           </Button>
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
     marginBottom: spacing.sm
   },
   years: {

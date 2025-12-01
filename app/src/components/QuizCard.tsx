@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { IconButton, Text, TextInput, useTheme } from "react-native-paper";
+import { IconButton, TextInput, useTheme } from "react-native-paper";
+import AppText from "./common/AppText";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import DescriptionList from "./DescriptionList";
@@ -86,7 +87,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
 
   const FrontFooter = (
     <View>
-      <Text
+      <AppText
         style={{
           fontSize: 12,
           marginBottom: 4,
@@ -94,7 +95,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
         }}
       >
         정답 ({answerLength}자)
-      </Text>
+      </AppText>
       <TextInput
         mode="flat"
         value={answer}
@@ -119,7 +120,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
   // --- Back Content ---
   const BackHeader = (
     <View>
-      <Text
+      <AppText
         style={[
           styles.resultText,
           {
@@ -129,12 +130,12 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
         ]}
       >
         {isCorrect ? "정답입니다" : "오답입니다"}
-      </Text>
+      </AppText>
 
       <View style={styles.keywordRow}>
-        <Text style={[styles.answerKeyword, { color: backTextColor }]}>
+        <AppText style={[styles.answerKeyword, { color: backTextColor }]}>
           {problem.keyword}
-        </Text>
+        </AppText>
         <IconButton
           icon="information-outline"
           size={20}
@@ -168,9 +169,9 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
         scores={problem.score}
         textStyle={[styles.importanceText, { color: backTextColor }]}
       />
-      <Text style={[styles.referenceCountText, { color: backTextColor }]}>
+      <AppText style={[styles.referenceCountText, { color: backTextColor }]}>
         출제 횟수: {referenceCount}회
-      </Text>
+      </AppText>
     </View>
   );
 

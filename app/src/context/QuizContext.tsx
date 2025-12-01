@@ -19,6 +19,7 @@ interface QuizContextValue {
   loading: boolean;
   cardStates: Record<number, { answer: string; isFlipped: boolean }>;
   updateCardState: (index: number, state: Partial<{ answer: string; isFlipped: boolean }>) => void;
+  resetAllCards: () => void;
 }
 
 const QuizContext = createContext<QuizContextValue | undefined>(undefined);
@@ -55,6 +56,10 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }));
   };
 
+  const resetAllCards = () => {
+    setCardStates({});
+  };
+
   const currentProblem = useMemo(() => {
     if (!quizProblems.length) {
       return null;
@@ -69,15 +74,17 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const goToNext = () => {
     if (currentIndex < quizProblems.length - 1) {
+      // Reset current card to front before moving
+      updateCardState(currentIndex, { isFlipped: false });
       setCurrentIndex((prev) => prev + 1);
-      // resetAnswer(); // No longer needed as state is per-card
     }
   };
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
+      // Reset current card to front before moving
+      updateCardState(currentIndex, { isFlipped: false });
       setCurrentIndex((prev) => prev - 1);
-      // resetAnswer();
     }
   };
 
@@ -97,6 +104,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
     cardStates,
     updateCardState,
+    resetAllCards,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

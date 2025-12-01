@@ -8,7 +8,8 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { ActivityIndicator, Surface, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Surface, useTheme } from "react-native-paper";
+import AppText from "../components/common/AppText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useQuiz } from "../context/QuizContext";
 import { RootStackParamList } from "../types/navigation";
@@ -32,8 +33,14 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
     loading,
     cardStates,
     updateCardState,
+    resetAllCards,
   } = useQuiz();
   const theme = useTheme();
+
+  // Reset all cards when entering the screen
+  useEffect(() => {
+    resetAllCards();
+  }, []);
 
   const flatListRef = useRef<FlatList>(null);
   const isProgrammaticScroll = useRef(false);
@@ -107,7 +114,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
   if (!quizProblems || quizProblems.length === 0) {
     return (
       <Surface style={quizScreenStyles.center}>
-        <Text>출제 가능한 문제가 없습니다.</Text>
+        <AppText>출제 가능한 문제가 없습니다.</AppText>
       </Surface>
     );
   }

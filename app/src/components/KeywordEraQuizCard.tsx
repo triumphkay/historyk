@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { IconButton, Text, TextInput, useTheme } from "react-native-paper";
+import { IconButton, TextInput, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import TypeLabel from "./TypeLabel";
@@ -22,6 +22,7 @@ import { quizScreenStyles, eraQuizStyles } from "../theme/quizStyles";
 import { POINT_COLOR_1 } from "../theme";
 import FlipCard from "./common/FlipCard";
 import QuizCardLayout from "./common/QuizCardLayout";
+import AppText from "./common/AppText";
 
 interface Props {
   problem: ExtendedNewWordEraItem;
@@ -148,14 +149,14 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   );
 
   const FrontBody = (
-    <Text style={[styles.keyword]}>
+    <AppText style={[styles.keyword]}>
       {problem.keyword}
       {problem.era_script &&
       problem.era_script.length > 0 &&
       problem.era_script[0]
         ? ` ${problem.era_script[0]}`
         : ""}
-    </Text>
+    </AppText>
   );
 
   const FrontFooter = (
@@ -235,7 +236,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   // --- Back Content ---
   const BackHeader = (
     <View>
-      <Text
+      <AppText
         style={[
           styles.resultText,
           {
@@ -245,12 +246,12 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         ]}
       >
         {isCorrect ? "정답입니다" : "오답입니다"}
-      </Text>
+      </AppText>
 
       <View style={styles.keywordRow}>
-        <Text style={[styles.answerKeyword, { color: backTextColor }]}>
+        <AppText style={[styles.answerKeyword, { color: backTextColor }]}>
           {problem.keyword}
-        </Text>
+        </AppText>
         <IconButton
           icon="information-outline"
           size={20}
@@ -272,22 +273,22 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   const BackBody = (
     <View style={{ width: "100%" }}>
       <View style={styles.eraInfoContainer}>
-        <Text style={[styles.eraText, { color: backTextColor }]}>
+        <AppText style={[styles.eraText, { color: backTextColor }]}>
           {[selectedEra, selectedSubEra, selectedDetEra]
             .filter(Boolean)
             .join(" ")}
-        </Text>
+        </AppText>
         {problem.years && (
-          <Text
+          <AppText
             style={{
               color: backTextColor,
               fontSize: 24,
-              fontWeight: "300",
+              fontWeight: 200,
               marginTop: 8,
             }}
           >
             {problem.years}
-          </Text>
+          </AppText>
         )}
       </View>
       {/* <DescriptionList descriptions={problem.descriptions} /> */}
@@ -300,9 +301,9 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         scores={problem.scores}
         textStyle={[styles.importanceText, { color: backTextColor }]}
       />
-      <Text style={[styles.referenceCountText, { color: backTextColor }]}>
+      <AppText style={[styles.referenceCountText, { color: backTextColor }]}>
         출제 횟수: {referenceEntries.length}회
-      </Text>
+      </AppText>
     </View>
   );
 
@@ -342,7 +343,8 @@ const styles = StyleSheet.create({
   },
   answerKeyword: {
     fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
+    // fontWeight: typography.weights.bold,
+    fontWeight: 800,
   },
   keywordRow: {
     flexDirection: "row",
@@ -371,7 +373,7 @@ const styles = StyleSheet.create({
   },
   eraText: {
     fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
+    fontWeight: 600,
   },
 });
 

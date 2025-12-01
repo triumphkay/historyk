@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import { Button, Divider, Modal, Portal, Surface, Text, useTheme } from 'react-native-paper';
+import { Button, Divider, Modal, Portal, Surface, useTheme } from 'react-native-paper';
+import AppText from './common/AppText';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 import { formatReferenceEntry } from '../utils/references';
@@ -19,13 +20,13 @@ const ReferenceModal: React.FC<ReferenceModalProps> = ({ visible, entries, onClo
       <Modal visible={visible} onDismiss={onClose} contentContainerStyle={[styles.modal, { backgroundColor: theme.colors.background }]}
       >
         <Surface elevation={0} style={styles.content}>
-          <Text style={[styles.title, { color: theme.colors.onSurface }]}>출제 기록</Text>
+          <AppText style={[styles.title, { color: theme.colors.onSurface }]}>출제 기록</AppText>
           <Divider style={styles.divider} />
           <FlatList
             data={entries}
             keyExtractor={(item, index) => `${item}-${index}`}
             renderItem={({ item }) => (
-              <Text style={[styles.entry, { color: theme.colors.onSurfaceVariant }]}>{formatReferenceEntry(item)}</Text>
+              <AppText style={[styles.entry, { color: theme.colors.onSurfaceVariant }]}>{formatReferenceEntry(item)}</AppText>
             )}
             contentContainerStyle={styles.list}
           />
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold
+    fontWeight: "bold"
   },
   divider: {
     marginVertical: spacing.sm

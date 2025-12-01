@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { IconButton, Surface, Text } from "react-native-paper";
+import { IconButton, Surface } from "react-native-paper";
 import { spacing } from "../../theme/spacing";
+import AppText from "../common/AppText";
 
 interface QuizNavigationProps {
   currentIndex: number;
@@ -24,9 +25,9 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({
         disabled={currentIndex === 0}
         size={32}
       />
-      <Text variant="bodyLarge">
-        <Text style={styles.current}>{currentIndex + 1}</Text> / {totalProblems}
-      </Text>
+      <AppText variant="bodyLarge">
+        <AppText style={styles.current}>{currentIndex + 1}</AppText> / {totalProblems}
+      </AppText>
       <IconButton
         icon="chevron-right"
         onPress={onNext}

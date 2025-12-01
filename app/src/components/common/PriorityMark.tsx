@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import { View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { useTheme } from "react-native-paper";
+import AppText from "./AppText";
 import type { TextStyle, StyleProp, ViewStyle } from "react-native";
 import { typography } from "../../theme/typography";
 import { getScoreFrequencyLabel } from "../../utils/score";
@@ -45,8 +46,8 @@ const PriorityMark: React.FC<PriorityMarkProps> = ({
     <View
       style={[{ flexDirection: "row", alignItems: "center", gap: 6 }, style]}
     >
-      <Text style={[styles.text, textStyle]}>중요도:</Text>
-      <Text style={[styles.point, textStyle]}>{label}</Text>
+      <AppText style={[styles.text, textStyle]}>중요도:</AppText>
+      <AppText style={[styles.point, textStyle]}>{label}</AppText>
       <View
         style={{
           width: 8,
@@ -59,15 +60,15 @@ const PriorityMark: React.FC<PriorityMarkProps> = ({
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   text: {
     fontSize: typography.sizes.xs,
-    fontWeight: typography.weights.medium,
+    fontWeight: "600",
   },
   point: {
     fontSize: typography.sizes.xs,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
   },
-};
+});
 
 export default PriorityMark;

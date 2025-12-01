@@ -18,6 +18,7 @@ interface NewWordEraQuizContextValue {
   resetKey: number;
   cardStates: Record<number, { country: string; leader: string; year: string; month: string; isFlipped: boolean }>;
   updateCardState: (index: number, state: Partial<{ country: string; leader: string; year: string; month: string; isFlipped: boolean }>) => void;
+  resetAllCards: () => void;
 }
 
 const NewWordEraQuizContext = createContext<NewWordEraQuizContextValue | undefined>(undefined);
@@ -75,6 +76,10 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
     }));
   };
 
+  const resetAllCards = () => {
+    setCardStates({});
+  };
+
   const currentProblem = useMemo(() => {
     if (!problems.length) {
       return null;
@@ -84,6 +89,8 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
 
   const goToNext = () => {
     if (currentIndex < problems.length - 1) {
+      // Reset current card to front before moving
+      updateCardState(currentIndex, { isFlipped: false });
       setCurrentIndex((prev) => prev + 1);
       setResetKey((prev) => prev + 1);
     }
@@ -91,6 +98,8 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
+      // Reset current card to front before moving
+      updateCardState(currentIndex, { isFlipped: false });
       setCurrentIndex((prev) => prev - 1);
       setResetKey((prev) => prev + 1);
     }
@@ -109,6 +118,7 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
     resetKey,
     cardStates,
     updateCardState,
+    resetAllCards,
   };
 
   return <NewWordEraQuizContext.Provider value={value}>{children}</NewWordEraQuizContext.Provider>;

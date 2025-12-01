@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Surface, Text, Divider, useTheme } from "react-native-paper";
+import { Surface, Divider, useTheme } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
@@ -9,6 +9,7 @@ import { typography } from "../theme/typography";
 import { formatReferenceId } from "../utils/referenceFormatter";
 import PriorityMark from "@components/common/PriorityMark";
 import DescriptionList from "@components/DescriptionList";
+import AppText from "@components/common/AppText";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordDetail">;
 
@@ -25,9 +26,9 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
         elevation={0}
         style={[styles.refChip, { backgroundColor: theme.colors.level3 }]}
       >
-        <Text style={[styles.refChipText, { color: theme.colors.level8 }]}>
+        <AppText style={[styles.refChipText, { color: theme.colors.level8 }]}>
           {formatReferenceId(id)}
-        </Text>
+        </AppText>
       </Surface>
     );
   };
@@ -38,9 +39,9 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerContainer}>
-          <Text style={[styles.title, { color: theme.colors.primary }]}>
+          <AppText style={[styles.title, { color: theme.colors.primary }]}>
             {keyword.keyword}
-          </Text>
+          </AppText>
           <Surface
             elevation={0}
             style={
@@ -70,14 +71,14 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
               {keyword.era_script &&
               keyword.era_script.length > 0 &&
               keyword.era_script[0] ? (
-                <Text
+                <AppText
                   style={[
                     styles.eraScriptTitle,
                     { color: theme.colors.level7 },
                   ]}
                 >
                   {keyword.keyword} {keyword.era_script[0]}
-                </Text>
+                </AppText>
               ) : null}
 
               <View style={styles.eraInfoGrid}>
@@ -89,7 +90,7 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
                   ]
                     .filter(Boolean)
                     .map((text, i) => (
-                      <Text
+                      <AppText
                         key={`era-text-${i}`}
                         style={[
                           styles.eraValue,
@@ -100,12 +101,12 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
                         ]}
                       >
                         {text}
-                      </Text>
+                      </AppText>
                     ))}
                 </View>
 
                 {keyword.years ? (
-                  <Text
+                  <AppText
                     style={[
                       styles.eraYearValue,
                       {
@@ -114,7 +115,7 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
                     ]}
                   >
                     {keyword.years}
-                  </Text>
+                  </AppText>
                 ) : null}
               </View>
             </Surface>
@@ -122,9 +123,9 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
           </>
         ) : null}
 
-        <Text style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
+        <AppText style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
           관련 키워드
-        </Text>
+        </AppText>
         {keyword.descriptions && keyword.descriptions.length > 0 ? (
           <DescriptionList descriptions={keyword.descriptions} />
         ) : (
@@ -149,36 +150,36 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
           //     </Surface>
           //   ))}
           // </Surface>
-          <Text
+          <AppText
             style={[styles.noData, { color: theme.colors.onSurfaceVariant }]}
           >
             설명이 없습니다.
-          </Text>
+          </AppText>
         )}
 
         <Divider style={styles.divider} />
 
         <Surface elevation={0} style={styles.infoSection}>
-          <Text
+          <AppText
             style={[styles.label, { color: theme.colors.onSurfaceVariant }]}
           >
             출제 횟수
-          </Text>
-          <Text style={[styles.value, { color: theme.colors.onSurface }]}>
+          </AppText>
+          <AppText style={[styles.value, { color: theme.colors.onSurface }]}>
             {occurrenceCount}회
-          </Text>
+          </AppText>
         </Surface>
 
         {keyword.q_ref_id && keyword.q_ref_id.length > 0 && (
           <Surface elevation={0} style={styles.refSection}>
-            <Text
+            <AppText
               style={[
                 styles.refLabel,
                 { color: theme.colors.onSurfaceVariant },
               ]}
             >
               지문 출제
-            </Text>
+            </AppText>
             <Surface elevation={0} style={styles.chipsContainer}>
               {keyword.q_ref_id.map((id, index) => (
                 <ExamChip key={index} id={id} />
@@ -189,14 +190,14 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
 
         {keyword.ref_id && keyword.ref_id.length > 0 && (
           <Surface elevation={0} style={styles.refSection}>
-            <Text
+            <AppText
               style={[
                 styles.refLabel,
                 { color: theme.colors.onSurfaceVariant },
               ]}
             >
               보기 출제
-            </Text>
+            </AppText>
             <Surface elevation={0} style={styles.chipsContainer}>
               {keyword.ref_id.map((id, index) => (
                 <ExamChip key={index} id={id} />
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
     flex: 1,
   },
   headerContainer: {
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
   },
   importanceText: {
     fontSize: typography.sizes.xs,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
   },
   eraCard: {
     padding: spacing.md,
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   },
   eraScriptTitle: {
     fontSize: typography.sizes.md,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
     marginBottom: spacing.md,
     // textAlign: "center",
   },
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   eraValue: {
     fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
   },
   eraYearValue: {
     fontSize: typography.sizes.xl,
@@ -278,11 +279,11 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.medium,
+    fontWeight: "600",
   },
   sectionTitle: {
     fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
     marginBottom: spacing.md,
   },
   chipsContainer: {
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
   refLabel: {
     fontSize: typography.sizes.sm,
     marginBottom: spacing.sm,
-    fontWeight: typography.weights.medium,
+    fontWeight: "600",
   },
   refChip: {
     paddingHorizontal: spacing.sm,

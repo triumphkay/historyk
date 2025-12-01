@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Button, Menu, Text, useTheme } from 'react-native-paper';
-import { POINT_COLOR_1 } from '../theme';
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
+import { Button, Menu, useTheme } from "react-native-paper";
+import AppText from "./common/AppText";
+import { POINT_COLOR_1 } from "../theme";
 
 interface DropdownSelectProps {
   label: string;
@@ -11,7 +12,13 @@ interface DropdownSelectProps {
   disabled?: boolean;
 }
 
-const DropdownSelect: React.FC<DropdownSelectProps> = ({ label, value, options, onSelect, disabled }) => {
+const DropdownSelect: React.FC<DropdownSelectProps> = ({
+  label,
+  value,
+  options,
+  onSelect,
+  disabled,
+}) => {
   const [visible, setVisible] = useState(false);
   const theme = useTheme();
   const showIcon = !disabled;
@@ -22,19 +29,28 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({ label, value, options, 
       onDismiss={() => setVisible(false)}
       anchor={
         <Button
-          mode="outlined"
+          // mode="outlined"
           onPress={() => setVisible(true)}
           disabled={disabled}
-          style={styles.dropdownButton}
+          style={[styles.dropdownButton, { borderColor: theme.colors.level5 }]}
           textColor={theme.colors.primary}
+          theme={{
+            colors: {
+              outline: disabled
+                ? theme.colors.surfaceDisabled
+                : theme.colors.outline,
+            },
+          }}
           icon={showIcon ? "chevron-down" : undefined}
         >
-          <Text 
-            variant="labelLarge" 
-            style={{ color: (disabled || value) ? POINT_COLOR_1 : theme.colors.primary }}
+          <AppText
+            variant="labelLarge"
+            style={{
+              color: disabled || value ? POINT_COLOR_1 : theme.colors.primary,
+            }}
           >
             {value || label}
-          </Text>
+          </AppText>
         </Button>
       }
     >
@@ -58,6 +74,9 @@ const styles = StyleSheet.create({
     width: 130,
     justifyContent: "center",
     alignItems: "center",
+    // borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 6,
   },
 });
 

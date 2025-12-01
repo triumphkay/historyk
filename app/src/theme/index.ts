@@ -8,6 +8,7 @@ import { colors, darkColors } from "./colors";
 const FONT = {
   notoLight: "NotoSansKR-200",
   notoRegular: "NotoSansKR-400",
+  notoMedium: "NotoSansKR-600",
   notoBold: "NotoSansKR-800",
   myeongRegular: "NanumMyeongjo-400",
   myeongBold: "NanumMyeongjo-800",
@@ -27,6 +28,11 @@ const buildFontEntry = (
 
 const fontConfig = {
   ...MD3LightTheme.fonts,
+  default: {
+    fontFamily: FONT.notoRegular,
+    fontWeight: "400",
+    letterSpacing: 0,
+  },
   displayLarge: buildFontEntry(
     MD3LightTheme.fonts.displayLarge,
     FONT.myeongBold,
@@ -64,8 +70,8 @@ const fontConfig = {
   ),
   titleMedium: buildFontEntry(
     MD3LightTheme.fonts.titleMedium,
-    FONT.notoRegular,
-    "400"
+    FONT.notoMedium,
+    "600"
   ),
   titleSmall: buildFontEntry(
     MD3LightTheme.fonts.titleSmall,
@@ -94,8 +100,8 @@ const fontConfig = {
   ),
   labelMedium: buildFontEntry(
     MD3LightTheme.fonts.labelMedium,
-    FONT.notoRegular,
-    "400"
+    FONT.notoMedium,
+    "600"
   ),
   labelSmall: buildFontEntry(
     MD3LightTheme.fonts.labelSmall,

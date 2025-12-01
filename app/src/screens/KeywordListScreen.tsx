@@ -4,13 +4,13 @@ import {
   ActivityIndicator,
   List,
   Surface,
-  Text,
   useTheme,
   Searchbar,
   Menu,
   Divider,
   Button,
 } from "react-native-paper";
+import AppText from "../components/common/AppText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useQuiz } from "../context/QuizContext";
 import { RootStackParamList } from "../types/navigation";
@@ -76,7 +76,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
     return (
       <Surface style={styles.center}>
         <ActivityIndicator animating color={theme.colors.primary} />
-        <Text>로딩 중...</Text>
+        <AppText>로딩 중...</AppText>
       </Surface>
     );
   }
@@ -110,9 +110,9 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
               { backgroundColor: theme.colors.primaryContainer },
             ]}
           >
-            <Text style={[styles.indexText, { color: colors.level8 }]}>
+            <AppText style={[styles.indexText, { color: colors.level8 }]}>
               {index + 1}
-            </Text>
+            </AppText>
           </Surface>
         )}
         right={(props) => (
@@ -135,9 +135,9 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
         />
       )}
       <Surface style={styles.countContainer} elevation={1}>
-        <Text style={styles.countText}>
+        <AppText style={styles.countText}>
           {filteredProblems.length}개의 키워드
-        </Text>
+        </AppText>
         <Menu
           visible={menuVisible}
           onDismiss={closeMenu}
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: 600,
     textAlign: "center",
   },
   titleContainer: {
@@ -213,7 +213,9 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "NotoSansKR-800",
+    // fontWeight: "bold",
+
     marginBottom: 2,
   },
   iconButtons: {
@@ -249,7 +251,7 @@ const styles = StyleSheet.create({
   },
   indexText: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 600,
   },
 });
 

@@ -86,15 +86,15 @@ export const eraQuizStyles = StyleSheet.create({
 
   // 키워드 텍스트
   keyword: {
-    fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontSize: typography.sizes.xxl,
+    fontFamily: "NanumMyeongjo-800",
     marginTop: spacing.xs,
   },
 
   // 드롭다운 행 (시기/상세 선택)
   dropdownRow: {
     flexDirection: "row",
-    gap: spacing.sm,
+    gap: spacing.reg,
     marginTop: spacing.md,
     justifyContent: "center",
   },

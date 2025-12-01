@@ -8,7 +8,8 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { ActivityIndicator, Surface, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Surface, useTheme } from "react-native-paper";
+import AppText from "../components/common/AppText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useNewWordEraQuiz } from "../context/NewWordEraQuizContext";
 import { RootStackParamList } from "../types/navigation";
@@ -39,7 +40,13 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
     resetKey,
     cardStates,
     updateCardState,
+    resetAllCards,
   } = useNewWordEraQuiz();
+
+  // Reset all cards when entering the screen
+  useEffect(() => {
+    resetAllCards();
+  }, []);
 
   const flatListRef = useRef<FlatList>(null);
   const isProgrammaticScroll = useRef(false);
@@ -151,7 +158,7 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
   if (!problems || problems.length === 0) {
     return (
       <Surface style={styles.center}>
-        <Text>출제 가능한 문제가 없습니다.</Text>
+        <AppText>출제 가능한 문제가 없습니다.</AppText>
       </Surface>
     );
   }

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { StyleSheet } from "react-native";
-import { Surface, Text, useTheme } from "react-native-paper";
+import { Surface, useTheme } from "react-native-paper";
+import AppText from "./common/AppText";
 import { pickDisplayType } from "../utils/types";
 import { TypeDetail } from "../types/TypeDetail";
 import typeMetadata from "../../assets/keyword-types.json";
@@ -53,9 +54,9 @@ const TypeLabel: React.FC<TypeLabelProps> = ({
     //   ]}
     // >
     // </Surface>
-    <Text style={[styles.text, { color: theme.colors.onSurface }]}>
+    <AppText style={[styles.text, { color: theme.colors.onSurface }]}>
       {questionText}
-    </Text>
+    </AppText>
   );
 };
 
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.medium,
+    fontWeight: "600",
   },
 });
 

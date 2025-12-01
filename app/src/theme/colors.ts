@@ -67,7 +67,7 @@ const secondaryContainer = { light: "#FFE8E6", dark: "#7D2E2A" };
 const onSecondaryContainer = { light: "#5A1412", dark: "#FFE8E6" };
 
 // Grey
-const grey = { light: LEVEL_3, dark: LEVEL_8 };
+const grey = { light: LEVEL_1, dark: LEVEL_8 };
 const onGrey = { light: LEVEL_8, dark: LEVEL_3 };
 const greyContainer = { light: LEVEL_1, dark: LEVEL_10 };
 const onGreyContainer = { light: LEVEL_8, dark: LEVEL_3 };

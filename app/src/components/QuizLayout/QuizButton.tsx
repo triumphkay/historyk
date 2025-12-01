@@ -32,8 +32,7 @@ const QuizButton: React.FC<QuizButtonProps> = ({ isFlipped, onPress }) => {
       }
       onPress={onPress}
       labelStyle={{
-        fontSize: typography.sizes.lg,
-        fontWeight: typography.weights.medium,
+        fontSize: typography.sizes.md,
       }}
       contentStyle={{
         height: 48,
@@ -52,6 +51,16 @@ const styles = StyleSheet.create({
     height: 50,
     alignSelf: "center",
     borderRadius: 999,
+    // Shadow for iOS
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    // Elevation for Android
+    elevation: 3,
   },
 });
 

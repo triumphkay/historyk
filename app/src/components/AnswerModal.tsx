@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, Modal, Portal, Surface, Text, useTheme } from 'react-native-paper';
+import { Button, Modal, Portal, Surface, useTheme } from 'react-native-paper';
+import AppText from './common/AppText';
 import { spacing } from '../theme/spacing';
 import { typography } from '../theme/typography';
 
@@ -18,7 +19,7 @@ const AnswerModal: React.FC<AnswerModalProps> = ({ visible, answer, onClose, onN
       <Modal visible={visible} onDismiss={onClose} contentContainerStyle={[styles.container, { backgroundColor: theme.colors.background }]}
         >
         <Surface elevation={0} style={styles.content}>
-          <Text style={[styles.answer, { color: theme.colors.onSurface }]}>{answer}</Text>
+          <AppText style={[styles.answer, { color: theme.colors.onSurface }]}>{answer}</AppText>
           <Button mode="outlined" onPress={onClose} style={styles.button}>
             닫기
           </Button>
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
     marginBottom: spacing.lg,
     textAlign: 'center'
   },

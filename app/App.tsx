@@ -7,11 +7,13 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import { Appbar, PaperProvider, useTheme, Text } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider } from "styled-components/native";
 import { useFonts } from "expo-font";
 import {
   NotoSansKR_200ExtraLight,
   NotoSansKR_400Regular,
+  NotoSansKR_600SemiBold,
   NotoSansKR_800ExtraBold,
 } from "@expo-google-fonts/noto-sans-kr";
 import {
@@ -66,45 +68,56 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
   }
 
   return (
-    <Appbar.Header
-      mode="small"
-      style={{ backgroundColor: theme.colors.level4 }}
-      elevated
+    <LinearGradient
+      colors={[theme.colors.level4, theme.colors.level4]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={{ width: "100%" }}
     >
-      <Appbar.BackAction onPress={() => navigation.goBack()} />
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          position: "absolute",
-          left: 0,
-          right: 0,
-          pointerEvents: "none",
-        }}
-      >
-        <Text variant="titleLarge" style={{ color: theme.colors.level9 }}>
-          {title}
-        </Text>
-      </View>
-      <View style={{ flex: 1 }} />
-      {isKeywordList ? (
-        <View style={{ flexDirection: "row" }}>
-          <Appbar.Action
-            icon="magnify"
-            onPress={() => {
-              const params = route.params as any;
-              if (params?.toggleSearch) {
-                params.toggleSearch();
-              }
-            }}
-          />
-
+      <Appbar.Header mode="small" style={{ backgroundColor: "transparent" }}>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+            left: 0,
+            right: 0,
+            pointerEvents: "none",
+          }}
+        >
+          <Text variant="titleLarge" style={{ color: theme.colors.primary }}>
+            {title}
+          </Text>
         </View>
-      ) : (
-        <View style={{ width: 48 }} />
-      )}
-    </Appbar.Header>
+        <View style={{ flex: 1 }} />
+        {isKeywordList ? (
+          <View style={{ flexDirection: "row" }}>
+            <Appbar.Action
+              icon="magnify"
+              onPress={() => {
+                const params = route.params as any;
+                if (params?.toggleSearch) {
+                  params.toggleSearch();
+                }
+              }}
+            />
+            <Appbar.Action
+              icon="sort"
+              onPress={() => {
+                const params = route.params as any;
+                if (params?.toggleSortDialog) {
+                  params.toggleSortDialog();
+                }
+              }}
+            />
+          </View>
+        ) : (
+          <View style={{ width: 48 }} />
+        )}
+      </Appbar.Header>
+    </LinearGradient>
   );
 };
 
@@ -154,6 +167,7 @@ const ThemedApp: React.FC = () => {
   const [fontsLoaded] = useFonts({
     "NotoSansKR-200": NotoSansKR_200ExtraLight,
     "NotoSansKR-400": NotoSansKR_400Regular,
+    "NotoSansKR-600": NotoSansKR_600SemiBold,
     "NotoSansKR-800": NotoSansKR_800ExtraBold,
     "NanumMyeongjo-400": NanumMyeongjo_400Regular,
     "NanumMyeongjo-800": NanumMyeongjo_800ExtraBold,
@@ -167,6 +181,7 @@ const ThemedApp: React.FC = () => {
         * {
           word-break: keep-all;
           overflow-wrap: break-word;
+          font-family: 'NotoSansKR-400', sans-serif;
         }
       `;
       document.head.appendChild(style);

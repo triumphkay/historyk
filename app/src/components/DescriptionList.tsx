@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Surface } from "react-native-paper";
 import { spacing } from "../theme/spacing";
-import KeywordChip from "./KeywordChip";
+import KeywordChip from "./common/KeywordChip";
 
 interface DescriptionListProps {
   descriptions: string[];

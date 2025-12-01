@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View, TextInput } from "react-native";
-import { Surface, Text, useTheme } from "react-native-paper";
+import { Surface, useTheme } from "react-native-paper";
+import AppText from "./common/AppText";
 import { spacing } from "../theme/spacing";
 import { typography } from "../theme/typography";
 
@@ -68,14 +69,14 @@ const AnswerBoxes: React.FC<AnswerBoxesProps> = ({
               key={slot.key}
               style={[styles.punctuation, { width: BOX_SIZE * 0.15 }]}
             >
-              <Text
+              <AppText
                 style={{
                   color: theme.colors.onSurface,
                   fontSize: typography.sizes.md,
                 }}
               >
                 {slot.char}
-              </Text>
+              </AppText>
             </View>
           );
         }

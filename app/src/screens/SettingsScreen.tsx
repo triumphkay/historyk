@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Surface, Text, useTheme } from 'react-native-paper';
+import { Surface, useTheme } from 'react-native-paper';
+import AppText from '../components/common/AppText';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { spacing } from '../theme/spacing';
@@ -13,10 +14,10 @@ const SettingsScreen: React.FC<Props> = () => {
 
   return (
     <Surface style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Text style={[styles.title, { color: theme.colors.onSurface }]}>설정</Text>
-      <Text style={[styles.description, { color: theme.colors.onSurfaceVariant }]}>
+      <AppText style={[styles.title, { color: theme.colors.onSurface }]}>설정</AppText>
+      <AppText style={[styles.description, { color: theme.colors.onSurfaceVariant }]}>
         추후 추가될 설정 항목이 여기에 표시됩니다.
-      </Text>
+      </AppText>
     </Surface>
   );
 };
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontWeight: "bold",
     marginBottom: spacing.md
   },
   description: {
