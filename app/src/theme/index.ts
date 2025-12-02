@@ -114,7 +114,11 @@ const paperFonts = configureFonts({
   config: fontConfig,
 });
 
-export const lightTheme = {
+export type AppTheme = typeof MD3LightTheme & {
+  colors: typeof colors;
+};
+
+export const lightTheme: AppTheme = {
   ...MD3LightTheme,
   dark: false,
   fonts: paperFonts,
@@ -124,7 +128,7 @@ export const lightTheme = {
   },
 };
 
-export const darkTheme = {
+export const darkTheme: AppTheme = {
   ...MD3DarkTheme,
   dark: true,
   fonts: paperFonts,
@@ -138,6 +142,4 @@ export const darkTheme = {
 export {
   POINT_COLOR_1,
   POINT_COLOR_2,
-  LIGHT_COLOR,
-  DARK_COLOR,
 } from "./colors";

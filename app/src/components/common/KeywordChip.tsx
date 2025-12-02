@@ -4,6 +4,7 @@ import { Surface, useTheme } from "react-native-paper";
 import { spacing } from "../../theme/spacing";
 import { typography } from "../../theme/typography";
 import AppText from "./AppText";
+import { AppTheme } from "../../theme";
 
 interface KeywordChipProps {
   text: string;
@@ -14,16 +15,16 @@ const KeywordChip: React.FC<KeywordChipProps> = ({
   text,
   variant = "front",
 }) => {
-  const theme = useTheme();
+  const theme = useTheme<AppTheme>();
 
   const chipBgColor =
     variant === "back"
-      ? (theme.colors as any).level3
-      : (theme.colors as any).onGrey;
+      ? theme.colors.level3
+      : theme.colors.onGrey;
   const chipTextColor =
     variant === "back"
-      ? (theme.colors as any).level8
-      : (theme.colors as any).grey;
+      ? theme.colors.level8
+      : theme.colors.grey;
 
   return (
     <Surface

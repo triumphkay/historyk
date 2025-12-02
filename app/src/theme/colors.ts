@@ -20,10 +20,6 @@ export const LEVEL_9 = "#2D2C27";
 export const LEVEL_10 = "#171614";
 export const LEVEL_11 = "#000000";
 
-// Base Colors (Aliases for backward compatibility)
-export const LIGHT_COLOR = LEVEL_3;
-export const DARK_COLOR = LEVEL_8;
-
 // Point Colors
 export const POINT_COLOR_1 = "#D54942"; // Red (Emphasis, Secondary)
 export const POINT_COLOR_2 = "#5265F8"; // Blue (Tertiary)
@@ -85,10 +81,10 @@ const errorContainer = { light: "#FFE8E6", dark: "#7D2E2A" };
 const onErrorContainer = { light: "#5A1412", dark: "#FFE8E6" };
 
 // Background & Surface
-const background = { light: LEVEL_3, dark: LEVEL_8 }; // User modified light to LEVEL_3
+const background = { light: LEVEL_3, dark: LEVEL_8 };
 const onBackground = { light: LEVEL_11, dark: LEVEL_1 };
-const surface = { light: LEVEL_2, dark: LEVEL_10 }; // User modified light to LEVEL_1
-const onSurface = { light: LEVEL_10, dark: LEVEL_2 }; // User modified light to LEVEL_9
+const surface = { light: LEVEL_2, dark: LEVEL_10 };
+const onSurface = { light: LEVEL_10, dark: LEVEL_2 };
 const surfaceVariant = { light: LEVEL_1, dark: LEVEL_10 };
 const onSurfaceVariant = { light: LEVEL_9, dark: LEVEL_3 };
 const surfaceDisabled = {

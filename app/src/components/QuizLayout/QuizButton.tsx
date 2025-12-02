@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import { typography } from "../../theme/typography";
+import { AppTheme } from "../../theme";
 
 interface QuizButtonProps {
   isFlipped: boolean;
@@ -9,7 +10,7 @@ interface QuizButtonProps {
 }
 
 const QuizButton: React.FC<QuizButtonProps> = ({ isFlipped, onPress }) => {
-  const theme = useTheme();
+  const theme = useTheme<AppTheme>();
 
   return (
     <Button
@@ -19,16 +20,16 @@ const QuizButton: React.FC<QuizButtonProps> = ({ isFlipped, onPress }) => {
         {
           borderWidth: 1,
           borderColor: isFlipped
-            ? (theme.colors as any).level6
+            ? theme.colors.level6
             : theme.colors.primary,
         },
       ]}
       icon={isFlipped ? "undo" : "check"}
       buttonColor={
-        isFlipped ? (theme.colors as any).level1 : theme.colors.primary
+        isFlipped ? theme.colors.level1 : theme.colors.primary
       }
       textColor={
-        isFlipped ? (theme.colors as any).level8 : theme.colors.onPrimary
+        isFlipped ? theme.colors.level8 : theme.colors.onPrimary
       }
       onPress={onPress}
       labelStyle={{
