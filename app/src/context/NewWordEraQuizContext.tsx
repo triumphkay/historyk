@@ -89,19 +89,25 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
 
   const goToNext = () => {
     if (currentIndex < problems.length - 1) {
-      // Reset current card to front before moving
-      updateCardState(currentIndex, { isFlipped: false });
+      const prevIndex = currentIndex;
       setCurrentIndex((prev) => prev + 1);
       setResetKey((prev) => prev + 1);
+      // Reset previous card to front after moving
+      setTimeout(() => {
+        updateCardState(prevIndex, { isFlipped: false });
+      }, 0);
     }
   };
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
-      // Reset current card to front before moving
-      updateCardState(currentIndex, { isFlipped: false });
+      const prevIndex = currentIndex;
       setCurrentIndex((prev) => prev - 1);
       setResetKey((prev) => prev + 1);
+      // Reset previous card to front after moving
+      setTimeout(() => {
+        updateCardState(prevIndex, { isFlipped: false });
+      }, 0);
     }
   };
 

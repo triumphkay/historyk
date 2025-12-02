@@ -68,7 +68,12 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / width);
     if (index !== currentIndex && index >= 0 && index < totalProblems) {
+      const prevIndex = currentIndex;
       setCurrentIndex(index);
+      // Reset previous card to front after drag
+      setTimeout(() => {
+        updateCardState(prevIndex, { isFlipped: false });
+      }, 0);
     }
   };
 
