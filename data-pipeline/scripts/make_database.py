@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Generate korean-history.db tables and export keyword text files.
+Generate korean-history.db with the tables that are still in use.
 
 Pipeline order:
 1. sessions (json_to_sessions.py)
-2. event (sessions_to_event.py)
-3. keywords (sessions_to_keywords.py)
-4. Keyword text exports (export_keywords.py)
+2. newwords table creation (create_newwords_table.py)
+3. newwords population (populate_newwords.py)
 """
 
 from __future__ import annotations
@@ -32,7 +31,7 @@ def run_command(description: str, command: list[str]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Rebuild database tables (sessions → event → keywords) and export keyword lists."
+        description="Rebuild the database (sessions → newwords) based on JSON sources."
     )
     parser.add_argument(
         "--input",
@@ -44,31 +43,6 @@ def main() -> None:
         default="database/korean-history.db",
         help="생성할 SQLite DB 경로 (기본값: database/korean-history.db)",
     )
-    parser.add_argument(
-        "--output",
-        default="database/keywords.txt",
-        help="키워드 텍스트 출력 경로 (기본값: database/keywords.txt)",
-    )
-    parser.add_argument(
-        "--all-output",
-        default="database/all-keywords.txt",
-        help="추가 키워드 목록 출력 경로 (기본값: database/all-keywords.txt)",
-    )
-    parser.add_argument(
-        "--all-wo-period-output",
-        default="database/all-keywords-wo.txt",
-        help="사건-시기 제외 키워드 목록 경로 (기본값: database/all-keywords-wo.txt)",
-    )
-    parser.add_argument(
-        "--period-output",
-        default="database/keywords-wo.txt",
-        help="사건-시기 키워드 목록 경로 (기본값: database/keywords-wo.txt)",
-    )
-    parser.add_argument(
-        "--non-period-output",
-        default=None,
-        help="사건-시기 제외 키워드 목록 경로",
-    )
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parent.parent
@@ -76,9 +50,8 @@ def main() -> None:
 
     age_list_script = scripts_dir / "update-age-list.py"
     session_script = scripts_dir / "json_to_sessions.py"
-    event_script = scripts_dir / "sessions_to_events.py"
-    keyword_script = scripts_dir / "sessions_to_keywords.py"
-    key_age_script = scripts_dir / "update_key_age.py"
+    newwords_script = scripts_dir / "create_newwords_table.py"
+    populate_script = scripts_dir / "populate_newwords.py"
 
     run_command(
         "연령 리스트 업데이트",
@@ -99,33 +72,6 @@ def main() -> None:
         ],
     )
     run_command(
-        "event 테이블 생성",
-        [
-            sys.executable,
-            str(event_script),
-            "--db",
-            str(args.db),
-        ],
-    )
-    run_command(
-        "keywords 테이블 생성",
-        [
-            sys.executable,
-            str(keyword_script),
-            "--db",
-            str(args.db),
-        ],
-    )
-    run_command(
-        "\"key-age\" JSON 업데이트",
-        [
-            sys.executable,
-            str(key_age_script),
-        ],
-    )
-    
-    newwords_script = scripts_dir / "create_newwords_table.py"
-    run_command(
         "newwords 테이블 생성",
         [
             sys.executable,
@@ -135,7 +81,6 @@ def main() -> None:
         ],
     )
 
-    populate_script = scripts_dir / "populate_newwords.py"
     run_command(
         "newwords 데이터 채우기",
         [
