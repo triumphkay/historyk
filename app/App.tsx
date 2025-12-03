@@ -103,7 +103,7 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
                 }
               }}
             />
-            <Appbar.Action
+            {/* <Appbar.Action
               icon="sort"
               onPress={() => {
                 const params = route.params as any;
@@ -111,7 +111,7 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
                   params.toggleSortDialog();
                 }
               }}
-            />
+            /> */}
           </View>
         ) : (
           <View style={{ width: 48 }} />
