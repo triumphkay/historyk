@@ -5,7 +5,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '..');
 const SOURCE_DIR = path.resolve(PROJECT_ROOT, '..', 'data-pipeline', 'database');
 const DEST_DIR = path.join(PROJECT_ROOT, 'assets');
 
-const FILES_TO_COPY = ['keyword-types.json', 'events.json'];
+const FILES_TO_COPY = ['keyword-types.json'];
 
 const ensureFileExists = (filePath) => {
   if (!fs.existsSync(filePath)) {
