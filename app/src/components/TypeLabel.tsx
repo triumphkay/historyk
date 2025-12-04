@@ -14,11 +14,13 @@ const typeDetails =
 interface TypeLabelProps {
   types: string[];
   preferEraType?: boolean; // If true, prefer types ending with -시기
+  useAgeQuestion?: boolean; // If true, use ageQuestion instead of question
 }
 
 const TypeLabel: React.FC<TypeLabelProps> = ({
   types,
   preferEraType = false,
+  useAgeQuestion = false,
 }) => {
   const theme = useTheme();
 
@@ -38,8 +40,15 @@ const TypeLabel: React.FC<TypeLabelProps> = ({
       return null;
     }
     const detail = typeDetails.find((item) => item.title === selectedType);
-    return detail?.question || selectedType;
-  }, [selectedType]);
+    if (!detail) {
+      return selectedType;
+    }
+    // Use age-question for era quizzes if available, otherwise fall back to question
+    if (useAgeQuestion && detail['age-question']) {
+      return detail['age-question'];
+    }
+    return detail.question || selectedType;
+  }, [selectedType, useAgeQuestion]);
 
   if (!questionText) {
     return null;

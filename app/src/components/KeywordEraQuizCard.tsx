@@ -144,7 +144,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         //   { color: theme.colors.onPrimary, opacity: 0.7 },
         // ]}
       />
-      <TypeLabel types={problem.types} preferEraType={true} />
+      <TypeLabel types={problem.types} preferEraType={true} useAgeQuestion={true} />
     </View>
   );
 
