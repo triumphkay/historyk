@@ -9,7 +9,7 @@ import { spacing } from "../theme/spacing";
 import { typography } from "../theme/typography";
 
 const typeDetails =
-  (typeMetadata as { "types-details": TypeDetail[] })["types-details"] || [];
+  (typeMetadata as { "type-set": TypeDetail[] })["type-set"] || [];
 
 interface TypeLabelProps {
   types: string[];

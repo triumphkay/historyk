@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate timeline-prehistory.json and timeline-history.json from timetable.json."""
+"""Generate key-prehistoric.json, ref-timeline.json, and key-age.json from timetable.json."""
 
 from __future__ import annotations
 
@@ -104,9 +104,9 @@ def main() -> None:
     output_dir = project_root / "database"
     app_assets_dir = project_root.parent / "app" / "assets"
     
-    prehistory_path = app_assets_dir / "timeline-prehistory.json"
-    history_path = output_dir / "timeline-history.json"
-    age_path = app_assets_dir / "timeline-age.json"
+    prehistory_path = app_assets_dir / "key-prehistoric.json"
+    history_path = output_dir / "ref-timeline.json"
+    age_path = app_assets_dir / "key-age.json"
 
     timetable = load_timetable(timetable_path)
     prehistory_entries = collect_prehistory_entries(timetable)

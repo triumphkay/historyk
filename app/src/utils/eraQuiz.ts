@@ -1,5 +1,3 @@
-import { EventItem } from '../types/EventItem';
-
 export const getFrequencyLabel = (scores: Array<string | number> = []): string => {
   const total = (scores || []).reduce((sum, value) => {
     const num = typeof value === 'string' ? parseFloat(value) : value;
@@ -32,20 +30,6 @@ export const parseYearParts = (years: string) => {
     month: monthMatch ? monthMatch[1].padStart(2, '0') : null,
     day: dayMatch ? dayMatch[1].padStart(2, '0') : null
   };
-};
-
-export const getCountryMap = (events: EventItem[]) => {
-  const map: Record<string, Set<string>> = {};
-  events.forEach((event) => {
-    if (Array.isArray(event.times) && event.times.length === 2) {
-      const [country, leader] = event.times;
-      if (!map[country]) {
-        map[country] = new Set();
-      }
-      map[country].add(leader);
-    }
-  });
-  return map;
 };
 
 export { mergeReferenceIds, formatReferenceEntry } from './references';

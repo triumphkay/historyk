@@ -21,8 +21,8 @@ ALLOWED_NATIONS = {
 }
 
 DB_PATH = Path("database/korean-history.db")
-KEY_AGE_PATH = Path("../app/assets/key-age.json")
-TIMELINE_HISTORY_PATH = Path("database/timeline-history.json")
+KEY_AGE_PATH = Path("../app/assets/key-timeline.json")
+TIMELINE_HISTORY_PATH = Path("database/ref-timeline.json")
 
 
 def _build_age_index():
@@ -78,7 +78,7 @@ def _find_matching_age_index(nation: str, entry: str, age_index: dict[str, int],
             if age_label.startswith(nation) and age_label.endswith(search_entry_no_gov):
                 return idx
 
-    raise ValueError(f"timeline-history.json에서 '{nation}'의 '{entry}'에 해당하는 항목을 찾을 수 없습니다.")
+        raise ValueError(f"ref-timeline.json에서 '{nation}'의 '{entry}'에 해당하는 항목을 찾을 수 없습니다.")
 
 
 def _sort_entries_by_age(
@@ -149,7 +149,7 @@ def collect_nation_entries():
 
 
 def update_key_age_file(nation_lists):
-    """Create key-age.json with sorted entries."""
+    """Create key-timeline.json with sorted entries."""
     ages, age_index = _build_age_index()
 
     ordered_entries = []

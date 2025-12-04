@@ -12,7 +12,7 @@ from collections import defaultdict
 # Configuration
 DB_PATH = "database/korean-history.db"
 KEYWORD_TYPES_PATH = "hardcodes/keyword-types.json"
-AGE_LIST_PATH = "database/timeline-history.json"
+AGE_LIST_PATH = "database/ref-timeline.json"
 
 # Sub-eras heuristic list
 SUB_ERAS = {

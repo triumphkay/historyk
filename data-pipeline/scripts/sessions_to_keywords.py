@@ -23,6 +23,34 @@ def load_config() -> dict:
         return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         die(f"[ERROR] 설정 파일 파싱 실패: {exc}")
+    return cache_age_sensitive_types(config)
+
+
+def cache_age_sensitive_types(config: dict) -> dict:
+    """type-set 중 age 플래그가 있는 항목을 추출해 캐시에 보관한다."""
+    if "_age_sensitive_types" in config:
+        return config
+    type_set = config.get("type-set", [])
+    age_types: set[str] = set()
+    if isinstance(type_set, list):
+        for entry in type_set:
+            if not isinstance(entry, dict):
+                continue
+            if not entry.get("age"):
+                continue
+            title = str(entry.get("title", "")).strip()
+            if title:
+                age_types.add(title)
+    config["_age_sensitive_types"] = age_types
+    return config
+
+
+def get_age_sensitive_types(config: dict) -> set[str]:
+    cached = config.get("_age_sensitive_types")
+    if isinstance(cached, set):
+        return cached
+    cache_age_sensitive_types(config)
+    return config.get("_age_sensitive_types", set())
 
 
 def ensure_schema(cur: sqlite3.Cursor) -> None:
@@ -91,8 +119,8 @@ def add_unique(target: List[str], value: str) -> None:
 
 
 def apply_times_suffix(keyword: str, session_type: str, config: dict, session_id: str) -> str:
-    except_types = {item.strip() for item in config.get("except-types", []) if item.strip()}
-    if session_type not in except_types:
+    age_sensitive_types = get_age_sensitive_types(config)
+    if session_type not in age_sensitive_types:
         return keyword.strip()
     suffixes = [item.strip() for item in config.get("times-key", []) if item.strip()]
     trimmed = keyword.strip()
@@ -172,8 +200,8 @@ def process_keyword(
 
 
 def clean_keywords(cur: sqlite3.Cursor, config: dict) -> None:
-    except_types = {item.strip() for item in config.get("except-types", []) if item.strip()}
-    if not except_types:
+    age_sensitive_types = get_age_sensitive_types(config)
+    if not age_sensitive_types:
         return
     cur.execute("SELECT id, types, descriptions FROM keywords")
     for keyword_id, types_json, desc_json in cur.fetchall():
@@ -186,7 +214,7 @@ def clean_keywords(cur: sqlite3.Cursor, config: dict) -> None:
             continue
         if not types_list:
             continue
-        if all(type_name in except_types for type_name in types_list):
+        if all(type_name in age_sensitive_types for type_name in types_list):
             cur.execute("DELETE FROM keywords WHERE id = ?", (keyword_id,))
 
 

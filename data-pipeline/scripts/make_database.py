@@ -94,7 +94,7 @@ def main() -> None:
 
     key_age_script = scripts_dir / "update_key_age.py"
     run_command(
-        "key-age.json 생성",
+        "key-timeline.json 생성",
         [
             sys.executable,
             str(key_age_script),

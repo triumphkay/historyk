@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import { NewWordEraItem } from '../types/NewWordEraItem';
 import { loadNewWordData } from '../utils/dataLoader';
 import { shuffle } from '../utils/random';
+import keywordTypes from '../../assets/keyword-types.json';
+import { TypeDetail } from '../types/TypeDetail';
 
 export type ExtendedNewWordEraItem = NewWordEraItem & { selectedEraIndex: number };
 
@@ -23,8 +25,17 @@ interface NewWordEraQuizContextValue {
 
 const NewWordEraQuizContext = createContext<NewWordEraQuizContextValue | undefined>(undefined);
 
+const ageSensitiveSet: Set<string> = (() => {
+  const entries = (keywordTypes as { "type-set": TypeDetail[] })["type-set"] || [];
+  const titles = entries
+    .filter((entry) => entry?.age)
+    .map((entry) => (entry?.title || "").trim())
+    .filter(Boolean);
+  return new Set(titles);
+})();
+
 const hasEraType = (types: string[]): boolean => {
-  return types.some(type => type.endsWith('-시기') || type === '시기');
+  return types.some((type) => ageSensitiveSet.has(type.trim()));
 };
 
 const hasValidEra = (item: NewWordEraItem): boolean => {

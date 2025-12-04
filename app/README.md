@@ -47,7 +47,7 @@ publish/
 │   │   └── SettingsScreen.tsx
 │   ├── context/             # 상태 관리 (Context API)
 │   │   ├── QuizContext.tsx
-│   │   ├── EraQuizContext.tsx
+│   │   ├── NewWordEraQuizContext.tsx
 │   │   └── ThemePreferenceContext.tsx
 │   ├── utils/               # 유틸리티 함수
 │   │   ├── dataLoader.ts
@@ -63,13 +63,14 @@ publish/
 │   │   └── index.ts
 │   └── types/               # TypeScript 타입 정의
 │       ├── Keyword.ts
-│       ├── EventItem.ts
 │       ├── QuizItem.ts
 │       └── ...
 ├── assets/                  # 정적 자산
-│   ├── events.json          # 역사 사건 데이터
 │   ├── keyword-types.json   # 키워드 타입 및 시기 데이터
-│   └── db.json              # 생성된 데이터베이스
+│   ├── data.json            # 생성된 키워드 데이터셋
+│   ├── key-prehistoric.json # 선사 시대 구간
+│   ├── key-age.json         # 시대/연대 구간
+│   └── key-timeline.json    # 국가별 왕/정부 목록
 ├── scripts/
 │   └── copy-keyword-types.js # 빌드 스크립트
 ├── App.tsx                  # 애플리케이션 진입점
@@ -112,19 +113,11 @@ npm run build
 ## 📊 데이터 구조
 
 ### 키워드 데이터 (keyword-types.json)
-- **types**: 키워드 분류 타입 목록
-- **types-details**: 각 타입별 상세 정보 및 문제 템플릿
-- **times-key**: 역사적 시기를 나타내는 키워드
-- **key-age**: 국가별 왕/정부 목록 (시대 퀴즈용)
-
-### 사건 데이터 (events.json)
-- `id`: 고유 식별자
-- `keyword`: 키워드명
-- `times`: 관련된 시대/왕/정부
-- `years`: 발생 연도 및 시기
-- `types`: 키워드 분류 타입
-- `score`: 출제 빈도 점수
-- `ref_id`, `q_ref_id`: 참고자료 ID
+- **type-set**: 타입 정의 및 출력 문구(`age: true`이면 시기/연표 정보가 필요한 타입)
+- **times-key**: 역사적 시기를 나타내는 키워드 접미사 목록
+- **key-timeline.json**: 국가별 왕/정부 목록 (시대 퀴즈용)
+- **key-age.json**: 시대 구간(상대/중대 등) 레이블 목록
+- **key-prehistoric.json**: 선사시대 구간 레이블 목록
 
 ## 🎨 기술 스택
 
@@ -140,10 +133,6 @@ npm run build
 ### QuizContext
 - 일반 키워드 퀴즈 상태 관리
 - 현재 문제, 진행도, 정답 확인 등
-
-### EraQuizContext
-- 시기/연도 퀴즈 상태 관리
-- 국가-왕/정부 선택 로직
 
 ### ThemePreferenceContext
 - 라이트/다크 모드 테마 설정

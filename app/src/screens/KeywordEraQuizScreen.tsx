@@ -17,7 +17,7 @@ import { spacing } from "../theme/spacing";
 import { quizScreenStyles, eraQuizStyles } from "../theme/quizStyles";
 import KeywordEraQuizCard from "../components/KeywordEraQuizCard";
 import { parseYearParts } from "../utils/eraQuiz";
-import keyAgeData from "../../assets/key-age.json";
+import keyAgeData from "../../assets/key-timeline.json";
 import { TypeDetail } from "../types/TypeDetail";
 import { QuizButton, QuizNavigation } from "../components/QuizLayout";
 

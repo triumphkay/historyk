@@ -16,7 +16,7 @@ import { spacing } from "../theme/spacing";
 import { typography } from "../theme/typography";
 import { mergeReferenceIds } from "../utils/references";
 import { parseYearParts } from "../utils/eraQuiz";
-import keyAgeData from "../../assets/key-age.json";
+import keyAgeData from "../../assets/key-timeline.json";
 import { TypeDetail } from "../types/TypeDetail";
 import { quizScreenStyles, eraQuizStyles } from "../theme/quizStyles";
 import { POINT_COLOR_1 } from "../theme";
