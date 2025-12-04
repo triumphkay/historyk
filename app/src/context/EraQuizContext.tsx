@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import { EventItem } from '../types/EventItem';
 import { loadEventData } from '../utils/dataLoader';
 import { shuffle } from '../utils/random';
-import keyAgeData from '../../assets/keyword-types.json';
+import keyAgeData from '../../assets/key-age.json';
 
 interface EraQuizContextValue {
   problems: EventItem[];
@@ -17,8 +17,8 @@ interface EraQuizContextValue {
 
 const EraQuizContext = createContext<EraQuizContextValue | undefined>(undefined);
 
-const keyAgeEntries = (keyAgeData as { 'key-age': Array<{ nation: string; list: string[] }> })['key-age'] || [];
-const keyAgeMap: Record<string, Set<string>> = keyAgeEntries.reduce((acc, entry) => {
+// keyAgeData is already an array of { nation: string; list: string[] }
+const keyAgeMap: Record<string, Set<string>> = (keyAgeData as Array<{ nation: string; list: string[] }>).reduce((acc, entry) => {
   acc[entry.nation] = new Set(entry.list);
   return acc;
 }, {} as Record<string, Set<string>>);

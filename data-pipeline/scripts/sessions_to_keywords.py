@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Dict, List
 
 DB_PATH = Path("database/korean-history.db")
-CONFIG_PATH = Path("database/keyword-types.json")
+CONFIG_PATH = Path("hardcodes/keyword-types.json")
 
 
 def die(message: str) -> None:

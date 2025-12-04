@@ -11,6 +11,7 @@ Pipeline order:
 from __future__ import annotations
 
 import argparse
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -48,18 +49,19 @@ def main() -> None:
     repo_root = Path(__file__).resolve().parent.parent
     scripts_dir = repo_root / "scripts"
 
-    age_list_script = scripts_dir / "update-age-list.py"
+    timeline_script = scripts_dir / "timeline_setting.py"
     session_script = scripts_dir / "json_to_sessions.py"
     newwords_script = scripts_dir / "create_newwords_table.py"
     populate_script = scripts_dir / "populate_newwords.py"
 
     run_command(
-        "연령 리스트 업데이트",
+        "연표 JSON 생성",
         [
             sys.executable,
-            str(age_list_script),
+            str(timeline_script),
         ],
     )
+
     run_command(
         "sessions 테이블 생성",
         [
@@ -71,6 +73,7 @@ def main() -> None:
             str(args.db),
         ],
     )
+
     run_command(
         "newwords 테이블 생성",
         [
@@ -88,6 +91,34 @@ def main() -> None:
             str(populate_script),
         ],
     )
+
+    key_age_script = scripts_dir / "update_key_age.py"
+    run_command(
+        "key-age.json 생성",
+        [
+            sys.executable,
+            str(key_age_script),
+        ],
+    )
+
+    json_gen_script = scripts_dir / "generate-newwords-json.js"
+    run_command(
+        "앱용 JSON 데이터 생성 (assets/data.json)",
+        [
+            "node",
+            str(json_gen_script),
+        ],
+    )
+
+    # Copy keyword-types.json to app/assets
+    hardcodes_dir = repo_root / "hardcodes"
+    app_assets_dir = repo_root.parent / "app" / "assets"
+    keyword_types_src = hardcodes_dir / "keyword-types.json"
+    keyword_types_dst = app_assets_dir / "keyword-types.json"
+    
+    print(f"[build] keyword-types.json 복사: {keyword_types_src} → {keyword_types_dst}")
+    shutil.copy(keyword_types_src, keyword_types_dst)
+    
     print("[build] 완료되었습니다.")
 
 

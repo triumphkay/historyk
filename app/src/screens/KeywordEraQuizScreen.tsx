@@ -17,7 +17,7 @@ import { spacing } from "../theme/spacing";
 import { quizScreenStyles, eraQuizStyles } from "../theme/quizStyles";
 import KeywordEraQuizCard from "../components/KeywordEraQuizCard";
 import { parseYearParts } from "../utils/eraQuiz";
-import keywordTypes from "../../assets/keyword-types.json";
+import keyAgeData from "../../assets/key-age.json";
 import { TypeDetail } from "../types/TypeDetail";
 import { QuizButton, QuizNavigation } from "../components/QuizLayout";
 
@@ -97,11 +97,11 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
   };
   const { country, leader, year, month, isFlipped } = currentCardState;
 
-  const metadata = keywordTypes as {
-    "key-age": Array<{ nation: string; list: string[] }>;
-    "types-details": TypeDetail[];
-  };
-  const keyAgeData = metadata["key-age"] || [];
+  // const metadata = keywordTypes as {
+  //   "key-age": Array<{ nation: string; list: string[] }>;
+  //   "types-details": TypeDetail[];
+  // };
+  // const keyAgeData = metadata["key-age"] || [];
 
   // Get selected era and det_era based on selectedEraIndex
   const selectedEra = useMemo(() => {

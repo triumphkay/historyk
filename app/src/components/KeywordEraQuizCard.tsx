@@ -16,7 +16,7 @@ import { spacing } from "../theme/spacing";
 import { typography } from "../theme/typography";
 import { mergeReferenceIds } from "../utils/references";
 import { parseYearParts } from "../utils/eraQuiz";
-import keywordTypes from "../../assets/keyword-types.json";
+import keyAgeData from "../../assets/key-age.json";
 import { TypeDetail } from "../types/TypeDetail";
 import { quizScreenStyles, eraQuizStyles } from "../theme/quizStyles";
 import { POINT_COLOR_1 } from "../theme";
@@ -45,11 +45,11 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   };
   const { country, leader, year, month, isFlipped } = cardState;
 
-  const metadata = keywordTypes as {
-    "key-age": Array<{ nation: string; list: string[] }>;
-    "types-details": TypeDetail[];
-  };
-  const keyAgeData = metadata["key-age"] || [];
+  // const metadata = keywordTypes as {
+  //   "key-age": Array<{ nation: string; list: string[] }>;
+  //   "types-details": TypeDetail[];
+  // };
+  // const keyAgeData = metadata["key-age"] || [];
 
   const selectedEraIndex = problem.selectedEraIndex;
 

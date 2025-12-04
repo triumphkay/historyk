@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PROJECT_ROOT = path.resolve(__dirname, '..');
-const SOURCE_DIR = path.resolve(PROJECT_ROOT, '..', 'data-pipeline', 'database');
+const SOURCE_DIR = path.resolve(PROJECT_ROOT, '..', 'data-pipeline', 'hardcodes');
 const DEST_DIR = path.join(PROJECT_ROOT, 'assets');
 
 const FILES_TO_COPY = ['keyword-types.json'];
