@@ -51,7 +51,17 @@ def collect_history_entries(timetable: list) -> list[str]:
                 entries.append(item)
             for period in group.get("period", []):
                 age_label = (period.get("age") or "").strip()
-                for person in period.get("list", []):
+                people_list = period.get("list", [])
+                
+                # If list is empty but age_label exists, add the age entry itself
+                # e.g. "일제강점기 무단통치기"
+                if not people_list and age_label:
+                    age_entry = f"{item} {age_label}"
+                    if age_entry not in seen:
+                        seen.add(age_entry)
+                        entries.append(age_entry)
+
+                for person in people_list:
                     name = (person.get("name") or "").strip()
                     if not name:
                         continue

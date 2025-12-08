@@ -5,7 +5,13 @@ import { shuffle } from '../utils/random';
 import keywordTypes from '../../assets/keyword-types.json';
 import { TypeDetail } from '../types/TypeDetail';
 
-export type ExtendedNewWordEraItem = NewWordEraItem & { selectedEraIndex: number };
+export type QuizMode = 'era-only' | 'sub-era' | 'det-era' | 'random-sub-or-det';
+
+export type ExtendedNewWordEraItem = NewWordEraItem & { 
+  selectedEraIndex: number;
+  quizMode: QuizMode;
+  selectedField: 'sub_era' | 'det_era' | null; // For random mode
+};
 
 interface NewWordEraQuizContextValue {
   problems: ExtendedNewWordEraItem[];
@@ -47,6 +53,26 @@ const selectRandomEraIndex = (eraArray: string[]): number => {
   return Math.floor(Math.random() * eraArray.length);
 };
 
+const determineQuizMode = (item: NewWordEraItem, eraIndex: number): { mode: QuizMode; selectedField: 'sub_era' | 'det_era' | null } => {
+  const hasSubEra = item.sub_era && item.sub_era[eraIndex] && item.sub_era[eraIndex].trim() !== '';
+  const hasDetEra = item.det_era && item.det_era[eraIndex] && item.det_era[eraIndex].trim() !== '';
+  
+  if (hasSubEra && hasDetEra) {
+    // Both exist: randomly choose one
+    const selectedField = Math.random() < 0.5 ? 'sub_era' : 'det_era';
+    return { mode: 'random-sub-or-det', selectedField };
+  } else if (hasSubEra) {
+    // Only sub_era
+    return { mode: 'sub-era', selectedField: null };
+  } else if (hasDetEra) {
+    // Only det_era
+    return { mode: 'det-era', selectedField: null };
+  } else {
+    // Only era
+    return { mode: 'era-only', selectedField: null };
+  }
+};
+
 export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [problems, setProblems] = useState<ExtendedNewWordEraItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,11 +91,18 @@ export const NewWordEraQuizProvider: React.FC<{ children: React.ReactNode }> = (
       
       const shuffled = shuffle(eligible);
       
-      // Pre-calculate selectedEraIndex for all items
-      const extendedProblems = shuffled.map(item => ({
-        ...item,
-        selectedEraIndex: selectRandomEraIndex(item.era)
-      }));
+      // Pre-calculate selectedEraIndex and quiz mode for all items
+      const extendedProblems = shuffled.map(item => {
+        const selectedEraIndex = selectRandomEraIndex(item.era);
+        const { mode, selectedField } = determineQuizMode(item, selectedEraIndex);
+        
+        return {
+          ...item,
+          selectedEraIndex,
+          quizMode: mode,
+          selectedField
+        };
+      });
       
       setProblems(extendedProblems);
       setLoading(false);

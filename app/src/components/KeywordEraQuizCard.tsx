@@ -45,13 +45,8 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   };
   const { country, leader, year, month, isFlipped } = cardState;
 
-  // const metadata = keywordTypes as {
-  //   "key-age": Array<{ nation: string; list: string[] }>;
-  //   "types-details": TypeDetail[];
-  // };
-  // const keyAgeData = metadata["key-age"] || [];
-
   const selectedEraIndex = problem.selectedEraIndex;
+  const quizMode = problem.quizMode;
 
   const selectedEra = useMemo(() => {
     if (!problem || !problem.era[selectedEraIndex]) return "";
@@ -69,25 +64,27 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
     return problem.sub_era[selectedEraIndex];
   }, [problem, selectedEraIndex]);
 
-  const hasLeaderAnswer = Boolean(selectedDetEra.trim());
+  // Determine what to show based on quiz mode
+  const showEraDropdown = quizMode === 'era-only';
+  const showSubEraDropdown = quizMode === 'sub-era' || (quizMode === 'random-sub-or-det' && problem.selectedField === 'sub_era');
+  const showDetEraDropdown = quizMode === 'det-era' || (quizMode === 'random-sub-or-det' && problem.selectedField === 'det_era');
 
   const countryOptions = useMemo(
     () => Array.from(new Set(keyAgeData.map((item) => item.nation))),
-    [keyAgeData]
+    []
   );
 
   const leaderOptions = useMemo(() => {
-    const entry = keyAgeData.find((item) => item.nation === selectedEra);
+    const entry = keyAgeData.find((item) => item.nation === (showEraDropdown ? country : selectedEra));
     return entry ? entry.list : [];
-  }, [selectedEra, keyAgeData]);
+  }, [showEraDropdown, country, selectedEra]);
 
+  // Auto-initialize country when era is fixed
   useEffect(() => {
-    // Initialize country if needed (e.g. pre-filled for leader questions)
-    // Only set if currently empty to avoid overwriting user input or infinite loops
-    if (hasLeaderAnswer && !country) {
+    if (!showEraDropdown && !country) {
       updateCardState(index, { country: selectedEra });
     }
-  }, [hasLeaderAnswer, selectedEra, country, index]);
+  }, [showEraDropdown, selectedEra, country, index, updateCardState]);
 
   const yearParts = useMemo(
     () => parseYearParts(problem?.years || ""),
@@ -101,37 +98,42 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   const isCorrect = useMemo(() => {
     if (!problem) return false;
 
-    if (country !== selectedEra) return false;
-
-    const hasLeaderAnswer = Boolean(selectedDetEra.trim());
-    if (hasLeaderAnswer && leader !== selectedDetEra) return false;
-
-    const shouldShowYearInputs = problem.years_check === "true"; // YEAR_INPUTS_ENABLED is now internal
-    if (shouldShowYearInputs) {
-      if (year !== yearParts.year) return false;
-      if (yearParts.month && month !== yearParts.month) return false;
+    if (showEraDropdown) {
+      return country === selectedEra;
+    }
+    
+    // For sub-era and det-era modes, we use the 'leader' state for the second dropdown
+    if (showSubEraDropdown) {
+      return leader === selectedSubEra;
+    }
+    
+    if (showDetEraDropdown) {
+      return leader === selectedDetEra;
     }
 
-    return true;
+    return false;
   }, [
     problem,
     country,
     leader,
-    year,
-    month,
     selectedEra,
+    selectedSubEra,
     selectedDetEra,
-    yearParts,
+    showEraDropdown,
+    showSubEraDropdown,
+    showDetEraDropdown
   ]);
 
   const handleNumericChange = (value: string, length: number) =>
     value.replace(/[^0-9]/g, "").slice(0, length);
-  const shouldShowYearInputs = problem.years_check === "true"; // YEAR_INPUTS_ENABLED is now internal
 
   const setCountry = (val: string) => updateCardState(index, { country: val });
   const setLeader = (val: string) => updateCardState(index, { leader: val });
   const setYear = (val: string) => updateCardState(index, { year: val });
   const setMonth = (val: string) => updateCardState(index, { month: val });
+
+  // Has the user provided an answer for the active field?
+  const hasAnswered = showEraDropdown ? Boolean(country) : Boolean(leader);
 
   // --- Front Content ---
   const FrontHeader = (
@@ -139,10 +141,6 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
       <PriorityMark
         scores={problem.scores}
         style={styles.cardScore}
-        // textStyle={[
-        //   styles.frequencyText,
-        //   { color: theme.colors.onPrimary, opacity: 0.7 },
-        // ]}
       />
       <TypeLabel types={problem.types} preferEraType={true} useAgeQuestion={true} />
     </View>
@@ -162,76 +160,57 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   const FrontFooter = (
     <View>
       <View style={styles.dropdownRow}>
-        <DropdownSelect
-          label="시대"
-          value={country}
-          options={countryOptions}
-          onSelect={setCountry}
-          disabled={hasLeaderAnswer}
-        />
-        {hasLeaderAnswer ? (
+        {showEraDropdown ? (
+          // Mode 1: era-only - show single eras dropdown
           <DropdownSelect
-            label="상세 시기"
-            value={leader}
-            options={leaderOptions}
-            onSelect={setLeader}
+            label="시대/국가"
+            value={country}
+            options={countryOptions}
+            onSelect={setCountry}
             disabled={false}
           />
+        ) : showSubEraDropdown ? (
+          // Mode 2 or 4 (sub_era): show fixed era + active sub_era
+          <>
+            <DropdownSelect
+              label="시대/국가"
+              value={selectedEra} // Uses the correct answer as fixed value
+              options={countryOptions}
+              onSelect={() => {}} // No-op
+              disabled={true}
+            />
+            <DropdownSelect
+              label="상세 시대"
+              value={leader}
+              options={leaderOptions}
+              onSelect={setLeader}
+              disabled={false}
+            />
+          </>
+        ) : showDetEraDropdown ? (
+          // Mode 3 or 4 (det_era): show fixed era + active det_era
+          <>
+            <DropdownSelect
+              label="시대/국가"
+              value={selectedEra} // Uses the correct answer as fixed value
+              options={countryOptions}
+              onSelect={() => {}} // No-op
+              disabled={true}
+            />
+            <DropdownSelect
+              label="상세 시기"
+              value={leader}
+              options={leaderOptions}
+              onSelect={setLeader}
+              disabled={false}
+            />
+          </>
         ) : null}
       </View>
-
-      {/* {shouldShowYearInputs ? (
-        <View style={styles.yearContainer}>
-          <Text
-            style={[
-              styles.hintLabel,
-              { color: theme.colors.onPrimary, opacity: 0.7 },
-            ]}
-          >
-            연도
-          </Text>
-          <View style={styles.yearRow}>
-            <TextInput
-              mode="outlined"
-              label="YYYY"
-              keyboardType="numeric"
-              value={year}
-              onChangeText={(text) => setYear(handleNumericChange(text, 4))}
-              style={styles.yearInput}
-              placeholder="0000"
-              textColor="#FFFFFF"
-              theme={{ colors: { onSurfaceVariant: "rgba(255,255,255,0.7)" } }}
-            />
-            <Text style={[styles.yearSuffix, { color: "#FFFFFF" }]}>년</Text>
-            {yearParts.month ? (
-              <>
-                <TextInput
-                  mode="outlined"
-                  label="MM"
-                  keyboardType="numeric"
-                  value={month}
-                  onChangeText={(text) =>
-                    setMonth(handleNumericChange(text, 2))
-                  }
-                  style={styles.yearInput}
-                  placeholder="00"
-                  textColor="#FFFFFF"
-                  theme={{
-                    colors: { onSurfaceVariant: "rgba(255,255,255,0.7)" },
-                  }}
-                />
-                <Text style={[styles.yearSuffix, { color: "#FFFFFF" }]}>
-                  월
-                </Text>
-              </>
-            ) : null}
-          </View>
-        </View>
-      ) : null} */}
     </View>
   );
 
-  const backTextColor = theme.colors.level3;
+  const backTextColor = (theme.colors as any).level3 || theme.colors.onSurface;
 
   // --- Back Content ---
   const BackHeader = (
@@ -241,7 +220,8 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
           styles.resultText,
           {
             color: backTextColor,
-            opacity: country && (!hasLeaderAnswer || leader) ? 1 : 0,
+            // Show result text/opacity only if the user has answered the relevant field
+            opacity: hasAnswered ? 1 : 0,
           },
         ]}
       >
@@ -270,30 +250,47 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
     </View>
   );
 
-  const BackBody = (
-    <View style={{ width: "100%" }}>
-      <View style={styles.eraInfoContainer}>
-        <AppText style={[styles.eraText, { color: backTextColor }]}>
-          {[selectedEra, selectedSubEra, selectedDetEra]
-            .filter(Boolean)
-            .join(" ")}
-        </AppText>
-        {problem.years && (
-          <AppText
-            style={{
-              color: backTextColor,
-              fontSize: 24,
-              fontWeight: 200,
-              marginTop: 8,
-            }}
-          >
-            {problem.years}
+  const BackBody = useMemo(() => {
+    // Build all era combinations
+    const eraCount = problem.era?.length || 0;
+    const eraCombinations: string[] = [];
+    
+    for (let i = 0; i < eraCount; i++) {
+      const era = problem.era[i] || "";
+      const subEra = problem.sub_era?.[i] || "";
+      const detEra = problem.det_era?.[i] || "";
+      
+      const parts = [era, subEra, detEra].filter(Boolean);
+      if (parts.length > 0) {
+        const text = parts.join(" ");
+        // First item: no parentheses, subsequent items: add parentheses
+        eraCombinations.push(i === 0 ? text : `(${text})`);
+      }
+    }
+    
+    return (
+      <View style={{ width: "100%" }}>
+        <View style={styles.eraInfoContainer}>
+          <AppText style={[styles.eraText, { color: backTextColor }]}>
+            {eraCombinations.join("\n")}
           </AppText>
-        )}
+          {problem.years && (
+            <AppText
+              style={{
+                color: backTextColor,
+                fontSize: 24,
+                fontWeight: 200,
+                marginTop: 8,
+              }}
+            >
+              {problem.years}
+            </AppText>
+          )}
+        </View>
+        {/* <DescriptionList descriptions={problem.descriptions} /> */}
       </View>
-      {/* <DescriptionList descriptions={problem.descriptions} /> */}
-    </View>
-  );
+    );
+  }, [problem, backTextColor]);
 
   const BackFooter = (
     <View style={styles.infoRowBottom}>

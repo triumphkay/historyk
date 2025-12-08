@@ -78,14 +78,51 @@ def _find_matching_age_index(nation: str, entry: str, age_index: dict[str, int],
             if age_label.startswith(nation) and age_label.endswith(search_entry_no_gov):
                 return idx
 
-        raise ValueError(f"ref-timeline.json에서 '{nation}'의 '{entry}'에 해당하는 항목을 찾을 수 없습니다.")
+    raise ValueError(f"ref-timeline.json에서 '{nation}'의 '{entry}'에 해당하는 항목을 찾을 수 없습니다.")
 
+
+# ... (previous constants)
+KEY_AGE_JSON_PATH = Path("../app/assets/key-age.json")
+
+# ...
+
+def load_key_age_json():
+    """Load key-age.json to get sub_era order."""
+    if not KEY_AGE_JSON_PATH.exists():
+        return {}
+    try:
+        data = json.loads(KEY_AGE_JSON_PATH.read_text(encoding="utf-8"))
+        # Transform into a dict: {nation: [sub_eras]}
+        result = {}
+        for item in data:
+            result[item["item"]] = item.get("ages", [])
+        return result
+    except Exception as e:
+        print(f"[Warning] Failed to load key-age.json: {e}")
+        return {}
+
+def _find_matching_sub_era_index(nation: str, entry: str, sub_era_map: dict) -> int | None:
+    """Find index of entry in sub_era list for a nation."""
+    if nation not in sub_era_map:
+        return None
+    
+    sub_eras = sub_era_map[nation]
+    try:
+        return sub_eras.index(entry)
+    except ValueError:
+        return None
 
 def _sort_entries_by_age(
-    nation: str, entries: list[str], age_index: dict[str, int], ages: list[str]
+    nation: str, entries: list[str], age_index: dict[str, int], ages: list[str], sub_era_map: dict
 ) -> list[str]:
     indexed_entries = []
     seen = set()
+    
+    # Calculate offset for sub_era indices to keep them valid but distinct from timeline indices (if needed)
+    # But actually, simpler is: if sub_era match found, use it (0-100). 
+    # Global timeline has 1500+ items. 
+    # We should rely on hierarchy. But for simple sorting list within a nation, 
+    # we just need a key.
     
     for entry in entries:
         normalized_entry = entry.strip()
@@ -94,9 +131,20 @@ def _sort_entries_by_age(
         if normalized_entry in seen:
             continue
             
+        # Try finding in sub_era map first (Prioritize sub_era ordering)
+        sub_era_idx = _find_matching_sub_era_index(nation, normalized_entry, sub_era_map)
+        
+        if sub_era_idx is not None:
+            # Found in sub_era list. 
+            # Use a tuple key: (0, sub_era_idx) to prioritize over timeline matches if any mixture
+            indexed_entries.append(((0, sub_era_idx), normalized_entry))
+            seen.add(normalized_entry)
+            continue
+
         try:
             idx = _find_matching_age_index(nation, normalized_entry, age_index, ages)
-            indexed_entries.append((idx, normalized_entry))
+            # Use tuple key: (1, idx) for timeline matches
+            indexed_entries.append(((1, idx), normalized_entry))
             seen.add(normalized_entry)
         except ValueError:
             # If not found in timeline, we might want to skip or append at the end.
@@ -112,36 +160,58 @@ def collect_nation_entries():
     """Read the newwords table and build the nation/list mapping."""
     conn = sqlite3.connect(DB_PATH)
     try:
-        # Fetch era and det_era columns
-        cursor = conn.execute("SELECT era, det_era FROM newwords")
+        # Fetch era, sub_era, and det_era columns
+        cursor = conn.execute("SELECT era, sub_era, det_era FROM newwords")
         nation_lists = defaultdict(list)
+        nations_seen = set()  # Track all nations we've encountered
         
-        for era_json, det_era_json in cursor:
-            if not era_json or not det_era_json:
+        for era_json, sub_era_json, det_era_json in cursor:
+            if not era_json:
                 continue
             
             try:
                 eras = json.loads(era_json)
-                det_eras = json.loads(det_era_json)
+                sub_eras = json.loads(sub_era_json) if sub_era_json else []
+                det_eras = json.loads(det_era_json) if det_era_json else []
             except json.JSONDecodeError:
                 continue
                 
-            if not isinstance(eras, list) or not isinstance(det_eras, list):
+            if not isinstance(eras, list):
                 continue
+            
+            # Pad sub_eras and det_eras to match eras length if needed
+            while len(sub_eras) < len(eras): sub_eras.append("")
+            while len(det_eras) < len(eras): det_eras.append("")
                 
             # Zip them to process pairs
-            for nation, detail in zip(eras, det_eras):
-                if not nation or not detail:
+            for nation, sub, detail in zip(eras, sub_eras, det_eras):
+                if not nation:
                     continue
                 
                 nation = nation.strip()
-                detail = detail.strip()
                 
                 if nation not in ALLOWED_NATIONS:
                     continue
                 
-                # Add to list
-                nation_lists[nation].append(detail)
+                # Track that we've seen this nation
+                nations_seen.add(nation)
+                
+                # Determine what to use as the list item
+                # Priority: det_era -> sub_era
+                final_detail = detail.strip() if detail else ""
+                
+                # If det_era is empty but sub_era exists, use sub_era
+                # This ensures nations like "일제강점기" get populated with "무단통치기", etc.
+                if not final_detail and sub:
+                    final_detail = sub.strip()
+                
+                if final_detail:
+                    nation_lists[nation].append(final_detail)
+        
+        # Ensure all seen nations are in the dict, even if they have no details
+        for nation in nations_seen:
+            if nation not in nation_lists:
+                nation_lists[nation] = []
                 
         return nation_lists
     finally:
@@ -151,17 +221,19 @@ def collect_nation_entries():
 def update_key_age_file(nation_lists):
     """Create key-timeline.json with sorted entries."""
     ages, age_index = _build_age_index()
+    sub_era_map = load_key_age_json()
 
     ordered_entries = []
     for nation, entries in nation_lists.items():
-        if not entries:
-            continue
-            
         nation_position = _find_nation_position(nation, ages)
-        sorted_entries = _sort_entries_by_age(nation, entries, age_index, ages)
         
-        if sorted_entries:
-            ordered_entries.append((nation_position, {"nation": nation, "list": sorted_entries}))
+        if entries:
+            sorted_entries = _sort_entries_by_age(nation, entries, age_index, ages, sub_era_map)
+        else:
+            sorted_entries = []
+        
+        # Include nation even if it has no entries
+        ordered_entries.append((nation_position, {"nation": nation, "list": sorted_entries}))
 
     ordered_entries.sort(key=lambda item: item[0])
     key_age = [entry for _, entry in ordered_entries]

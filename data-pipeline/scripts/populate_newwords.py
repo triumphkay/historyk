@@ -148,6 +148,17 @@ def main():
     keyword_types = load_json(repo_root / KEYWORD_TYPES_PATH)
     age_list = load_json(repo_root / AGE_LIST_PATH)
     
+    # Build type order map from type-set
+    type_order = {}
+    age_types = set()  # Types with age: true
+    if "type-set" in keyword_types:
+        for idx, type_item in enumerate(keyword_types["type-set"]):
+            if "title" in type_item:
+                type_order[type_item["title"]] = idx
+                # Collect types with age: true
+                if type_item.get("age") is True:
+                    age_types.add(type_item["title"])
+    
     times_keys = set(keyword_types.get("times-key", []))
     
     # Build key_age map for nation lookup
@@ -284,8 +295,9 @@ def main():
                 final_keyword = raw_keyword
                 script_to_add = None
                 
-                is_event_type = row_type in ("사건", "사건-시기")
-                if is_event_type:
+                # Check if row_type has age:true or is "사건"
+                should_process = row_type == "사건" or row_type in age_types
+                if should_process:
                     for tk in times_keys:
                         if raw_keyword.endswith(tk):
                             # Remove tk from end
@@ -363,6 +375,9 @@ def main():
                             era_tuple = (p_era or "", p_sub or "", p_det or "")
                             merge_era_tuples(entry.era_tuples, era_tuple)
                             
+                            # Track the last valid era for inheritance in recursive steps
+                            last_valid_era = p_era or ""
+
                             # Recursively parse remaining text to extract pure year info
                             remaining_text = info
                             if final_keyword == "김지정의 난":
@@ -374,7 +389,17 @@ def main():
                                 if parsed_remaining:
                                     # Found more era info in remaining text
                                     r_era, r_sub, r_det = parsed_remaining
-                                    era_tuple_r = (r_era or "", r_sub or "", r_det or "")
+                                    
+                                    # Inherit era if missing
+                                    final_r_era = r_era or ""
+                                    if not final_r_era and last_valid_era:
+                                        final_r_era = last_valid_era
+                                    
+                                    # Update last_valid_era if we found a new one
+                                    if r_era:
+                                        last_valid_era = r_era
+
+                                    era_tuple_r = (final_r_era, r_sub or "", r_det or "")
                                     merge_era_tuples(entry.era_tuples, era_tuple_r)
                                     remaining_text = info_remaining
                                 else:
@@ -482,6 +507,12 @@ def main():
             
     print(f"Updated descriptions for {count_updates} keywords based on cross-references.")
 
+    # Helper function to sort types according to type-set order
+    def sort_types(types_set, type_order_map):
+        types_list = list(types_set)
+        # Sort by type_order index, types not in map go to the end
+        return sorted(types_list, key=lambda t: type_order_map.get(t, 999))
+    
     # Write to DB
     # Clear table first? The user said "korean-history.db의 테이블을 추가하고 싶다", 
     # and we created it. It should be empty. But safe to clear or replace.
@@ -507,13 +538,16 @@ def main():
         sub_era_list = [t[1] for t in entry.era_tuples]
         det_era_list = [t[2] for t in entry.era_tuples]
         
+        # Sort types according to type-set order
+        sorted_types = sort_types(entry.types, type_order)
+        
         data_to_insert.append((
             entry.id,
             entry.keyword,
             json.dumps(list(entry.descriptions), ensure_ascii=False),
             json.dumps(list(entry.ref_id), ensure_ascii=False),
             json.dumps(list(entry.q_ref_id), ensure_ascii=False),
-            json.dumps(list(entry.types), ensure_ascii=False),
+            json.dumps(sorted_types, ensure_ascii=False),
             json.dumps(entry.scores, ensure_ascii=False),
             json.dumps(era_list, ensure_ascii=False),
             json.dumps(sub_era_list, ensure_ascii=False),

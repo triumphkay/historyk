@@ -16,8 +16,12 @@ export default function Home() {
   const [selectedType, setSelectedType] = useState<string>('All');
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isReloading, setIsReloading] = useState(false);
 
-  useEffect(() => {
+  const fetchData = (showLoading = true) => {
+    if (showLoading) {
+      setLoading(true);
+    }
     fetch('/api/keywords')
       .then((res) => res.json())
       .then((data) => {
@@ -35,11 +39,17 @@ export default function Home() {
             setAllTypes(Array.from(types).sort());
         }
         setLoading(false);
+        setIsReloading(false);
       })
       .catch((err) => {
         console.error(err);
         setLoading(false);
+        setIsReloading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -70,6 +80,12 @@ export default function Home() {
     }
   };
 
+  const handleReload = () => {
+    setSelectedIds(new Set()); // Clear selections on reload
+    setIsReloading(true);
+    fetchData(false); // Don't show full loading screen
+  };
+
   if (loading) return <div className="p-8 text-center text-gray-500">Loading keywords...</div>;
 
   const allSelected = filteredKeywords.length > 0 && selectedIds.size === filteredKeywords.length;
@@ -78,24 +94,42 @@ export default function Home() {
   return (
     <main className="min-h-screen p-4 bg-gray-100 font-sans">
       <div className="w-full">
-        <header className="mb-6 sticky top-0 bg-gray-100 py-4 z-10 flex flex-col sm:flex-row justify-between items-center border-b border-gray-300">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2 sm:mb-0">
+        <header className="mb-6 sticky top-0 bg-gray-100 py-4 z-10 flex flex-col sm:flex-row justify-between items-center border-b border-gray-300 gap-3">
+            <h1 className="text-2xl font-bold text-gray-800">
               Korean History Keywords ({filteredKeywords.length})
               {selectedIds.size > 0 && <span className="text-blue-600 ml-2">({selectedIds.size} selected)</span>}
             </h1>
             
-            <div className="flex items-center gap-2">
-            <label className="font-medium text-gray-700">Filter Type:</label>
-            <select 
-                className="border border-gray-300 rounded px-3 py-2 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-            >
-                <option value="All">All Types</option>
-                {allTypes.map((t) => (
-                <option key={t} value={t}>{t}</option>
-                ))}
-            </select>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleReload}
+                disabled={isReloading}
+                className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <svg 
+                  className={`w-4 h-4 ${isReloading ? 'animate-spin' : ''}`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                {isReloading ? 'Reloading...' : 'Reload'}
+              </button>
+              
+              <div className="flex items-center gap-2">
+                <label className="font-medium text-gray-700">Filter Type:</label>
+                <select 
+                    className="border border-gray-300 rounded px-3 py-2 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                >
+                    <option value="All">All Types</option>
+                    {allTypes.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                    ))}
+                </select>
+              </div>
             </div>
         </header>
 
