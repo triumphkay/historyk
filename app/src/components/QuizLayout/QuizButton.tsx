@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import { typography } from "../../theme/typography";
 import { AppTheme } from "../../theme";
+import texts from "../../../assets/texts.json";
 
 interface QuizButtonProps {
   isFlipped: boolean;
@@ -19,18 +20,12 @@ const QuizButton: React.FC<QuizButtonProps> = ({ isFlipped, onPress }) => {
         styles.button,
         {
           borderWidth: 1,
-          borderColor: isFlipped
-            ? theme.colors.level6
-            : theme.colors.primary,
+          borderColor: isFlipped ? theme.colors.level6 : theme.colors.primary,
         },
       ]}
       icon={isFlipped ? "undo" : "check"}
-      buttonColor={
-        isFlipped ? theme.colors.level1 : theme.colors.primary
-      }
-      textColor={
-        isFlipped ? theme.colors.level8 : theme.colors.onPrimary
-      }
+      buttonColor={isFlipped ? theme.colors.level1 : theme.colors.primary}
+      textColor={isFlipped ? theme.colors.level8 : theme.colors.onPrimary}
       onPress={onPress}
       labelStyle={{
         fontSize: typography.sizes.md,
@@ -41,7 +36,9 @@ const QuizButton: React.FC<QuizButtonProps> = ({ isFlipped, onPress }) => {
         alignItems: "center",
       }}
     >
-      {isFlipped ? "문제 보기" : "정답 확인"}
+      {isFlipped
+        ? texts.componentContents.returnLabel
+        : texts.componentContents.confrimLabel}
     </Button>
   );
 };

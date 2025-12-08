@@ -106,8 +106,9 @@ const scrim = { light: LEVEL_11, dark: LEVEL_11 };
 const inverseSurface = { light: LEVEL_9, dark: LEVEL_2 };
 const inverseOnSurface = { light: LEVEL_1, dark: LEVEL_9 };
 const inversePrimary = { light: LEVEL_3, dark: LEVEL_8 };
+// Modal background dim color
 const backdrop = {
-  light: "rgba(68, 66, 59, 0.4)",
+  light: "rgba(0, 0, 0, 0.6)",
   dark: "rgba(68, 66, 59, 0.4)",
 };
 

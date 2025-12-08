@@ -20,6 +20,7 @@ import { parseYearParts } from "../utils/eraQuiz";
 import keyAgeData from "../../assets/key-timeline.json";
 import { TypeDetail } from "../types/TypeDetail";
 import { QuizButton, QuizNavigation } from "../components/QuizLayout";
+import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordEraQuizScreen">;
 
@@ -163,7 +164,7 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
   if (!problems || problems.length === 0) {
     return (
       <Surface style={styles.center}>
-        <AppText>출제 가능한 문제가 없습니다.</AppText>
+        <AppText>{texts.componentContents.noQuestion}</AppText>
       </Surface>
     );
   }

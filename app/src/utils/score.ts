@@ -1,10 +1,14 @@
-export const getScoreFrequencyLabel = (scores: Array<number | string> = []): string | null => {
+import texts from "../../assets/texts.json";
+
+export const getScoreFrequencyLabel = (
+  scores: Array<number | string> = []
+): string | null => {
   if (!Array.isArray(scores) || scores.length === 0) {
     return null;
   }
 
   const total = scores.reduce<number>((sum, value) => {
-    const numeric = typeof value === 'number' ? value : Number(value);
+    const numeric = typeof value === "number" ? value : Number(value);
     if (Number.isFinite(numeric)) {
       return sum + numeric;
     }
@@ -16,13 +20,13 @@ export const getScoreFrequencyLabel = (scores: Array<number | string> = []): str
   }
 
   if (total < 5) {
-    return '낮음';
+    return texts.componentContents.prioprityLow;
   }
   if (total < 10) {
-    return '보통';
+    return texts.componentContents.prioprityNormal;
   }
   if (total < 20) {
-    return '높음';
+    return texts.componentContents.prioprityHigh;
   }
-  return '매우 높음';
+  return texts.componentContents.prioprityVeryHigh;
 };

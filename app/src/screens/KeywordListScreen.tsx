@@ -19,6 +19,7 @@ import { QuizItem } from "../types/QuizItem";
 import { getScoreFrequencyLabel } from "../utils/score";
 import PriorityMark from "../components/common/PriorityMark";
 import { colors } from "@theme/colors";
+import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordList">;
 
@@ -76,7 +77,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
     return (
       <Surface style={styles.center}>
         <ActivityIndicator animating color={theme.colors.primary} />
-        <AppText>로딩 중...</AppText>
+        <AppText>{texts.componentContents.nowLoading}</AppText>
       </Surface>
     );
   }
@@ -128,7 +129,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
     >
       {searchVisible && (
         <Searchbar
-          placeholder="키워드 검색"
+          placeholder={texts.keywordList.searchLabel}
           onChangeText={setSearchQuery}
           value={searchQuery}
           style={styles.searchBar}
@@ -136,7 +137,8 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
       )}
       <Surface style={styles.countContainer} elevation={1}>
         <AppText style={styles.countText}>
-          {filteredProblems.length}개의 키워드
+          {filteredProblems.length}
+          {texts.keywordList.keywordCount}
         </AppText>
         <Menu
           visible={menuVisible}
@@ -149,7 +151,9 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
               contentStyle={{ flexDirection: "row-reverse" }}
               labelStyle={{ fontSize: 13 }}
             >
-              {sortMode === "alphabetical" ? "가나다순" : "중요도순"}
+              {sortMode === "alphabetical"
+                ? texts.keywordList.orderAtoZ
+                : texts.keywordList.orderPriority}
             </Button>
           }
         >
@@ -158,7 +162,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
               setSortMode("alphabetical");
               closeMenu();
             }}
-            title="가나다순"
+            title={texts.keywordList.orderAtoZ}
             leadingIcon={sortMode === "alphabetical" ? "check" : undefined}
           />
           <Divider />
@@ -167,7 +171,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
               setSortMode("importance");
               closeMenu();
             }}
-            title="중요도순"
+            title={texts.keywordList.orderPriority}
             leadingIcon={sortMode === "importance" ? "check" : undefined}
           />
         </Menu>

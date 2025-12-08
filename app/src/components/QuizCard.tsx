@@ -17,6 +17,7 @@ import { useQuiz } from "../context/QuizContext";
 import { POINT_COLOR_1 } from "../theme";
 import FlipCard from "./common/FlipCard";
 import QuizCardLayout from "./common/QuizCardLayout";
+import texts from "../../assets/texts.json";
 
 interface Props {
   problem: QuizItem;
@@ -94,13 +95,14 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
           marginLeft: 4,
         }}
       >
-        정답 ({answerLength}자)
+        {texts.componentContents.answer} ({answerLength}
+        {texts.componentContents.textLength})
       </AppText>
       <TextInput
         mode="flat"
         value={answer}
         onChangeText={setAnswer}
-        placeholder="답을 입력하세요"
+        placeholder={texts.keywordQuiz.writeHere}
         placeholderTextColor={theme.colors.level4}
         textColor={POINT_COLOR_1}
         // underlineColor={theme.colors.onPrimary}
@@ -129,7 +131,9 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
           },
         ]}
       >
-        {isCorrect ? "정답입니다" : "오답입니다"}
+        {isCorrect
+          ? texts.componentContents.correct
+          : texts.componentContents.notCorrect}
       </AppText>
 
       <View style={styles.keywordRow}>
@@ -170,7 +174,8 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
         textStyle={[styles.importanceText, { color: backTextColor }]}
       />
       <AppText style={[styles.referenceCountText, { color: backTextColor }]}>
-        출제 횟수: {referenceCount}회
+        {texts.componentContents.count}: {referenceCount}
+        {texts.componentContents.countTimes}
       </AppText>
     </View>
   );

@@ -10,6 +10,7 @@ import { formatReferenceId } from "../utils/referenceFormatter";
 import PriorityMark from "@components/common/PriorityMark";
 import DescriptionList from "@components/DescriptionList";
 import AppText from "@components/common/AppText";
+import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordDetail">;
 
@@ -52,9 +53,6 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
             }
           >
             <PriorityMark scores={keyword.score} />
-            {/* <Text style={[styles.importanceText, { color: theme.colors.onSecondaryContainer }]}>
-              {importanceLabel || '중요도 없음'}
-            </Text> */}
           </Surface>
         </View>
 
@@ -123,8 +121,10 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
           </>
         ) : null}
 
-        <AppText style={[styles.sectionTitle, { color: theme.colors.onSurface }]}>
-          관련 키워드
+        <AppText
+          style={[styles.sectionTitle, { color: theme.colors.onSurface }]}
+        >
+          {texts.keywordDetails.relatedKeyword}
         </AppText>
         {keyword.descriptions && keyword.descriptions.length > 0 ? (
           <DescriptionList descriptions={keyword.descriptions} />
@@ -153,7 +153,7 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
           <AppText
             style={[styles.noData, { color: theme.colors.onSurfaceVariant }]}
           >
-            설명이 없습니다.
+            {texts.keywordDetails.NoItem}
           </AppText>
         )}
 
@@ -163,10 +163,11 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
           <AppText
             style={[styles.label, { color: theme.colors.onSurfaceVariant }]}
           >
-            출제 횟수
+            {texts.componentContents.count}
           </AppText>
           <AppText style={[styles.value, { color: theme.colors.onSurface }]}>
-            {occurrenceCount}회
+            {occurrenceCount}
+            {texts.componentContents.countTimes}
           </AppText>
         </Surface>
 
@@ -178,7 +179,7 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
                 { color: theme.colors.onSurfaceVariant },
               ]}
             >
-              지문 출제
+              {texts.keywordDetails.quistionCount}
             </AppText>
             <Surface elevation={0} style={styles.chipsContainer}>
               {keyword.q_ref_id.map((id, index) => (
@@ -196,7 +197,7 @@ const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
                 { color: theme.colors.onSurfaceVariant },
               ]}
             >
-              보기 출제
+              {texts.keywordDetails.optionCount}
             </AppText>
             <Surface elevation={0} style={styles.chipsContainer}>
               {keyword.ref_id.map((id, index) => (

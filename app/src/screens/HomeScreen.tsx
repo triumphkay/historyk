@@ -1,16 +1,29 @@
-import React from "react";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
-import { Surface, useTheme, IconButton } from "react-native-paper";
+import React, { useState } from "react";
+import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
+import {
+  Surface,
+  useTheme,
+  IconButton,
+  Portal,
+  Modal,
+} from "react-native-paper";
 import AppText from "../components/common/AppText";
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
+import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
+  const [visible, setVisible] = useState(false);
+
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+
+  const titleStyle = [styles.titleText, { color: theme.colors.onPrimary }];
 
   return (
     <Surface style={[styles.stage, { backgroundColor: theme.colors.level3 }]}>
@@ -20,7 +33,87 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         end={{ x: 0, y: 1 }}
         style={styles.container}
       >
+        <Portal>
+          <Modal
+            visible={visible}
+            onDismiss={hideModal}
+            contentContainerStyle={[
+              styles.modalContainer,
+              { backgroundColor: theme.colors.surface },
+            ]}
+          >
+            <ScrollView contentContainerStyle={styles.modalScrollContent}>
+              <View style={styles.modalTextContainer}>
+                <AppText style={styles.modalHeader}>{texts.appTitle}</AppText>
+                {texts.notice.map((line, index) => {
+                  const parts = line.split(/(\*\*.*?\*\*)/g);
+                  const isHeader = line.startsWith("**");
+
+                  return (
+                    <AppText
+                      key={index}
+                      style={[
+                        styles.modalText,
+                        {
+                          color: theme.colors.onSurfaceVariant,
+                          marginBottom: isHeader ? spacing.xs : spacing.md,
+                          marginTop: isHeader ? spacing.sm : 0,
+                        },
+                      ]}
+                    >
+                      {parts.map((part, partIndex) => {
+                        const isBold =
+                          part.startsWith("**") && part.endsWith("**");
+                        const content = isBold ? part.slice(2, -2) : part;
+
+                        // Skip empty parts ensuring no extra whitespace
+                        if (!content) return null;
+
+                        return (
+                          <AppText
+                            key={partIndex}
+                            style={{ fontWeight: isBold ? "700" : "400" }}
+                          >
+                            {content}
+                          </AppText>
+                        );
+                      })}
+                    </AppText>
+                  );
+                })}
+              </View>
+
+              <AppText
+                style={[styles.versionText, { color: theme.colors.outline }]}
+              >
+                version {texts.version}
+              </AppText>
+
+              <TouchableOpacity
+                style={[
+                  styles.closeButton,
+                  { backgroundColor: theme.colors.primary },
+                ]}
+                onPress={hideModal}
+              >
+                <AppText
+                  style={{
+                    color: theme.colors.onPrimary,
+                    fontWeight: "600",
+                  }}
+                >
+                  {texts.componentContents.close}
+                </AppText>
+              </TouchableOpacity>
+            </ScrollView>
+          </Modal>
+        </Portal>
         {/* Settings Icon - Top Right */}
+        {/* 
+          [NOTE] 설정 버튼 기능은 임시적으로 비활성화되었습니다. 
+          추후 설정 스크린(SettingsScreen) 기능이 다시 사용될 예정이므로 
+          이 코드를 삭제하지 마십시오. (DO NOT DELETE THIS CODE)
+        
         <View style={styles.settingsButtonContainer}>
           <IconButton
             icon="cog"
@@ -29,13 +122,26 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             onPress={() => navigation.navigate("Settings")}
           />
         </View>
-
+        */}
+        <View style={{ height: 40 }} />
+        {/* Placeholder for spacing */}
         {/* Main Content */}
         <View style={styles.content}>
           {/* Title */}
-          <AppText style={[styles.title, { color: theme.colors.onPrimary }]}>
-            한국사{"\n"}키워드로{"\n"}공부하기
-          </AppText>
+          <View style={styles.titleContainer}>
+            <AppText style={titleStyle}>{texts.main.titleLabel[0]}</AppText>
+            <AppText style={titleStyle}>{texts.main.titleLabel[1]}</AppText>
+            <View style={styles.titleRow}>
+              <AppText style={titleStyle}>{texts.main.titleLabel[2]}</AppText>
+              <IconButton
+                icon="help-circle-outline"
+                size={20}
+                iconColor={theme.colors.onPrimary}
+                onPress={showModal}
+                style={[styles.helpIcon]}
+              />
+            </View>
+          </View>
 
           {/* Main Buttons */}
           <View style={styles.buttonsContainer}>
@@ -53,7 +159,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                   { color: theme.colors.onPrimaryContainer },
                 ]}
               >
-                키워드 퀴즈
+                {texts.keywordQuiz.headTitle}
               </AppText>
               <IconButton
                 icon="arrow-right"
@@ -77,7 +183,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                   { color: theme.colors.onPrimaryContainer },
                 ]}
               >
-                한국사 시대 퀴즈
+                {texts.timelinedQuiz.headTitle}
               </AppText>
               <IconButton
                 icon="arrow-right"
@@ -88,7 +194,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-
         {/* Bottom Link */}
         <View style={styles.bottomLinkContainer}>
           <TouchableOpacity
@@ -98,7 +203,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
             <AppText
               style={[styles.bottomLink, { color: theme.colors.onPrimary }]}
             >
-              전체 키워드 보기
+              {texts.main.toListTitle}
             </AppText>
           </TouchableOpacity>
         </View>
@@ -110,7 +215,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   stage: {
     flex: 1,
-    paddingTop: spacing.xxl,
+    paddingTop: spacing.xxxl,
     paddingHorizontal: spacing.md,
     // paddingBottom: 0,
   },
@@ -121,6 +226,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
+    overflow: "hidden", // Ensure border radius clips content if needed
   },
   settingsButtonContainer: {
     alignItems: "flex-end",
@@ -131,13 +237,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: spacing.xxl * 2,
   },
-  title: {
+  titleContainer: {
+    alignSelf: "flex-start",
+    marginBottom: spacing.xl * 2,
+  },
+  titleText: {
     fontSize: 52,
     fontFamily: "NanumMyeongjo-400",
     lineHeight: 72,
-    marginBottom: spacing.xl * 2,
     textAlign: "left",
-    alignSelf: "flex-start",
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  helpIcon: {
+    marginTop: 15, // Adjust alignment with text baseline if needed
+    marginLeft: -5,
   },
   buttonsContainer: {
     width: "100%",
@@ -167,6 +283,50 @@ const styles = StyleSheet.create({
   bottomLink: {
     fontSize: 16,
     textDecorationLine: "underline",
+  },
+  // Modal Styles
+  modalHeader: {
+    fontSize: 24,
+    fontWeight: 800,
+    marginBottom: spacing.reg,
+  },
+  modalContainer: {
+    paddingVertical: spacing.lg,
+    margin: spacing.lg,
+    // Padding moved to scroll content to avoid clipping functionality issues with ScrollView
+    borderRadius: 16,
+    // maxHeight: "80%",
+    maxHeight: 600,
+  },
+  modalScrollContent: {
+    alignItems: "center",
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xl, // Reduced padding to avoid excessive whitespace
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: spacing.md,
+  },
+  modalTextContainer: {
+    width: "100%",
+    marginBottom: spacing.lg,
+  },
+  modalText: {
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: "left",
+    width: "100%",
+  },
+  versionText: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: spacing.lg,
+  },
+  closeButton: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xl,
+    borderRadius: 8,
   },
 });
 

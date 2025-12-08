@@ -6,6 +6,7 @@ import type { TextStyle, StyleProp, ViewStyle } from "react-native";
 import { typography } from "../../theme/typography";
 import { getScoreFrequencyLabel } from "../../utils/score";
 import { colors, frequency } from "@theme/colors";
+import texts from "../../../assets/texts.json";
 
 interface PriorityMarkProps {
   scores: Array<number | string>;
@@ -15,13 +16,13 @@ interface PriorityMarkProps {
 
 const getImportanceColor = (label: string): string => {
   switch (label) {
-    case "매우 높음":
+    case texts.componentContents.prioprityVeryHigh:
       return frequency.veryHigh; // 빨간색
-    case "높음":
+    case texts.componentContents.prioprityHigh:
       return frequency.high; // 주황색
-    case "보통":
+    case texts.componentContents.prioprityNormal:
       return frequency.normal; // 노란색
-    case "낮음":
+    case texts.componentContents.prioprityLow:
       return frequency.low; // 초록색
     default:
       return colors.primary; // 회색 (기본값)
@@ -46,7 +47,9 @@ const PriorityMark: React.FC<PriorityMarkProps> = ({
     <View
       style={[{ flexDirection: "row", alignItems: "center", gap: 6 }, style]}
     >
-      <AppText style={[styles.text, textStyle]}>중요도:</AppText>
+      <AppText style={[styles.text, textStyle]}>
+        {texts.componentContents.prioprity}:
+      </AppText>
       <AppText style={[styles.point, textStyle]}>{label}</AppText>
       <View
         style={{

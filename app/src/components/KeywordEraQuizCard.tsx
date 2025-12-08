@@ -23,6 +23,7 @@ import { POINT_COLOR_1 } from "../theme";
 import FlipCard from "./common/FlipCard";
 import QuizCardLayout from "./common/QuizCardLayout";
 import AppText from "./common/AppText";
+import texts from "../../assets/texts.json";
 
 interface Props {
   problem: ExtendedNewWordEraItem;
@@ -65,9 +66,13 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   }, [problem, selectedEraIndex]);
 
   // Determine what to show based on quiz mode
-  const showEraDropdown = quizMode === 'era-only';
-  const showSubEraDropdown = quizMode === 'sub-era' || (quizMode === 'random-sub-or-det' && problem.selectedField === 'sub_era');
-  const showDetEraDropdown = quizMode === 'det-era' || (quizMode === 'random-sub-or-det' && problem.selectedField === 'det_era');
+  const showEraDropdown = quizMode === "era-only";
+  const showSubEraDropdown =
+    quizMode === "sub-era" ||
+    (quizMode === "random-sub-or-det" && problem.selectedField === "sub_era");
+  const showDetEraDropdown =
+    quizMode === "det-era" ||
+    (quizMode === "random-sub-or-det" && problem.selectedField === "det_era");
 
   const countryOptions = useMemo(
     () => Array.from(new Set(keyAgeData.map((item) => item.nation))),
@@ -75,7 +80,9 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   );
 
   const leaderOptions = useMemo(() => {
-    const entry = keyAgeData.find((item) => item.nation === (showEraDropdown ? country : selectedEra));
+    const entry = keyAgeData.find(
+      (item) => item.nation === (showEraDropdown ? country : selectedEra)
+    );
     return entry ? entry.list : [];
   }, [showEraDropdown, country, selectedEra]);
 
@@ -101,12 +108,12 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
     if (showEraDropdown) {
       return country === selectedEra;
     }
-    
+
     // For sub-era and det-era modes, we use the 'leader' state for the second dropdown
     if (showSubEraDropdown) {
       return leader === selectedSubEra;
     }
-    
+
     if (showDetEraDropdown) {
       return leader === selectedDetEra;
     }
@@ -121,7 +128,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
     selectedDetEra,
     showEraDropdown,
     showSubEraDropdown,
-    showDetEraDropdown
+    showDetEraDropdown,
   ]);
 
   const handleNumericChange = (value: string, length: number) =>
@@ -138,11 +145,12 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
   // --- Front Content ---
   const FrontHeader = (
     <View style={styles.cardHeader}>
-      <PriorityMark
-        scores={problem.scores}
-        style={styles.cardScore}
+      <PriorityMark scores={problem.scores} style={styles.cardScore} />
+      <TypeLabel
+        types={problem.types}
+        preferEraType={true}
+        useAgeQuestion={true}
       />
-      <TypeLabel types={problem.types} preferEraType={true} useAgeQuestion={true} />
     </View>
   );
 
@@ -163,7 +171,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         {showEraDropdown ? (
           // Mode 1: era-only - show single eras dropdown
           <DropdownSelect
-            label="시대/국가"
+            label={texts.timelinedQuiz.era}
             value={country}
             options={countryOptions}
             onSelect={setCountry}
@@ -173,14 +181,14 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
           // Mode 2 or 4 (sub_era): show fixed era + active sub_era
           <>
             <DropdownSelect
-              label="시대/국가"
+              label={texts.timelinedQuiz.era}
               value={selectedEra} // Uses the correct answer as fixed value
               options={countryOptions}
               onSelect={() => {}} // No-op
               disabled={true}
             />
             <DropdownSelect
-              label="상세 시대"
+              label={texts.timelinedQuiz.subEra}
               value={leader}
               options={leaderOptions}
               onSelect={setLeader}
@@ -191,14 +199,14 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
           // Mode 3 or 4 (det_era): show fixed era + active det_era
           <>
             <DropdownSelect
-              label="시대/국가"
+              label={texts.timelinedQuiz.era}
               value={selectedEra} // Uses the correct answer as fixed value
               options={countryOptions}
               onSelect={() => {}} // No-op
               disabled={true}
             />
             <DropdownSelect
-              label="상세 시기"
+              label={texts.timelinedQuiz.detEra}
               value={leader}
               options={leaderOptions}
               onSelect={setLeader}
@@ -225,7 +233,9 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
           },
         ]}
       >
-        {isCorrect ? "정답입니다" : "오답입니다"}
+        {isCorrect
+          ? texts.componentContents.correct
+          : texts.componentContents.notCorrect}
       </AppText>
 
       <View style={styles.keywordRow}>
@@ -254,12 +264,12 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
     // Build all era combinations
     const eraCount = problem.era?.length || 0;
     const eraCombinations: string[] = [];
-    
+
     for (let i = 0; i < eraCount; i++) {
       const era = problem.era[i] || "";
       const subEra = problem.sub_era?.[i] || "";
       const detEra = problem.det_era?.[i] || "";
-      
+
       const parts = [era, subEra, detEra].filter(Boolean);
       if (parts.length > 0) {
         const text = parts.join(" ");
@@ -267,7 +277,7 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         eraCombinations.push(i === 0 ? text : `(${text})`);
       }
     }
-    
+
     return (
       <View style={{ width: "100%" }}>
         <View style={styles.eraInfoContainer}>
@@ -299,7 +309,8 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
         textStyle={[styles.importanceText, { color: backTextColor }]}
       />
       <AppText style={[styles.referenceCountText, { color: backTextColor }]}>
-        출제 횟수: {referenceEntries.length}회
+        {texts.componentContents.count}: {referenceEntries.length}
+        {texts.componentContents.countTimes}
       </AppText>
     </View>
   );

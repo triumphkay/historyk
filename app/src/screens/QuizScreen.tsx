@@ -17,6 +17,7 @@ import { spacing } from "../theme/spacing";
 import { quizScreenStyles } from "../theme/quizStyles";
 import QuizCard from "../components/QuizCard";
 import { QuizButton, QuizNavigation } from "../components/QuizLayout";
+import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Quiz">;
 
@@ -64,7 +65,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     // Skip state update during programmatic scroll
     if (isProgrammaticScroll.current) return;
-    
+
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(contentOffsetX / width);
     if (index !== currentIndex && index >= 0 && index < totalProblems) {
@@ -119,7 +120,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
   if (!quizProblems || quizProblems.length === 0) {
     return (
       <Surface style={quizScreenStyles.center}>
-        <AppText>출제 가능한 문제가 없습니다.</AppText>
+        <AppText>{texts.componentContents.noQuestion}</AppText>
       </Surface>
     );
   }

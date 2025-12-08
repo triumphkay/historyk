@@ -31,25 +31,26 @@ import { NewWordEraQuizProvider } from "./src/context/NewWordEraQuizContext";
 import { RootStackParamList } from "./src/types/navigation";
 import { lightTheme } from "./src/theme";
 import { styledTheme } from "./src/theme/styledTheme";
+import texts from "./assets/texts.json";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const getScreenTitle = (routeName: string): string => {
   switch (routeName) {
     case "Home":
-      return "한능검 키워드 공부";
+      return texts.appTitle;
     case "KeywordList":
-      return "한국사 키워드";
+      return texts.keywordList.headTitle;
     case "Quiz":
-      return "키워드 퀴즈";
+      return texts.keywordQuiz.headTitle;
     case "KeywordEraQuizScreen":
-      return "한국사 시대 퀴즈";
+      return texts.timelinedQuiz.headTitle;
     case "KeywordDetail":
-      return "키워드";
+      return texts.keywordDetails.headTitle;
     case "Settings":
-      return "설정";
+      return texts.settings.headTitle;
     default:
-      return "한국사 키워드 학습*";
+      return texts.appTitle;
   }
 };
 
@@ -132,32 +133,32 @@ const AppNavigator = () => (
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: "홈" }}
+        options={{ title: texts.main.headTitle }}
       />
       <Stack.Screen
         name="KeywordList"
         component={KeywordListScreen}
-        options={{ title: "한국사 키워드" }}
+        options={{ title: texts.keywordList.headTitle }}
       />
       <Stack.Screen
         name="Quiz"
         component={QuizScreen}
-        options={{ title: "키워드 퀴즈" }}
+        options={{ title: texts.keywordQuiz.headTitle }}
       />
       <Stack.Screen
         name="KeywordEraQuizScreen"
         component={KeywordEraQuizScreen}
-        options={{ title: "시대 퀴즈" }}
+        options={{ title: texts.timelinedQuiz.headTitle }}
       />
       <Stack.Screen
         name="KeywordDetail"
         component={KeywordDetailScreen}
-        options={{ title: "키워드" }}
+        options={{ title: texts.keywordDetails.headTitle }}
       />
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}
-        options={{ title: "설정" }}
+        options={{ title: texts.settings.headTitle }}
       />
     </Stack.Navigator>
   </NavigationContainer>

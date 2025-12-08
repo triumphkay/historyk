@@ -118,6 +118,12 @@ def main() -> None:
     
     print(f"[build] keyword-types.json 복사: {keyword_types_src} → {keyword_types_dst}")
     shutil.copy(keyword_types_src, keyword_types_dst)
+
+    # Copy texts.json to app/assets
+    texts_src = hardcodes_dir / "texts.json"
+    texts_dst = app_assets_dir / "texts.json"
+    print(f"[build] texts.json 복사: {texts_src} → {texts_dst}")
+    shutil.copy(texts_src, texts_dst)
     
     print("[build] 완료되었습니다.")
 

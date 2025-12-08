@@ -1,9 +1,10 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Button, Modal, Portal, Surface, useTheme } from 'react-native-paper';
-import AppText from './common/AppText';
-import { spacing } from '../theme/spacing';
-import { typography } from '../theme/typography';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { Button, Modal, Portal, Surface, useTheme } from "react-native-paper";
+import AppText from "./common/AppText";
+import { spacing } from "../theme/spacing";
+import { typography } from "../theme/typography";
+import texts from "../../assets/texts.json";
 
 interface AnswerModalProps {
   visible: boolean;
@@ -12,19 +13,32 @@ interface AnswerModalProps {
   onNext: () => void;
 }
 
-const AnswerModal: React.FC<AnswerModalProps> = ({ visible, answer, onClose, onNext }) => {
+const AnswerModal: React.FC<AnswerModalProps> = ({
+  visible,
+  answer,
+  onClose,
+  onNext,
+}) => {
   const theme = useTheme();
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onClose} contentContainerStyle={[styles.container, { backgroundColor: theme.colors.background }]}
-        >
+      <Modal
+        visible={visible}
+        onDismiss={onClose}
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
         <Surface elevation={0} style={styles.content}>
-          <AppText style={[styles.answer, { color: theme.colors.onSurface }]}>{answer}</AppText>
+          <AppText style={[styles.answer, { color: theme.colors.onSurface }]}>
+            {answer}
+          </AppText>
           <Button mode="outlined" onPress={onClose} style={styles.button}>
-            닫기
+            {texts.componentContents.close}
           </Button>
           <Button mode="contained" onPress={onNext}>
-            다음 문제로 넘어가기
+            {texts.componentContents.nextQuestion}
           </Button>
         </Surface>
       </Modal>
@@ -34,21 +48,21 @@ const AnswerModal: React.FC<AnswerModalProps> = ({ visible, answer, onClose, onN
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: spacing.lg
+    marginHorizontal: spacing.lg,
   },
   content: {
     padding: spacing.lg,
-    borderRadius: spacing.md
+    borderRadius: spacing.md,
   },
   answer: {
     fontSize: typography.sizes.xxl,
     fontWeight: "bold",
     marginBottom: spacing.lg,
-    textAlign: 'center'
+    textAlign: "center",
   },
   button: {
-    marginBottom: spacing.sm
-  }
+    marginBottom: spacing.sm,
+  },
 });
 
 export default AnswerModal;

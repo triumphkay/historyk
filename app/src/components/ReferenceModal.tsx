@@ -1,10 +1,18 @@
-import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
-import { Button, Divider, Modal, Portal, Surface, useTheme } from 'react-native-paper';
-import AppText from './common/AppText';
-import { spacing } from '../theme/spacing';
-import { typography } from '../theme/typography';
-import { formatReferenceEntry } from '../utils/references';
+import React from "react";
+import { FlatList, StyleSheet } from "react-native";
+import {
+  Button,
+  Divider,
+  Modal,
+  Portal,
+  Surface,
+  useTheme,
+} from "react-native-paper";
+import AppText from "./common/AppText";
+import { spacing } from "../theme/spacing";
+import { typography } from "../theme/typography";
+import { formatReferenceEntry } from "../utils/references";
+import texts from "../../assets/texts.json";
 
 interface ReferenceModalProps {
   visible: boolean;
@@ -12,26 +20,42 @@ interface ReferenceModalProps {
   onClose: () => void;
 }
 
-const ReferenceModal: React.FC<ReferenceModalProps> = ({ visible, entries, onClose }) => {
+const ReferenceModal: React.FC<ReferenceModalProps> = ({
+  visible,
+  entries,
+  onClose,
+}) => {
   const theme = useTheme();
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={onClose} contentContainerStyle={[styles.modal, { backgroundColor: theme.colors.background }]}
+      <Modal
+        visible={visible}
+        onDismiss={onClose}
+        contentContainerStyle={[
+          styles.modal,
+          { backgroundColor: theme.colors.background },
+        ]}
       >
         <Surface elevation={0} style={styles.content}>
-          <AppText style={[styles.title, { color: theme.colors.onSurface }]}>출제 기록</AppText>
+          <AppText style={[styles.title, { color: theme.colors.onSurface }]}>
+            {texts.componentContents.records}
+          </AppText>
           <Divider style={styles.divider} />
           <FlatList
             data={entries}
             keyExtractor={(item, index) => `${item}-${index}`}
             renderItem={({ item }) => (
-              <AppText style={[styles.entry, { color: theme.colors.onSurfaceVariant }]}>{formatReferenceEntry(item)}</AppText>
+              <AppText
+                style={[styles.entry, { color: theme.colors.onSurfaceVariant }]}
+              >
+                {formatReferenceEntry(item)}
+              </AppText>
             )}
             contentContainerStyle={styles.list}
           />
           <Button mode="outlined" onPress={onClose}>
-            닫기
+            {texts.componentContents.close}
           </Button>
         </Surface>
       </Modal>
@@ -41,27 +65,27 @@ const ReferenceModal: React.FC<ReferenceModalProps> = ({ visible, entries, onClo
 
 const styles = StyleSheet.create({
   modal: {
-    marginHorizontal: spacing.lg
+    marginHorizontal: spacing.lg,
   },
   content: {
-    maxHeight: '70%',
+    maxHeight: "70%",
     padding: spacing.lg,
-    borderRadius: spacing.md
+    borderRadius: spacing.md,
   },
   title: {
     fontSize: typography.sizes.lg,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   divider: {
-    marginVertical: spacing.sm
+    marginVertical: spacing.sm,
   },
   list: {
-    paddingBottom: spacing.md
+    paddingBottom: spacing.md,
   },
   entry: {
     fontSize: typography.sizes.md,
-    marginBottom: spacing.xs
-  }
+    marginBottom: spacing.xs,
+  },
 });
 
 export default ReferenceModal;
