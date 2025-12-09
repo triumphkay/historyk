@@ -544,7 +544,7 @@ def main():
         data_to_insert.append((
             entry.id,
             entry.keyword,
-            json.dumps(list(entry.descriptions), ensure_ascii=False),
+            json.dumps(sorted(list(entry.descriptions)), ensure_ascii=False),
             json.dumps(sorted(list(entry.ref_id), key=int), ensure_ascii=False),
             json.dumps(sorted(list(entry.q_ref_id), key=int), ensure_ascii=False),
             json.dumps(sorted_types, ensure_ascii=False),
