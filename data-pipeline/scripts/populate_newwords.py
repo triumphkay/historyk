@@ -12,19 +12,39 @@ from collections import defaultdict
 # Configuration
 DB_PATH = "database/korean-history.db"
 KEYWORD_TYPES_PATH = "hardcodes/keyword-types.json"
+TIMETABLE_PATH = "hardcodes/timetable.json"
 AGE_LIST_PATH = "database/ref-timeline.json"
-
-# Sub-eras heuristic list
-SUB_ERAS = {
-    "전기", "중기", "후기", "말기",
-    "상대", "중대", "하대",
-    "무신집권기", "원간섭기", "세도정치기", "개항기",
-    "무단통치기", "문화통치기", "민족말살기"
-}
 
 def load_json(path: str):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+def collect_sub_eras(timetable_data):
+    """Collect all unique 'age' values from timetable.json to build dynamic SUB_ERAS set."""
+    sub_eras = set()
+    
+    def traverse(nodes):
+        if not nodes: return
+        if isinstance(nodes, dict):
+            nodes = [nodes]
+            
+        for node in nodes:
+            # Collect 'age' if present and not empty
+            if "age" in node and node["age"]:
+                sub_eras.add(node["age"].strip())
+            
+            # Recurse
+            traverse(node.get("group"))
+            traverse(node.get("period"))
+            traverse(node.get("list"))
+            
+    traverse(timetable_data)
+    
+    # Add common heuristic terms that might not be explicitly 'age' in all contexts but are used as such
+    # (Optional: keep these only if strictly needed, otherwise trust timetable)
+    # sub_eras.update(["전기", "중기", "후기", "말기", "초기"]) 
+    
+    return sub_eras
 
 def parse_era(text: str, age_list: list[str], key_age_map: dict, sub_eras: set[str]):
     # Find longest match
@@ -51,7 +71,16 @@ def parse_era(text: str, age_list: list[str], key_age_map: dict, sub_eras: set[s
         
         # Check if text starts with a standalone sub_era (e.g., "하대", "전기")
         for sub_era_item in sub_eras:
-            if text.startswith(sub_era_item):
+            # Check for exact match or prefix? Prefix seems safer if followed by space
+            # But here we just check startswith as per original logic.
+            # Sort sub_eras by length desc to match longest first
+            # (Caller should sort or we iterate carefully)
+            pass 
+        
+        # Sort sub_eras by length descending to match longest first
+        sorted_subs = sorted(list(sub_eras), key=len, reverse=True)
+        for sub_era_item in sorted_subs:
+             if text.startswith(sub_era_item):
                 # Found standalone sub_era
                 remaining = text[len(sub_era_item):].strip()
                 return ("", sub_era_item, ""), remaining
@@ -109,8 +138,10 @@ def parse_era(text: str, age_list: list[str], key_age_map: dict, sub_eras: set[s
         others = parts[1:]
 
     if others:
-        if others[0] in sub_eras:
-            sub_era = others[0]
+        possible_sub = others[0]
+        # Check if first token is a known sub_era
+        if possible_sub in sub_eras:
+            sub_era = possible_sub
             if len(others) > 1:
                 det_era = " ".join(others[1:])
         else:
@@ -146,7 +177,14 @@ def main():
     
     # Load Data
     keyword_types = load_json(repo_root / KEYWORD_TYPES_PATH)
+    timetable_data = load_json(repo_root / TIMETABLE_PATH)
     age_list = load_json(repo_root / AGE_LIST_PATH)
+    
+    # Dynamic SUB_ERAS
+    SUB_ERAS = collect_sub_eras(timetable_data)
+    # Ensure manual overrides if necessary (though timetable should cover them now)
+    # print(f"[INFO] Loaded {len(SUB_ERAS)} sub-eras from timetable.")
+    
     
     # Build type order map from type-set
     type_order = {}
@@ -535,6 +573,46 @@ def main():
     for kw, entry in newwords_cache.items():
         # Remove duplicates: if an ID is in both, remove it from ref_id (priority to q_ref_id)
         entry.ref_id.difference_update(entry.q_ref_id)
+        
+        # --- Description Pruning Logic ---
+        # Rule: If "Nation Age Ruler" (E, S, D) exists, remove "Nation Age" (E, S, "") and "Nation Ruler" (E, "", D).
+        
+        # 1. Parse all descriptions
+        # parsed_map: normalized_string_or_obj -> (era, sub, det)
+        # We need to map back to original strings to remove them.
+        
+        parsed_descs = [] # list of ( (e,s,d), original_string )
+        for desc in entry.descriptions:
+            # Use same parser
+            parsed, remaining = parse_era(desc, age_list, key_age_map, SUB_ERAS)
+            if parsed and not remaining:
+                # Only apply to pure era strings
+                parsed_descs.append((parsed, desc))
+        
+        to_remove = set()
+        
+        # 2. Identify Super Descs (E, S, D all present)
+        # Note: parsed is (era, sub, det)
+        super_triples = [(p, orig) for p, orig in parsed_descs if p[0] and p[1] and p[2]]
+        
+        for (era, sub, det), _ in super_triples:
+            # Find subsets to remove
+            for (p_era, p_sub, p_det), p_orig in parsed_descs:
+                if p_orig in to_remove: continue # Already marked
+                
+                # Case 1: Nation Age (E=E, S=S, D="")
+                if p_era == era and p_sub == sub and not p_det:
+                    to_remove.add(p_orig)
+                    continue
+                
+                # Case 2: Nation Ruler (E=E, S="", D=D)
+                if p_era == era and not p_sub and p_det == det:
+                    to_remove.add(p_orig)
+                    continue
+        
+        if to_remove:
+            entry.descriptions.difference_update(to_remove)
+        # ---------------------------------
 
         # Convert era_tuples to parallel arrays
         era_list = [t[0] for t in entry.era_tuples]
