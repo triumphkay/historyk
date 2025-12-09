@@ -95,7 +95,7 @@ def load_key_age_json():
         # Transform into a dict: {nation: [sub_eras]}
         result = {}
         for item in data:
-            result[item["item"]] = item.get("ages", [])
+            result[item["nation"]] = item.get("periods", [])
         return result
     except Exception as e:
         print(f"[Warning] Failed to load key-age.json: {e}")

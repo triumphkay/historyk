@@ -97,7 +97,7 @@ def collect_age_entries(timetable: list) -> list[dict]:
                 key = item
                 if key not in seen_items:
                     seen_items.add(key)
-                    results.append({"item": item, "ages": ages})
+                    results.append({"nation": item, "periods": ages})
     return results
 
 
