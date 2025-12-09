@@ -33,7 +33,10 @@
     "confrimLabel": "정답 확인",
     "returnLabel": "문제 보기",
 
-    "records": "출제 기록"
+    "records": "출제 기록",
+
+    "typeKing": "왕/군주",
+    "typeGoverment": "정부"
   },
 
   "main": {

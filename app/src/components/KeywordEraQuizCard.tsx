@@ -16,7 +16,8 @@ import { spacing } from "../theme/spacing";
 import { typography } from "../theme/typography";
 import { mergeReferenceIds } from "../utils/references";
 import { parseYearParts } from "../utils/eraQuiz";
-import keyAgeData from "../../assets/key-timeline.json";
+import keyTimelineStruct from "../../assets/key-timeline.json";
+import keyAgeStruct from "../../assets/key-age.json";
 import { TypeDetail } from "../types/TypeDetail";
 import { quizScreenStyles, eraQuizStyles } from "../theme/quizStyles";
 import { POINT_COLOR_1 } from "../theme";
@@ -75,16 +76,25 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
     (quizMode === "random-sub-or-det" && problem.selectedField === "det_era");
 
   const countryOptions = useMemo(
-    () => Array.from(new Set(keyAgeData.map((item) => item.nation))),
+    () => Array.from(new Set(keyTimelineStruct.map((item) => item.nation))),
     []
   );
 
   const leaderOptions = useMemo(() => {
-    const entry = keyAgeData.find(
-      (item) => item.nation === (showEraDropdown ? country : selectedEra)
-    );
-    return entry ? entry.list : [];
-  }, [showEraDropdown, country, selectedEra]);
+    const targetEra = showEraDropdown ? country : selectedEra;
+
+    if (showSubEraDropdown) {
+      // Use key-age.json for eras/periods
+      const entry = (keyAgeStruct as any[]).find(
+        (item) => item.nation === targetEra
+      );
+      return entry ? entry.periods : [];
+    } else {
+      // Use key-timeline.json for rulers/leaders (det-era)
+      const entry = keyTimelineStruct.find((item) => item.nation === targetEra);
+      return entry ? entry.list : [];
+    }
+  }, [showEraDropdown, country, selectedEra, showSubEraDropdown]);
 
   // Auto-initialize country when era is fixed
   useEffect(() => {
@@ -206,7 +216,11 @@ const KeywordEraQuizCard: React.FC<Props> = ({ problem, index }) => {
               disabled={true}
             />
             <DropdownSelect
-              label={texts.timelinedQuiz.detEra}
+              label={
+                selectedEra === "대한민국"
+                  ? texts.componentContents.typeGoverment
+                  : texts.componentContents.typeKing
+              }
               value={leader}
               options={leaderOptions}
               onSelect={setLeader}

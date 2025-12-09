@@ -200,11 +200,6 @@ def collect_nation_entries():
                 # Priority: det_era -> sub_era
                 final_detail = detail.strip() if detail else ""
                 
-                # If det_era is empty but sub_era exists, use sub_era
-                # This ensures nations like "일제강점기" get populated with "무단통치기", etc.
-                if not final_detail and sub:
-                    final_detail = sub.strip()
-                
                 if final_detail:
                     nation_lists[nation].append(final_detail)
         

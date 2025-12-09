@@ -23745,13 +23745,15 @@
       "한중FTA"
     ],
     "ref_id": [
-      "5949"
+      "5949",
+      "7648"
     ],
     "q_ref_id": [],
     "types": [
       "정부"
     ],
     "scores": [
+      "1",
       "1"
     ],
     "era": [],
@@ -48665,29 +48667,6 @@
       "1",
       "1",
       "3"
-    ],
-    "era": [],
-    "sub_era": [],
-    "det_era": [],
-    "years": "",
-    "years_check": "",
-    "era_script": []
-  },
-  {
-    "id": "n1205",
-    "keyword": "대한민국 박근혜 대통령",
-    "descriptions": [
-      "한중FTA"
-    ],
-    "ref_id": [
-      "7648"
-    ],
-    "q_ref_id": [],
-    "types": [
-      "정부"
-    ],
-    "scores": [
-      "1"
     ],
     "era": [],
     "sub_era": [],
