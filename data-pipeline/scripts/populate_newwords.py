@@ -533,6 +533,9 @@ def main():
     # But we assigned IDs based on encounter order.
     
     for kw, entry in newwords_cache.items():
+        # Remove duplicates: if an ID is in both, remove it from ref_id (priority to q_ref_id)
+        entry.ref_id.difference_update(entry.q_ref_id)
+
         # Convert era_tuples to parallel arrays
         era_list = [t[0] for t in entry.era_tuples]
         sub_era_list = [t[1] for t in entry.era_tuples]
