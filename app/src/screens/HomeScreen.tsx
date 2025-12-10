@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Constants from "expo-constants";
 import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
 import {
   Surface,
@@ -13,6 +14,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
 import texts from "../../assets/texts.json";
+import { typography } from "@theme/typography";
+import { colors, POINT_COLOR_1 } from "@theme/colors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -44,10 +47,16 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           >
             <ScrollView contentContainerStyle={styles.modalScrollContent}>
               <View style={styles.modalTextContainer}>
+                <AppText
+                  style={[styles.modalAppTitle, { color: POINT_COLOR_1 }]}
+                >
+                  키워드 한국사
+                </AppText>
                 <AppText style={styles.modalHeader}>{texts.appTitle}</AppText>
                 {texts.notice.map((line, index) => {
-                  const parts = line.split(/(\*\*.*?\*\*)/g);
-                  const isHeader = line.startsWith("**");
+                  const parts = line.split(/(\*\*.*?\*\*|\*.*?\*)/g);
+                  const isMainHeader = line.startsWith("**");
+                  const isSubHeader = !isMainHeader && line.includes("*");
 
                   return (
                     <AppText
@@ -56,15 +65,29 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                         styles.modalText,
                         {
                           color: theme.colors.onSurfaceVariant,
-                          marginBottom: isHeader ? spacing.xs : spacing.md,
-                          marginTop: isHeader ? spacing.sm : 0,
+                          marginBottom:
+                            isMainHeader || isSubHeader
+                              ? spacing.xs
+                              : spacing.sm,
+                          marginTop: isMainHeader
+                            ? spacing.md
+                            : isSubHeader
+                            ? spacing.sm
+                            : 0,
                         },
                       ]}
                     >
                       {parts.map((part, partIndex) => {
-                        const isBold =
-                          part.startsWith("**") && part.endsWith("**");
-                        const content = isBold ? part.slice(2, -2) : part;
+                        let isBold = false;
+                        let content = part;
+
+                        if (part.startsWith("**") && part.endsWith("**")) {
+                          isBold = true;
+                          content = part.slice(2, -2);
+                        } else if (part.startsWith("*") && part.endsWith("*")) {
+                          isBold = true;
+                          content = part.slice(1, -1);
+                        }
 
                         // Skip empty parts ensuring no extra whitespace
                         if (!content) return null;
@@ -86,7 +109,11 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
               <AppText
                 style={[styles.versionText, { color: theme.colors.outline }]}
               >
-                version {texts.version}
+                version{" "}
+                {Constants.expoConfig?.version ||
+                  Constants.manifest?.version ||
+                  Constants.nativeAppVersion ||
+                  texts.version}
               </AppText>
 
               <TouchableOpacity
@@ -126,6 +153,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         <View style={{ height: 40 }} />
         {/* Placeholder for spacing */}
         {/* Main Content */}
+
+        <View style={[styles.headWrapper, { backgroundColor: POINT_COLOR_1 }]}>
+          <AppText style={[styles.headTitle, { color: theme.colors.level1 }]}>
+            키워드 한국사
+          </AppText>
+        </View>
         <View style={styles.content}>
           {/* Title */}
           <View style={styles.titleContainer}>
@@ -223,7 +256,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: spacing.xl,
     paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xxl,
+    paddingBottom: spacing.xl,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     overflow: "hidden", // Ensure border radius clips content if needed
@@ -231,15 +264,30 @@ const styles = StyleSheet.create({
   settingsButtonContainer: {
     alignItems: "flex-end",
   },
+  headWrapper: {
+    height: 36,
+    alignSelf: "flex-start",
+    borderRadius: 18,
+    marginBottom: spacing.lg,
+  },
+  headTitle: {
+    paddingHorizontal: spacing.reg,
+    fontSize: typography.sizes.lg,
+    lineHeight: 36,
+    fontWeight: 800,
+    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 6,
+  },
   content: {
     flex: 1,
     // justifyContent: "center",
     alignItems: "center",
-    paddingBottom: spacing.xxl * 2,
+    // paddingBottom: spacing.xxl * 2,
   },
   titleContainer: {
     alignSelf: "flex-start",
-    marginBottom: spacing.xl * 2,
+    marginBottom: spacing.xxl,
   },
   titleText: {
     fontSize: 52,
@@ -263,14 +311,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.lg,
-    borderRadius: 12,
+    // paddingVertical: spacing.xs,
+    // paddingHorizontal: spacing.xl,
+    paddingLeft: spacing.xl,
+    paddingRight: spacing.md,
+    borderRadius: 30,
     minHeight: 60,
   },
   buttonText: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: 800,
     flex: 1,
   },
   buttonIcon: {
@@ -285,9 +335,15 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   // Modal Styles
+  modalAppTitle: {
+    fontSize: 16,
+    fontWeight: 800,
+    marginBottom: spacing.sm,
+  },
   modalHeader: {
     fontSize: 24,
-    fontWeight: 800,
+    fontFamily: "NanumMyeongjo-800",
+
     marginBottom: spacing.reg,
   },
   modalContainer: {

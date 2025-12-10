@@ -1,5 +1,16 @@
-import React, { useMemo, useState, useEffect } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import React, { useMemo, useState, useEffect, useLayoutEffect } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  GestureResponderEvent,
+  Keyboard,
+  Platform,
+  Modal,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   ActivityIndicator,
   List,
@@ -18,7 +29,7 @@ import { spacing } from "../theme/spacing";
 import { QuizItem } from "../types/QuizItem";
 import { getScoreFrequencyLabel } from "../utils/score";
 import PriorityMark from "../components/common/PriorityMark";
-import { colors } from "@theme/colors";
+import { colors } from "../theme/colors";
 import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordList">;
@@ -33,14 +44,38 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   );
   const [menuVisible, setMenuVisible] = useState(false);
 
-  // Set navigation options for search
-  useEffect(() => {
-    navigation.setParams({
-      toggleSearch: () => setSearchVisible(!searchVisible),
-    } as any);
-  }, [navigation, searchVisible]);
+  // Fix: Use useLayoutEffect and setOptions to correctly handle header interaction without passing functions in params
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={styles.iconButtons}>
+          <TouchableOpacity
+            onPress={() => setSearchVisible((prev) => !prev)}
+            style={{ padding: 8 }}
+          >
+           <MaterialCommunityIcons
+              name={searchVisible ? "magnify-minus" : "magnify"}
+              size={24}
+              color={theme.colors.primary}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation, searchVisible, theme.colors.primary]);
 
-  const openMenu = () => setMenuVisible(true);
+  // Ref for the menu anchor
+  const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });
+
+  const openMenu = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+    
+    const { nativeEvent } = event;
+    const anchor = { x: nativeEvent.pageX - 100, y: nativeEvent.pageY + 10 };
+    setMenuAnchor(anchor);
+    setMenuVisible(true);
+  };
+
   const closeMenu = () => setMenuVisible(false);
 
   const sortedProblems = useMemo(() => {
@@ -83,8 +118,6 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   }
 
   const renderItem = ({ item, index }: { item: QuizItem; index: number }) => {
-    // const descriptionCount = item.descriptions?.length || 0;
-
     return (
       <List.Item
         title={item.keyword}
@@ -140,42 +173,66 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
           {filteredProblems.length}
           {texts.keywordList.keywordCount}
         </AppText>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Button
-              mode="text"
-              onPress={openMenu}
-              icon="sort"
-              contentStyle={{ flexDirection: "row-reverse" }}
-              labelStyle={{ fontSize: 13 }}
-            >
-              {sortMode === "alphabetical"
-                ? texts.keywordList.orderAtoZ
-                : texts.keywordList.orderPriority}
-            </Button>
-          }
+
+        <Button
+          mode="text"
+          onPress={openMenu}
+          icon="sort"
+          contentStyle={{ flexDirection: "row-reverse" }}
+          labelStyle={{ fontSize: 13 }}
         >
-          <Menu.Item
-            onPress={() => {
-              setSortMode("alphabetical");
-              closeMenu();
-            }}
-            title={texts.keywordList.orderAtoZ}
-            leadingIcon={sortMode === "alphabetical" ? "check" : undefined}
-          />
-          <Divider />
-          <Menu.Item
-            onPress={() => {
-              setSortMode("importance");
-              closeMenu();
-            }}
-            title={texts.keywordList.orderPriority}
-            leadingIcon={sortMode === "importance" ? "check" : undefined}
-          />
-        </Menu>
+          {sortMode === "alphabetical"
+            ? texts.keywordList.orderAtoZ
+            : texts.keywordList.orderPriority}
+        </Button>
       </Surface>
+
+      {/* Custom Modal for robust iOS behavior */}
+      <Modal
+        visible={menuVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeMenu}
+      >
+        <TouchableWithoutFeedback onPress={closeMenu}>
+          <View style={styles.modalOverlay}>
+            <Surface
+              style={[
+                styles.customMenu,
+                {
+                  top: menuAnchor.y,
+                  left: menuAnchor.x,
+                  backgroundColor: theme.colors.elevation.level2,
+                },
+              ]}
+              elevation={2}
+            >
+              <View style={styles.menuContent}>
+                <Menu.Item
+                  onPress={() => {
+                    setSortMode("alphabetical");
+                    closeMenu();
+                  }}
+                  title={texts.keywordList.orderAtoZ}
+                  leadingIcon={
+                    sortMode === "alphabetical" ? "check" : undefined
+                  }
+                />
+                <Divider />
+                <Menu.Item
+                  onPress={() => {
+                    setSortMode("importance");
+                    closeMenu();
+                  }}
+                  title={texts.keywordList.orderPriority}
+                  leadingIcon={sortMode === "importance" ? "check" : undefined}
+                />
+              </View>
+            </Surface>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
       <FlatList
         data={filteredProblems}
         keyExtractor={(item) => item.id}
@@ -201,7 +258,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontSize: 14,
-    fontWeight: 600,
+    fontWeight: "600",
     textAlign: "center",
   },
   titleContainer: {
@@ -218,8 +275,6 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     fontFamily: "NotoSansKR-800",
-    // fontWeight: "bold",
-
     marginBottom: 2,
   },
   iconButtons: {
@@ -228,12 +283,10 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     margin: spacing.sm,
-    // marginBottom: spacing.sm,
   },
   list: {
     padding: spacing.md,
     paddingTop: 0,
-    // gap: 20,
   },
   listItem: {
     borderBottomWidth: 1,
@@ -255,7 +308,20 @@ const styles = StyleSheet.create({
   },
   indexText: {
     fontSize: 16,
-    fontWeight: 600,
+    fontWeight: "600",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "transparent",
+  },
+  customMenu: {
+    position: "absolute",
+    minWidth: 150,
+    borderRadius: 4,
+  },
+  menuContent: {
+    borderRadius: 4,
+    overflow: "hidden",
   },
 });
 
