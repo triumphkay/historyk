@@ -43,14 +43,14 @@ def collect_history_entries(timetable: list) -> list[str]:
         if block.get("epic") == "선사시대":
             continue
         for group in block.get("group", []):
-            item = (group.get("item") or "").strip()
+            item = (group.get("item") or "").strip().replace("_", " ")
             if not item:
                 continue
             if item not in seen:
                 seen.add(item)
                 entries.append(item)
             for period in group.get("period", []):
-                age_label = (period.get("age") or "").strip()
+                age_label = (period.get("age") or "").strip().replace("_", " ")
                 people_list = period.get("list", [])
                 
                 # If list is empty but age_label exists, add the age entry itself
@@ -62,7 +62,7 @@ def collect_history_entries(timetable: list) -> list[str]:
                         entries.append(age_entry)
 
                 for person in people_list:
-                    name = (person.get("name") or "").strip()
+                    name = (person.get("name") or "").strip().replace("_", " ")
                     if not name:
                         continue
                     base_label = f"{item} {name}"
@@ -83,13 +83,13 @@ def collect_age_entries(timetable: list) -> list[dict]:
     seen_items: set[str] = set()
     for block in timetable:
         for group in block.get("group", []):
-            item = (group.get("item") or "").strip()
+            item = (group.get("item") or "").strip().replace("_", " ")
             if not item:
                 continue
             ages: list[str] = []
             seen_ages: set[str] = set()
             for period in group.get("period", []):
-                age_label = (period.get("age") or "").strip()
+                age_label = (period.get("age") or "").strip().replace("_", " ")
                 if age_label and age_label not in seen_ages:
                     seen_ages.add(age_label)
                     ages.append(age_label)

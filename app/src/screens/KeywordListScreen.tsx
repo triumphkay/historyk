@@ -44,25 +44,11 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   );
   const [menuVisible, setMenuVisible] = useState(false);
 
-  // Fix: Use useLayoutEffect and setOptions to correctly handle header interaction without passing functions in params
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View style={styles.iconButtons}>
-          <TouchableOpacity
-            onPress={() => setSearchVisible((prev) => !prev)}
-            style={{ padding: 8 }}
-          >
-           <MaterialCommunityIcons
-              name={searchVisible ? "magnify-minus" : "magnify"}
-              size={24}
-              color={theme.colors.primary}
-            />
-          </TouchableOpacity>
-        </View>
-      ),
-    });
-  }, [navigation, searchVisible, theme.colors.primary]);
+  useEffect(() => {
+    navigation.setParams({
+      toggleSearch: () => setSearchVisible((prev) => !prev),
+    } as any);
+  }, [navigation]);
 
   // Ref for the menu anchor
   const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });

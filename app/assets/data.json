@@ -1,5 +1,5 @@
 {
-  "id": "00008",
+  "id": "00014",
   "items": [
     {
       "id": "n0001",
@@ -2723,7 +2723,7 @@
         ""
       ],
       "det_era": [
-        "10대_정종"
+        "10대 정종"
       ],
       "years": "1044년",
       "years_check": "",
@@ -5095,12 +5095,12 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1866년",
+      "years": "흥선대원군 섭정기 1866년",
       "years_check": "true",
       "era_script": []
     },
@@ -5619,8 +5619,8 @@
       "keyword": "호포제",
       "descriptions": [
         "양반 군포 부과",
-        "조선 고종",
-        "조선 흥선대원군_섭정기"
+        "조선 흥선대원군 섭정기",
+        "조선 흥선대원군 섭정기 고종"
       ],
       "ref_id": [
         "5723",
@@ -5647,12 +5647,12 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1871년",
+      "years": "흥선대원군 섭정기 1871년",
       "years_check": "true",
       "era_script": []
     },
@@ -5967,7 +5967,7 @@
     },
     {
       "id": "n0093",
-      "keyword": "조선 흥선대원군_섭정기",
+      "keyword": "조선 흥선대원군 섭정기",
       "descriptions": [
         "경복궁 중건",
         "당백전",
@@ -6806,8 +6806,8 @@
       "keyword": "경복궁 중건",
       "descriptions": [
         "당백전",
-        "조선 고종",
-        "조선 흥선대원군_섭정기"
+        "조선 흥선대원군 섭정기",
+        "조선 흥선대원군 섭정기 고종"
       ],
       "ref_id": [
         "5724",
@@ -6833,12 +6833,12 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1865년",
+      "years": "흥선대원군 섭정기 1865년",
       "years_check": "",
       "era_script": []
     },
@@ -6947,12 +6947,12 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1866년",
+      "years": "흥선대원군 섭정기 1866년",
       "years_check": "true",
       "era_script": []
     },
@@ -9983,12 +9983,12 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1871년",
+      "years": "흥선대원군 섭정기 1871년",
       "years_check": "true",
       "era_script": [
         "건립"
@@ -15328,92 +15328,29 @@
     },
     {
       "id": "n0273",
-      "keyword": "조선 고종",
+      "keyword": "조선 흥선대원군 섭정기 고종",
       "descriptions": [
-        "23부",
-        "거문도 점령",
         "경복궁 중건",
-        "과거제 폐지",
-        "광혜원",
-        "교조신원운동",
-        "대전회통",
-        "두모진 해관 사건",
-        "박문국",
-        "보은 집회",
         "삼군부 부활",
-        "서유견문",
-        "심행일기",
-        "아관파천",
-        "영남만인소",
-        "영선사",
-        "우정총국",
-        "육영공원",
-        "지부복궐척화의소",
-        "한성 사범 학교",
-        "한성순보",
         "호포제"
       ],
       "ref_id": [
         "5824",
-        "5924",
-        "5937",
-        "5938",
         "6524",
-        "6742",
-        "6812",
-        "6824",
-        "7033",
-        "7138",
-        "7142",
-        "7424",
-        "7524",
-        "7527",
-        "7534",
-        "7535"
+        "7424"
       ],
-      "q_ref_id": [
-        "6249"
-      ],
+      "q_ref_id": [],
       "types": [
-        "왕",
         "시기"
       ],
       "scores": [
         "1",
         "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "3",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "2",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
-        "1",
         "1"
       ],
-      "era": [
-        "조선"
-      ],
-      "sub_era": [
-        "흥선대원군_섭정기"
-      ],
-      "det_era": [
-        "고종"
-      ],
+      "era": [],
+      "sub_era": [],
+      "det_era": [],
       "years": "",
       "years_check": "",
       "era_script": []
@@ -16087,12 +16024,12 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1864년",
+      "years": "흥선대원군 섭정기 1864년",
       "years_check": "true",
       "era_script": []
     },
@@ -21261,6 +21198,83 @@
     },
     {
       "id": "n0416",
+      "keyword": "조선 고종",
+      "descriptions": [
+        "23부",
+        "거문도 점령",
+        "과거제 폐지",
+        "광혜원",
+        "교조신원운동",
+        "대전회통",
+        "두모진 해관 사건",
+        "박문국",
+        "보은 집회",
+        "서유견문",
+        "심행일기",
+        "아관파천",
+        "영남만인소",
+        "영선사",
+        "우정총국",
+        "육영공원",
+        "지부복궐척화의소",
+        "한성 사범 학교",
+        "한성순보"
+      ],
+      "ref_id": [
+        "5924",
+        "5937",
+        "5938",
+        "6742",
+        "6812",
+        "6824",
+        "7033",
+        "7138",
+        "7142",
+        "7524",
+        "7527",
+        "7534",
+        "7535"
+      ],
+      "q_ref_id": [
+        "6249"
+      ],
+      "types": [
+        "왕",
+        "시기"
+      ],
+      "scores": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "3",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "2",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ],
+      "era": [],
+      "sub_era": [],
+      "det_era": [],
+      "years": "",
+      "years_check": "",
+      "era_script": []
+    },
+    {
+      "id": "n0417",
       "keyword": "비변사",
       "descriptions": [
         "변방",
@@ -21318,7 +21332,7 @@
       "era_script": []
     },
     {
-      "id": "n0417",
+      "id": "n0418",
       "keyword": "승정원",
       "descriptions": [
         "도승지",
@@ -21371,7 +21385,7 @@
       "era_script": []
     },
     {
-      "id": "n0418",
+      "id": "n0419",
       "keyword": "유득공",
       "descriptions": [
         "규장각 검서관",
@@ -21409,7 +21423,7 @@
       "era_script": []
     },
     {
-      "id": "n0419",
+      "id": "n0420",
       "keyword": "정제두",
       "descriptions": [
         "강화학파",
@@ -21449,7 +21463,7 @@
       "era_script": []
     },
     {
-      "id": "n0420",
+      "id": "n0421",
       "keyword": "이제마",
       "descriptions": [
         "동의수세보원",
@@ -21475,7 +21489,7 @@
       "era_script": []
     },
     {
-      "id": "n0421",
+      "id": "n0422",
       "keyword": "홍경래의 난",
       "descriptions": [
         "정주성",
@@ -21532,7 +21546,7 @@
       "era_script": []
     },
     {
-      "id": "n0422",
+      "id": "n0423",
       "keyword": "동학농민운동",
       "descriptions": [
         "교정청",
@@ -21594,17 +21608,17 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         "고종"
       ],
-      "years": "1894년",
+      "years": "흥선대원군 섭정기 1894년",
       "years_check": "true",
       "era_script": []
     },
     {
-      "id": "n0423",
+      "id": "n0424",
       "keyword": "김사미·효심의 난",
       "descriptions": [
         "경주",
@@ -21649,7 +21663,7 @@
       "era_script": []
     },
     {
-      "id": "n0424",
+      "id": "n0425",
       "keyword": "조선 고종 즉위",
       "descriptions": [
         "흥선대원군"
@@ -21675,21 +21689,21 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1863년",
+      "years": "흥선대원군 섭정기 1863년",
       "years_check": "true",
       "era_script": []
     },
     {
-      "id": "n0425",
+      "id": "n0426",
       "keyword": "오페르트 도굴 사건",
       "descriptions": [
         "남연군 묘",
-        "조선 흥선대원군_섭정기"
+        "조선 흥선대원군 섭정기"
       ],
       "ref_id": [
         "5930",
@@ -21726,17 +21740,17 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1868년",
+      "years": "흥선대원군 섭정기 1868년",
       "years_check": "true",
       "era_script": []
     },
     {
-      "id": "n0426",
+      "id": "n0427",
       "keyword": "신미양요",
       "descriptions": [
         "강화도",
@@ -21748,7 +21762,7 @@
         "어재연",
         "어재연 장군 깃발",
         "제너럴 셔먼호 사건",
-        "조선 흥선대원군_섭정기",
+        "조선 흥선대원군 섭정기",
         "척화비"
       ],
       "ref_id": [
@@ -21794,17 +21808,17 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1871년",
+      "years": "흥선대원군 섭정기 1871년",
       "years_check": "true",
       "era_script": []
     },
     {
-      "id": "n0427",
+      "id": "n0428",
       "keyword": "운요호 사건",
       "descriptions": [
         "강화도 조약",
@@ -21857,7 +21871,7 @@
       "era_script": []
     },
     {
-      "id": "n0428",
+      "id": "n0429",
       "keyword": "조·불 수호 통상 조약",
       "descriptions": [
         "천주교",
@@ -21898,7 +21912,7 @@
       "era_script": []
     },
     {
-      "id": "n0429",
+      "id": "n0430",
       "keyword": "강화도 조약",
       "descriptions": [
         "10리",
@@ -21989,7 +22003,7 @@
       "era_script": []
     },
     {
-      "id": "n0430",
+      "id": "n0431",
       "keyword": "제물포 조약",
       "descriptions": [
         "일본 공사관 경비병 주둔",
@@ -22028,7 +22042,7 @@
       "era_script": []
     },
     {
-      "id": "n0431",
+      "id": "n0432",
       "keyword": "1차 수신사",
       "descriptions": [
         "강화도 조약",
@@ -22074,7 +22088,7 @@
       ]
     },
     {
-      "id": "n0432",
+      "id": "n0433",
       "keyword": "척화주전론",
       "descriptions": [
         "기정진",
@@ -22094,19 +22108,19 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "",
+      "years": "흥선대원군 섭정기",
       "years_check": "true",
       "era_script": [
         "주장"
       ]
     },
     {
-      "id": "n0433",
+      "id": "n0434",
       "keyword": "나철",
       "descriptions": [
         "5적 처단",
@@ -22135,7 +22149,7 @@
       "era_script": []
     },
     {
-      "id": "n0434",
+      "id": "n0435",
       "keyword": "오기호",
       "descriptions": [
         "5적 처단",
@@ -22161,7 +22175,7 @@
       "era_script": []
     },
     {
-      "id": "n0435",
+      "id": "n0436",
       "keyword": "이재명",
       "descriptions": [
         "독립운동",
@@ -22195,7 +22209,7 @@
       "era_script": []
     },
     {
-      "id": "n0436",
+      "id": "n0437",
       "keyword": "안중근",
       "descriptions": [
         "동양 평화론",
@@ -22231,7 +22245,7 @@
       "era_script": []
     },
     {
-      "id": "n0437",
+      "id": "n0438",
       "keyword": "조명하",
       "descriptions": [
         "일본 육군 대장 저격"
@@ -22258,7 +22272,7 @@
       "era_script": []
     },
     {
-      "id": "n0438",
+      "id": "n0439",
       "keyword": "나석주",
       "descriptions": [
         "동양 척식 주식회사",
@@ -22284,7 +22298,7 @@
       "era_script": []
     },
     {
-      "id": "n0439",
+      "id": "n0440",
       "keyword": "간도 참변",
       "descriptions": [
         "대학살",
@@ -22324,7 +22338,7 @@
       "era_script": []
     },
     {
-      "id": "n0440",
+      "id": "n0441",
       "keyword": "호가장 전투",
       "descriptions": [
         "조선의용군",
@@ -22359,7 +22373,7 @@
       "era_script": []
     },
     {
-      "id": "n0441",
+      "id": "n0442",
       "keyword": "봉오동 전투",
       "descriptions": [
         "간도 참변",
@@ -22404,7 +22418,7 @@
       "era_script": []
     },
     {
-      "id": "n0442",
+      "id": "n0443",
       "keyword": "영릉가 전투",
       "descriptions": [
         "조선혁명군"
@@ -22453,7 +22467,7 @@
       "era_script": []
     },
     {
-      "id": "n0443",
+      "id": "n0444",
       "keyword": "대전자령 전투",
       "descriptions": [
         "조선혁명군",
@@ -22505,7 +22519,7 @@
       "era_script": []
     },
     {
-      "id": "n0444",
+      "id": "n0445",
       "keyword": "참의부",
       "descriptions": [
         "대한민국 임시 정부"
@@ -22538,7 +22552,7 @@
       ]
     },
     {
-      "id": "n0445",
+      "id": "n0446",
       "keyword": "대한제국 고종",
       "descriptions": [
         "경부선 철도",
@@ -22593,7 +22607,7 @@
       "era_script": []
     },
     {
-      "id": "n0446",
+      "id": "n0447",
       "keyword": "포츠머스 조약",
       "descriptions": [
         "강화 조약",
@@ -22629,7 +22643,7 @@
       "era_script": []
     },
     {
-      "id": "n0447",
+      "id": "n0448",
       "keyword": "아관파천",
       "descriptions": [
         "독립협회",
@@ -22678,7 +22692,7 @@
       "era_script": []
     },
     {
-      "id": "n0448",
+      "id": "n0449",
       "keyword": "대한매일신보",
       "descriptions": [
         "국채 보상 운동",
@@ -22753,7 +22767,7 @@
       ]
     },
     {
-      "id": "n0449",
+      "id": "n0450",
       "keyword": "홍주성 전투",
       "descriptions": [
         "민종식",
@@ -22783,7 +22797,7 @@
       "era_script": []
     },
     {
-      "id": "n0450",
+      "id": "n0451",
       "keyword": "개신교",
       "descriptions": [
         "배재 학당"
@@ -22819,7 +22833,7 @@
       "era_script": []
     },
     {
-      "id": "n0451",
+      "id": "n0452",
       "keyword": "안창호",
       "descriptions": [
         "공립 협회",
@@ -22861,7 +22875,7 @@
       "era_script": []
     },
     {
-      "id": "n0452",
+      "id": "n0453",
       "keyword": "정인보",
       "descriptions": [
         "여유당전서",
@@ -22893,7 +22907,7 @@
       "era_script": []
     },
     {
-      "id": "n0453",
+      "id": "n0454",
       "keyword": "안희제",
       "descriptions": [
         "백산 상회"
@@ -22918,7 +22932,7 @@
       "era_script": []
     },
     {
-      "id": "n0454",
+      "id": "n0455",
       "keyword": "장인환",
       "descriptions": [
         "스티븐스 암살 사건"
@@ -22945,7 +22959,7 @@
       "era_script": []
     },
     {
-      "id": "n0455",
+      "id": "n0456",
       "keyword": "전명운",
       "descriptions": [
         "스티븐스 암살 사건"
@@ -22972,7 +22986,7 @@
       "era_script": []
     },
     {
-      "id": "n0456",
+      "id": "n0457",
       "keyword": "제주도",
       "descriptions": [
         "4.3 사건",
@@ -23027,7 +23041,7 @@
       "era_script": []
     },
     {
-      "id": "n0457",
+      "id": "n0458",
       "keyword": "흑산도",
       "descriptions": [
         "자산어보",
@@ -23053,7 +23067,7 @@
       "era_script": []
     },
     {
-      "id": "n0458",
+      "id": "n0459",
       "keyword": "강화도",
       "descriptions": [
         "강화도 천도",
@@ -23103,7 +23117,7 @@
       "era_script": []
     },
     {
-      "id": "n0459",
+      "id": "n0460",
       "keyword": "암태도",
       "descriptions": [
         "문재철",
@@ -23129,7 +23143,7 @@
       "era_script": []
     },
     {
-      "id": "n0460",
+      "id": "n0461",
       "keyword": "절영도",
       "descriptions": [
         "러시아 저탄소"
@@ -23152,7 +23166,7 @@
       "era_script": []
     },
     {
-      "id": "n0461",
+      "id": "n0462",
       "keyword": "한국 독립군",
       "descriptions": [
         "대전자령 전투",
@@ -23205,7 +23219,7 @@
       "era_script": []
     },
     {
-      "id": "n0462",
+      "id": "n0463",
       "keyword": "동북인민혁명군",
       "descriptions": [
         "동북항일연군"
@@ -23236,7 +23250,7 @@
       "era_script": []
     },
     {
-      "id": "n0463",
+      "id": "n0464",
       "keyword": "6.25 전쟁",
       "descriptions": [
         "1차 개헌",
@@ -23306,7 +23320,7 @@
       "era_script": []
     },
     {
-      "id": "n0464",
+      "id": "n0465",
       "keyword": "반민특위 해체",
       "descriptions": [
         "대한민국 이승만 정부"
@@ -23337,7 +23351,7 @@
       "era_script": []
     },
     {
-      "id": "n0465",
+      "id": "n0466",
       "keyword": "조봉암 사형",
       "descriptions": [
         "진보당 사건"
@@ -23371,7 +23385,7 @@
       "era_script": []
     },
     {
-      "id": "n0466",
+      "id": "n0467",
       "keyword": "한일 기본 조약",
       "descriptions": [],
       "ref_id": [
@@ -23402,7 +23416,7 @@
       "era_script": []
     },
     {
-      "id": "n0467",
+      "id": "n0468",
       "keyword": "6차 개헌",
       "descriptions": [
         "3선 개헌",
@@ -23440,7 +23454,7 @@
       "era_script": []
     },
     {
-      "id": "n0468",
+      "id": "n0469",
       "keyword": "인민혁명당 재건위 사건",
       "descriptions": [
         "7차 개헌",
@@ -23475,7 +23489,7 @@
       "era_script": []
     },
     {
-      "id": "n0469",
+      "id": "n0470",
       "keyword": "외교 정책",
       "descriptions": [
         "조선 중립화론",
@@ -23505,7 +23519,7 @@
       "era_script": []
     },
     {
-      "id": "n0470",
+      "id": "n0471",
       "keyword": "선박 난파",
       "descriptions": [
         "하멜 표류기"
@@ -23529,7 +23543,7 @@
       "era_script": []
     },
     {
-      "id": "n0471",
+      "id": "n0472",
       "keyword": "종교 전파",
       "descriptions": [
         "선교사",
@@ -23554,7 +23568,7 @@
       "era_script": []
     },
     {
-      "id": "n0472",
+      "id": "n0473",
       "keyword": "해안 측량권",
       "descriptions": [
         "강화도 조약"
@@ -23580,7 +23594,7 @@
       "era_script": []
     },
     {
-      "id": "n0473",
+      "id": "n0474",
       "keyword": "통상 요구",
       "descriptions": [
         "서양 상선",
@@ -23605,7 +23619,7 @@
       "era_script": []
     },
     {
-      "id": "n0474",
+      "id": "n0475",
       "keyword": "국제 인식",
       "descriptions": [
         "혼일강리역대국도지도"
@@ -23628,7 +23642,7 @@
       "era_script": []
     },
     {
-      "id": "n0475",
+      "id": "n0476",
       "keyword": "충주",
       "descriptions": [
         "김경업",
@@ -23673,7 +23687,7 @@
       "era_script": []
     },
     {
-      "id": "n0476",
+      "id": "n0477",
       "keyword": "공주",
       "descriptions": [
         "공산성",
@@ -23715,7 +23729,7 @@
       "era_script": []
     },
     {
-      "id": "n0477",
+      "id": "n0478",
       "keyword": "용인",
       "descriptions": [
         "광교산",
@@ -23741,7 +23755,7 @@
       "era_script": []
     },
     {
-      "id": "n0478",
+      "id": "n0479",
       "keyword": "대한민국 박근혜 정부",
       "descriptions": [
         "한중FTA"
@@ -23766,7 +23780,7 @@
       "era_script": []
     },
     {
-      "id": "n0479",
+      "id": "n0480",
       "keyword": "대한민국 문재인 정부",
       "descriptions": [
         "판문점 남북 정상 회담",
@@ -23798,7 +23812,7 @@
       "era_script": []
     },
     {
-      "id": "n0480",
+      "id": "n0481",
       "keyword": "금관가야",
       "descriptions": [
         "김유신",
@@ -23839,7 +23853,7 @@
       "era_script": []
     },
     {
-      "id": "n0481",
+      "id": "n0482",
       "keyword": "환도성 함락",
       "descriptions": [
         "관구검",
@@ -23877,7 +23891,7 @@
       "era_script": []
     },
     {
-      "id": "n0482",
+      "id": "n0483",
       "keyword": "고구려 장수왕",
       "descriptions": [
         "고구려 평양 천도",
@@ -23920,7 +23934,7 @@
       "era_script": []
     },
     {
-      "id": "n0483",
+      "id": "n0484",
       "keyword": "고구려 미천왕",
       "descriptions": [
         "낙랑군 축출",
@@ -23956,7 +23970,7 @@
       "era_script": []
     },
     {
-      "id": "n0484",
+      "id": "n0485",
       "keyword": "고구려 고국천왕",
       "descriptions": [
         "을파소",
@@ -23986,7 +24000,7 @@
       "era_script": []
     },
     {
-      "id": "n0485",
+      "id": "n0486",
       "keyword": "고구려 광개토대왕",
       "descriptions": [
         "신라 구원",
@@ -24035,7 +24049,7 @@
       "era_script": []
     },
     {
-      "id": "n0486",
+      "id": "n0487",
       "keyword": "고구려 소수림왕",
       "descriptions": [
         "고구려 불교 공인",
@@ -24075,7 +24089,7 @@
       "era_script": []
     },
     {
-      "id": "n0487",
+      "id": "n0488",
       "keyword": "의상",
       "descriptions": [
         "관음 신앙",
@@ -24117,7 +24131,7 @@
       "era_script": []
     },
     {
-      "id": "n0488",
+      "id": "n0489",
       "keyword": "원광",
       "descriptions": [
         "걸사표",
@@ -24160,7 +24174,7 @@
       "era_script": []
     },
     {
-      "id": "n0489",
+      "id": "n0490",
       "keyword": "혜초",
       "descriptions": [
         "왕오천축국전"
@@ -24197,7 +24211,7 @@
       "era_script": []
     },
     {
-      "id": "n0490",
+      "id": "n0491",
       "keyword": "각훈",
       "descriptions": [
         "해동고승전"
@@ -24228,7 +24242,7 @@
       "era_script": []
     },
     {
-      "id": "n0491",
+      "id": "n0492",
       "keyword": "후고구려 궁예",
       "descriptions": [
         "광평성",
@@ -24282,7 +24296,7 @@
       "era_script": []
     },
     {
-      "id": "n0492",
+      "id": "n0493",
       "keyword": "고려 충목왕",
       "descriptions": [
         "정치도감"
@@ -24305,7 +24319,7 @@
       "era_script": []
     },
     {
-      "id": "n0493",
+      "id": "n0494",
       "keyword": "하사창동 철조석가여래좌상",
       "descriptions": [
         "석굴암 본존불 양식",
@@ -24329,7 +24343,7 @@
       "era_script": []
     },
     {
-      "id": "n0494",
+      "id": "n0495",
       "keyword": "진포 대첩",
       "descriptions": [
         "금강",
@@ -24378,7 +24392,7 @@
       "era_script": []
     },
     {
-      "id": "n0495",
+      "id": "n0496",
       "keyword": "충주성 전투",
       "descriptions": [
         "김윤후",
@@ -24417,7 +24431,7 @@
       "era_script": []
     },
     {
-      "id": "n0496",
+      "id": "n0497",
       "keyword": "상서성",
       "descriptions": [],
       "ref_id": [],
@@ -24440,7 +24454,7 @@
       "era_script": []
     },
     {
-      "id": "n0497",
+      "id": "n0498",
       "keyword": "추밀원",
       "descriptions": [],
       "ref_id": [],
@@ -24463,7 +24477,7 @@
       "era_script": []
     },
     {
-      "id": "n0498",
+      "id": "n0499",
       "keyword": "어사대",
       "descriptions": [
         "관리 감찰",
@@ -24497,7 +24511,7 @@
       "era_script": []
     },
     {
-      "id": "n0499",
+      "id": "n0500",
       "keyword": "한림원",
       "descriptions": [],
       "ref_id": [],
@@ -24518,7 +24532,7 @@
       "era_script": []
     },
     {
-      "id": "n0500",
+      "id": "n0501",
       "keyword": "중서문하성",
       "descriptions": [
         "첨의부"
@@ -24546,7 +24560,7 @@
       "era_script": []
     },
     {
-      "id": "n0501",
+      "id": "n0502",
       "keyword": "청연각",
       "descriptions": [
         "경연",
@@ -24582,7 +24596,7 @@
       "era_script": []
     },
     {
-      "id": "n0502",
+      "id": "n0503",
       "keyword": "순군부",
       "descriptions": [
         "치안"
@@ -24605,7 +24619,7 @@
       "era_script": []
     },
     {
-      "id": "n0503",
+      "id": "n0504",
       "keyword": "개성부",
       "descriptions": [
         "치안"
@@ -24628,7 +24642,7 @@
       "era_script": []
     },
     {
-      "id": "n0504",
+      "id": "n0505",
       "keyword": "전민변정도감",
       "descriptions": [
         "고려 공민왕",
@@ -24674,7 +24688,7 @@
       ]
     },
     {
-      "id": "n0505",
+      "id": "n0506",
       "keyword": "거란 2차 침입",
       "descriptions": [
         "거란",
@@ -24710,7 +24724,7 @@
       "era_script": []
     },
     {
-      "id": "n0506",
+      "id": "n0507",
       "keyword": "노비안검법",
       "descriptions": [
         "고려 광종",
@@ -24766,7 +24780,7 @@
       ]
     },
     {
-      "id": "n0507",
+      "id": "n0508",
       "keyword": "김보당의 난",
       "descriptions": [
         "고려 무신집권기",
@@ -24812,7 +24826,7 @@
       "era_script": []
     },
     {
-      "id": "n0508",
+      "id": "n0509",
       "keyword": "흑창",
       "descriptions": [
         "고려 태조",
@@ -24867,7 +24881,7 @@
       ]
     },
     {
-      "id": "n0509",
+      "id": "n0510",
       "keyword": "최충헌 집권",
       "descriptions": [
         "교정도감",
@@ -24912,7 +24926,7 @@
       "era_script": []
     },
     {
-      "id": "n0510",
+      "id": "n0511",
       "keyword": "경정 전시과",
       "descriptions": [
         "고려 문종"
@@ -24935,7 +24949,7 @@
       "era_script": []
     },
     {
-      "id": "n0511",
+      "id": "n0512",
       "keyword": "식읍",
       "descriptions": [
         "노동력"
@@ -24958,7 +24972,7 @@
       "era_script": []
     },
     {
-      "id": "n0512",
+      "id": "n0513",
       "keyword": "녹읍",
       "descriptions": [
         "노동력",
@@ -24984,7 +24998,7 @@
       "era_script": []
     },
     {
-      "id": "n0513",
+      "id": "n0514",
       "keyword": "조광조",
       "descriptions": [
         "기묘사화",
@@ -25047,7 +25061,7 @@
       "era_script": []
     },
     {
-      "id": "n0514",
+      "id": "n0515",
       "keyword": "최익현",
       "descriptions": [
         "단발령",
@@ -25091,7 +25105,7 @@
       "era_script": []
     },
     {
-      "id": "n0515",
+      "id": "n0516",
       "keyword": "쌍성총관부",
       "descriptions": [
         "몽골",
@@ -25126,7 +25140,7 @@
       ]
     },
     {
-      "id": "n0516",
+      "id": "n0517",
       "keyword": "쌍성총관부 수복",
       "descriptions": [
         "고려 공민왕"
@@ -25166,7 +25180,7 @@
       "era_script": []
     },
     {
-      "id": "n0517",
+      "id": "n0518",
       "keyword": "4군 6진",
       "descriptions": [
         "김종서",
@@ -25214,7 +25228,7 @@
       ]
     },
     {
-      "id": "n0518",
+      "id": "n0519",
       "keyword": "정동행성",
       "descriptions": [
         "고려 원간섭기",
@@ -25252,7 +25266,7 @@
       ]
     },
     {
-      "id": "n0519",
+      "id": "n0520",
       "keyword": "저고여 피살",
       "descriptions": [
         "고려 고종",
@@ -25286,7 +25300,7 @@
       "era_script": []
     },
     {
-      "id": "n0520",
+      "id": "n0521",
       "keyword": "경복궁",
       "descriptions": [
         "근정전",
@@ -25330,7 +25344,7 @@
       "era_script": []
     },
     {
-      "id": "n0521",
+      "id": "n0522",
       "keyword": "창경궁",
       "descriptions": [
         "동물원",
@@ -25363,7 +25377,7 @@
       "era_script": []
     },
     {
-      "id": "n0522",
+      "id": "n0523",
       "keyword": "창덕궁",
       "descriptions": [
         "규장각",
@@ -25400,7 +25414,7 @@
       "era_script": []
     },
     {
-      "id": "n0523",
+      "id": "n0524",
       "keyword": "경희궁",
       "descriptions": [
         "서궐"
@@ -25429,7 +25443,7 @@
       "era_script": []
     },
     {
-      "id": "n0524",
+      "id": "n0525",
       "keyword": "경운궁",
       "descriptions": [
         "고종 환궁",
@@ -25457,7 +25471,7 @@
       "era_script": []
     },
     {
-      "id": "n0525",
+      "id": "n0526",
       "keyword": "사역원",
       "descriptions": [
         "통역"
@@ -25480,7 +25494,7 @@
       "era_script": []
     },
     {
-      "id": "n0526",
+      "id": "n0527",
       "keyword": "관상감",
       "descriptions": [
         "기상",
@@ -25508,7 +25522,7 @@
       "era_script": []
     },
     {
-      "id": "n0527",
+      "id": "n0528",
       "keyword": "행주산성",
       "descriptions": [
         "고양",
@@ -25541,7 +25555,7 @@
       "era_script": []
     },
     {
-      "id": "n0528",
+      "id": "n0529",
       "keyword": "절두산 순교 성지",
       "descriptions": [
         "병인박해"
@@ -25565,7 +25579,7 @@
       "era_script": []
     },
     {
-      "id": "n0529",
+      "id": "n0530",
       "keyword": "국립서울현충원",
       "descriptions": [
         "6.25 전쟁"
@@ -25589,7 +25603,7 @@
       "era_script": []
     },
     {
-      "id": "n0530",
+      "id": "n0531",
       "keyword": "풍납동 토성",
       "descriptions": [
         "백제 토성",
@@ -25614,7 +25628,7 @@
       "era_script": []
     },
     {
-      "id": "n0531",
+      "id": "n0532",
       "keyword": "암사동 유적",
       "descriptions": [
         "갈돌",
@@ -25642,7 +25656,7 @@
       "era_script": []
     },
     {
-      "id": "n0532",
+      "id": "n0533",
       "keyword": "용골산성",
       "descriptions": [
         "용골산성 전투",
@@ -25680,7 +25694,7 @@
       "era_script": []
     },
     {
-      "id": "n0533",
+      "id": "n0534",
       "keyword": "신숙주",
       "descriptions": [
         "계유정난",
@@ -25717,7 +25731,7 @@
       "era_script": []
     },
     {
-      "id": "n0534",
+      "id": "n0535",
       "keyword": "송시열",
       "descriptions": [
         "기년복",
@@ -25763,7 +25777,7 @@
       "era_script": []
     },
     {
-      "id": "n0535",
+      "id": "n0536",
       "keyword": "김종직",
       "descriptions": [
         "무오사화",
@@ -25801,7 +25815,7 @@
       "era_script": []
     },
     {
-      "id": "n0536",
+      "id": "n0537",
       "keyword": "이수광",
       "descriptions": [
         "지봉유설",
@@ -25829,7 +25843,7 @@
       "era_script": []
     },
     {
-      "id": "n0537",
+      "id": "n0538",
       "keyword": "홍산 전투",
       "descriptions": [
         "고려군",
@@ -25868,7 +25882,7 @@
       "era_script": []
     },
     {
-      "id": "n0538",
+      "id": "n0539",
       "keyword": "나선 정벌",
       "descriptions": [
         "러시아",
@@ -25938,7 +25952,7 @@
       "era_script": []
     },
     {
-      "id": "n0539",
+      "id": "n0540",
       "keyword": "수원",
       "descriptions": [
         "수원 화성",
@@ -25965,7 +25979,7 @@
       "era_script": []
     },
     {
-      "id": "n0540",
+      "id": "n0541",
       "keyword": "국학",
       "descriptions": [
         "대나마",
@@ -25998,7 +26012,7 @@
       "era_script": []
     },
     {
-      "id": "n0541",
+      "id": "n0542",
       "keyword": "국자감",
       "descriptions": [
         "7재",
@@ -26052,7 +26066,7 @@
       "era_script": []
     },
     {
-      "id": "n0542",
+      "id": "n0543",
       "keyword": "성균관",
       "descriptions": [
         "개성",
@@ -26105,7 +26119,7 @@
       "era_script": []
     },
     {
-      "id": "n0543",
+      "id": "n0544",
       "keyword": "한성 사범 학교",
       "descriptions": [
         "2차 갑오개혁",
@@ -26156,7 +26170,7 @@
       ]
     },
     {
-      "id": "n0544",
+      "id": "n0545",
       "keyword": "신임사화",
       "descriptions": [
         "노론",
@@ -26191,7 +26205,7 @@
       "era_script": []
     },
     {
-      "id": "n0545",
+      "id": "n0546",
       "keyword": "사도세자 추존",
       "descriptions": [
         "사도"
@@ -26220,7 +26234,7 @@
       "era_script": []
     },
     {
-      "id": "n0546",
+      "id": "n0547",
       "keyword": "왕자의 난",
       "descriptions": [
         "조선 태조",
@@ -26259,14 +26273,14 @@
       "era_script": []
     },
     {
-      "id": "n0547",
+      "id": "n0548",
       "keyword": "제너럴 셔먼호 사건",
       "descriptions": [
         "대동강",
         "박규수",
         "신미양요",
         "이양선",
-        "조선 흥선대원군_섭정기",
+        "조선 흥선대원군 섭정기",
         "통상 요구",
         "평안 감사",
         "평양"
@@ -26314,17 +26328,17 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1866년",
+      "years": "흥선대원군 섭정기 1866년",
       "years_check": "true",
       "era_script": []
     },
     {
-      "id": "n0548",
+      "id": "n0549",
       "keyword": "톈진 조약",
       "descriptions": [
         "갑신정변",
@@ -26360,7 +26374,7 @@
       "era_script": []
     },
     {
-      "id": "n0549",
+      "id": "n0550",
       "keyword": "거문도 점령",
       "descriptions": [
         "영국",
@@ -26416,7 +26430,7 @@
       "era_script": []
     },
     {
-      "id": "n0550",
+      "id": "n0551",
       "keyword": "절영도 조차 요구 저지",
       "descriptions": [
         "독립협회"
@@ -26451,7 +26465,7 @@
       "era_script": []
     },
     {
-      "id": "n0551",
+      "id": "n0552",
       "keyword": "러일 전쟁",
       "descriptions": [
         "1차 한일협약",
@@ -26506,7 +26520,7 @@
       "era_script": []
     },
     {
-      "id": "n0552",
+      "id": "n0553",
       "keyword": "이병도",
       "descriptions": [
         "조선사 편수회",
@@ -26536,7 +26550,7 @@
       "era_script": []
     },
     {
-      "id": "n0553",
+      "id": "n0554",
       "keyword": "백남운",
       "descriptions": [
         "식민 사학 정체성론 반박",
@@ -26567,7 +26581,7 @@
       "era_script": []
     },
     {
-      "id": "n0554",
+      "id": "n0555",
       "keyword": "전차",
       "descriptions": [
         "한성 전기 회사"
@@ -26609,7 +26623,7 @@
       ]
     },
     {
-      "id": "n0555",
+      "id": "n0556",
       "keyword": "보빙사",
       "descriptions": [
         "미국",
@@ -26671,7 +26685,7 @@
       ]
     },
     {
-      "id": "n0556",
+      "id": "n0557",
       "keyword": "영남만인소",
       "descriptions": [
         "영남 유생",
@@ -26710,7 +26724,7 @@
       "era_script": []
     },
     {
-      "id": "n0557",
+      "id": "n0558",
       "keyword": "별기군",
       "descriptions": [
         "교련병대",
@@ -26756,7 +26770,7 @@
       ]
     },
     {
-      "id": "n0558",
+      "id": "n0559",
       "keyword": "통리기무아문",
       "descriptions": [
         "12사",
@@ -26816,7 +26830,7 @@
       ]
     },
     {
-      "id": "n0559",
+      "id": "n0560",
       "keyword": "물산 장려 운동",
       "descriptions": [
         "경성방직",
@@ -26890,7 +26904,7 @@
       "era_script": []
     },
     {
-      "id": "n0560",
+      "id": "n0561",
       "keyword": "원산 총파업",
       "descriptions": [
         "노동 단체 격려 전문",
@@ -26949,7 +26963,7 @@
       "era_script": []
     },
     {
-      "id": "n0561",
+      "id": "n0562",
       "keyword": "1차 미소 공동 위원회",
       "descriptions": [
         "덕수궁",
@@ -26988,7 +27002,7 @@
       "era_script": []
     },
     {
-      "id": "n0562",
+      "id": "n0563",
       "keyword": "2차 미소 공동 위원회",
       "descriptions": [],
       "ref_id": [
@@ -27020,7 +27034,7 @@
       "era_script": []
     },
     {
-      "id": "n0563",
+      "id": "n0564",
       "keyword": "반민특위",
       "descriptions": [
         "김상덕",
@@ -27063,7 +27077,7 @@
       ]
     },
     {
-      "id": "n0564",
+      "id": "n0565",
       "keyword": "5.10 총선거",
       "descriptions": [
         "유엔 한국 임시 위원단",
@@ -27114,7 +27128,7 @@
       "era_script": []
     },
     {
-      "id": "n0565",
+      "id": "n0566",
       "keyword": "정전 협정",
       "descriptions": [
         "6.25 전쟁",
@@ -27151,7 +27165,7 @@
       "era_script": []
     },
     {
-      "id": "n0566",
+      "id": "n0567",
       "keyword": "경향신문 폐간",
       "descriptions": [
         "대한민국 이승만 정부"
@@ -27190,7 +27204,7 @@
       "era_script": []
     },
     {
-      "id": "n0567",
+      "id": "n0568",
       "keyword": "6.29 민주화 선언",
       "descriptions": [
         "6월 민주 항쟁"
@@ -27223,7 +27237,7 @@
       "era_script": []
     },
     {
-      "id": "n0568",
+      "id": "n0569",
       "keyword": "7차 개헌",
       "descriptions": [
         "100만인 청원 운동",
@@ -27279,7 +27293,7 @@
       "era_script": []
     },
     {
-      "id": "n0569",
+      "id": "n0570",
       "keyword": "8차 개헌",
       "descriptions": [
         "단임제",
@@ -27306,7 +27320,7 @@
       "era_script": []
     },
     {
-      "id": "n0570",
+      "id": "n0571",
       "keyword": "무구정광대다라니경",
       "descriptions": [
         "불국사",
@@ -27341,7 +27355,7 @@
       "era_script": []
     },
     {
-      "id": "n0571",
+      "id": "n0572",
       "keyword": "팔만대장경",
       "descriptions": [
         "고려",
@@ -27380,7 +27394,7 @@
       "era_script": []
     },
     {
-      "id": "n0572",
+      "id": "n0573",
       "keyword": "직지심체요절",
       "descriptions": [
         "고려",
@@ -27426,7 +27440,7 @@
       "era_script": []
     },
     {
-      "id": "n0573",
+      "id": "n0574",
       "keyword": "자치통감",
       "descriptions": [
         "동국통감"
@@ -27453,7 +27467,7 @@
       "era_script": []
     },
     {
-      "id": "n0574",
+      "id": "n0575",
       "keyword": "계미자",
       "descriptions": [
         "조선 태종",
@@ -27495,7 +27509,7 @@
       "era_script": []
     },
     {
-      "id": "n0575",
+      "id": "n0576",
       "keyword": "갑인자",
       "descriptions": [
         "이천",
@@ -27527,7 +27541,7 @@
       "era_script": []
     },
     {
-      "id": "n0576",
+      "id": "n0577",
       "keyword": "이빙허각",
       "descriptions": [
         "규합총서"
@@ -27551,7 +27565,7 @@
       "era_script": []
     },
     {
-      "id": "n0577",
+      "id": "n0578",
       "keyword": "김만덕",
       "descriptions": [
         "재산 기부",
@@ -27579,7 +27593,7 @@
       "era_script": []
     },
     {
-      "id": "n0578",
+      "id": "n0579",
       "keyword": "남자현",
       "descriptions": [],
       "ref_id": [],
@@ -27600,7 +27614,7 @@
       "era_script": []
     },
     {
-      "id": "n0579",
+      "id": "n0580",
       "keyword": "강주룡",
       "descriptions": [
         "을밀대"
@@ -27624,7 +27638,7 @@
       "era_script": []
     },
     {
-      "id": "n0580",
+      "id": "n0581",
       "keyword": "오광심",
       "descriptions": [
         "기관지 광복",
@@ -27648,7 +27662,7 @@
       "era_script": []
     },
     {
-      "id": "n0581",
+      "id": "n0582",
       "keyword": "백중",
       "descriptions": [],
       "ref_id": [
@@ -27669,7 +27683,7 @@
       "era_script": []
     },
     {
-      "id": "n0582",
+      "id": "n0583",
       "keyword": "옥저",
       "descriptions": [
         "민며느리제",
@@ -27710,7 +27724,7 @@
       "era_script": []
     },
     {
-      "id": "n0583",
+      "id": "n0584",
       "keyword": "고구려 영류왕",
       "descriptions": [
         "연개소문 정변",
@@ -27736,7 +27750,7 @@
       "era_script": []
     },
     {
-      "id": "n0584",
+      "id": "n0585",
       "keyword": "자장",
       "descriptions": [
         "황룡사 구층 목탑"
@@ -27769,7 +27783,7 @@
       "era_script": []
     },
     {
-      "id": "n0585",
+      "id": "n0586",
       "keyword": "북위 국서 전달",
       "descriptions": [
         "고구려 공격 요청",
@@ -27808,7 +27822,7 @@
       "era_script": []
     },
     {
-      "id": "n0586",
+      "id": "n0587",
       "keyword": "고구려 평양 천도",
       "descriptions": [
         "고구려 장수왕",
@@ -27850,7 +27864,7 @@
       "era_script": []
     },
     {
-      "id": "n0587",
+      "id": "n0588",
       "keyword": "연개소문 정변",
       "descriptions": [
         "고구려 영류왕",
@@ -27894,7 +27908,7 @@
       "era_script": []
     },
     {
-      "id": "n0588",
+      "id": "n0589",
       "keyword": "김헌창의 난",
       "descriptions": [
         "신라 헌덕왕",
@@ -27938,7 +27952,7 @@
       "era_script": []
     },
     {
-      "id": "n0589",
+      "id": "n0590",
       "keyword": "거칠부 국사 편찬",
       "descriptions": [
         "신라 진흥왕"
@@ -27982,7 +27996,7 @@
       "era_script": []
     },
     {
-      "id": "n0590",
+      "id": "n0591",
       "keyword": "우산국 복속",
       "descriptions": [
         "신라 지증왕",
@@ -28033,7 +28047,7 @@
       "era_script": []
     },
     {
-      "id": "n0591",
+      "id": "n0592",
       "keyword": "관료전 지급",
       "descriptions": [
         "신라 신문왕"
@@ -28082,7 +28096,7 @@
       "era_script": []
     },
     {
-      "id": "n0592",
+      "id": "n0593",
       "keyword": "녹읍 폐지",
       "descriptions": [
         "신라 신문왕"
@@ -28138,7 +28152,7 @@
       "era_script": []
     },
     {
-      "id": "n0593",
+      "id": "n0594",
       "keyword": "신라 불교 공인",
       "descriptions": [
         "신라 법흥왕",
@@ -28176,7 +28190,7 @@
       "era_script": []
     },
     {
-      "id": "n0594",
+      "id": "n0595",
       "keyword": "고려 현종",
       "descriptions": [
         "강감찬",
@@ -28224,7 +28238,7 @@
       "era_script": []
     },
     {
-      "id": "n0595",
+      "id": "n0596",
       "keyword": "발해 무왕",
       "descriptions": [
         "대문예",
@@ -28261,7 +28275,7 @@
       "era_script": []
     },
     {
-      "id": "n0596",
+      "id": "n0597",
       "keyword": "발해 대조영",
       "descriptions": [
         "동모산"
@@ -28286,7 +28300,7 @@
       "era_script": []
     },
     {
-      "id": "n0597",
+      "id": "n0598",
       "keyword": "고려 건국",
       "descriptions": [
         "고려 태조",
@@ -28329,7 +28343,7 @@
       "era_script": []
     },
     {
-      "id": "n0598",
+      "id": "n0599",
       "keyword": "개경 환도",
       "descriptions": [
         "삼별초",
@@ -28373,7 +28387,7 @@
       "era_script": []
     },
     {
-      "id": "n0599",
+      "id": "n0600",
       "keyword": "고려 공민왕 즉위",
       "descriptions": [],
       "ref_id": [
@@ -28406,7 +28420,7 @@
       "era_script": []
     },
     {
-      "id": "n0600",
+      "id": "n0601",
       "keyword": "고려 멸망",
       "descriptions": [],
       "ref_id": [
@@ -28437,7 +28451,7 @@
       "era_script": []
     },
     {
-      "id": "n0601",
+      "id": "n0602",
       "keyword": "고려 명종 폐위",
       "descriptions": [
         "최충헌"
@@ -28466,7 +28480,7 @@
       "era_script": []
     },
     {
-      "id": "n0602",
+      "id": "n0603",
       "keyword": "무오정변",
       "descriptions": [
         "유경"
@@ -28495,7 +28509,7 @@
       "era_script": []
     },
     {
-      "id": "n0603",
+      "id": "n0604",
       "keyword": "만적의 난",
       "descriptions": [
         "개성",
@@ -28552,7 +28566,7 @@
       "era_script": []
     },
     {
-      "id": "n0604",
+      "id": "n0605",
       "keyword": "균여",
       "descriptions": [
         "귀법사",
@@ -28587,7 +28601,7 @@
       "era_script": []
     },
     {
-      "id": "n0605",
+      "id": "n0606",
       "keyword": "의천",
       "descriptions": [
         "고려 숙종",
@@ -28644,7 +28658,7 @@
       "era_script": []
     },
     {
-      "id": "n0606",
+      "id": "n0607",
       "keyword": "요세",
       "descriptions": [
         "만덕사",
@@ -28678,7 +28692,7 @@
       "era_script": []
     },
     {
-      "id": "n0607",
+      "id": "n0608",
       "keyword": "혜심",
       "descriptions": [
         "선문염송집",
@@ -28716,7 +28730,7 @@
       "era_script": []
     },
     {
-      "id": "n0608",
+      "id": "n0609",
       "keyword": "지눌",
       "descriptions": [
         "권수정혜결사문",
@@ -28763,7 +28777,7 @@
       "era_script": []
     },
     {
-      "id": "n0609",
+      "id": "n0610",
       "keyword": "체징",
       "descriptions": [
         "가지산문"
@@ -28790,7 +28804,7 @@
       "era_script": []
     },
     {
-      "id": "n0610",
+      "id": "n0611",
       "keyword": "동북 9성",
       "descriptions": [
         "고려",
@@ -28849,7 +28863,7 @@
       ]
     },
     {
-      "id": "n0611",
+      "id": "n0612",
       "keyword": "강화도 천도",
       "descriptions": [
         "강화도",
@@ -28906,7 +28920,7 @@
       "era_script": []
     },
     {
-      "id": "n0612",
+      "id": "n0613",
       "keyword": "요동 정벌 추진",
       "descriptions": [
         "고려 우왕",
@@ -28964,7 +28978,7 @@
       "era_script": []
     },
     {
-      "id": "n0613",
+      "id": "n0614",
       "keyword": "최무선",
       "descriptions": [
         "고려 우왕",
@@ -29009,7 +29023,7 @@
       "era_script": []
     },
     {
-      "id": "n0614",
+      "id": "n0615",
       "keyword": "최해산",
       "descriptions": [
         "신기전",
@@ -29033,7 +29047,7 @@
       "era_script": []
     },
     {
-      "id": "n0615",
+      "id": "n0616",
       "keyword": "이여송",
       "descriptions": [
         "불랑기포",
@@ -29060,7 +29074,7 @@
       "era_script": []
     },
     {
-      "id": "n0616",
+      "id": "n0617",
       "keyword": "신류",
       "descriptions": [
         "나선 정벌"
@@ -29089,7 +29103,7 @@
       "era_script": []
     },
     {
-      "id": "n0617",
+      "id": "n0618",
       "keyword": "이장손",
       "descriptions": [
         "비격진천뢰"
@@ -29112,7 +29126,7 @@
       "era_script": []
     },
     {
-      "id": "n0618",
+      "id": "n0619",
       "keyword": "호조",
       "descriptions": [
         "삼사"
@@ -29137,7 +29151,7 @@
       "era_script": []
     },
     {
-      "id": "n0619",
+      "id": "n0620",
       "keyword": "북관 대첩",
       "descriptions": [
         "길주 의병",
@@ -29167,7 +29181,7 @@
       "era_script": []
     },
     {
-      "id": "n0620",
+      "id": "n0621",
       "keyword": "진주 대첩",
       "descriptions": [
         "김시민",
@@ -29201,7 +29215,7 @@
       "era_script": []
     },
     {
-      "id": "n0621",
+      "id": "n0622",
       "keyword": "백마산성 전투",
       "descriptions": [
         "백마산성",
@@ -29225,7 +29239,7 @@
       "era_script": []
     },
     {
-      "id": "n0622",
+      "id": "n0623",
       "keyword": "여진 정벌",
       "descriptions": [
         "4군 6진",
@@ -29267,7 +29281,7 @@
       "era_script": []
     },
     {
-      "id": "n0623",
+      "id": "n0624",
       "keyword": "김홍도",
       "descriptions": [
         "단원",
@@ -29307,7 +29321,7 @@
       "era_script": []
     },
     {
-      "id": "n0624",
+      "id": "n0625",
       "keyword": "정선",
       "descriptions": [
         "겸재",
@@ -29342,7 +29356,7 @@
       "era_script": []
     },
     {
-      "id": "n0625",
+      "id": "n0626",
       "keyword": "신윤복",
       "descriptions": [
         "단오도",
@@ -29375,7 +29389,7 @@
       "era_script": []
     },
     {
-      "id": "n0626",
+      "id": "n0627",
       "keyword": "강세황",
       "descriptions": [
         "영통동구도"
@@ -29402,7 +29416,7 @@
       "era_script": []
     },
     {
-      "id": "n0627",
+      "id": "n0628",
       "keyword": "동국통감",
       "descriptions": [
         "자치통감",
@@ -29441,7 +29455,7 @@
       ]
     },
     {
-      "id": "n0628",
+      "id": "n0629",
       "keyword": "신유박해",
       "descriptions": [
         "이승훈",
@@ -29495,7 +29509,7 @@
       "era_script": []
     },
     {
-      "id": "n0629",
+      "id": "n0630",
       "keyword": "주시경",
       "descriptions": [
         "국문 연구소",
@@ -29526,7 +29540,7 @@
       "era_script": []
     },
     {
-      "id": "n0630",
+      "id": "n0631",
       "keyword": "이극로",
       "descriptions": [
         "우리말 큰 사전",
@@ -29556,7 +29570,7 @@
       "era_script": []
     },
     {
-      "id": "n0631",
+      "id": "n0632",
       "keyword": "유길준",
       "descriptions": [
         "1차 갑오개혁",
@@ -29597,7 +29611,7 @@
       "era_script": []
     },
     {
-      "id": "n0632",
+      "id": "n0633",
       "keyword": "독립문 건립 운동",
       "descriptions": [],
       "ref_id": [
@@ -29621,7 +29635,7 @@
       "era_script": []
     },
     {
-      "id": "n0633",
+      "id": "n0634",
       "keyword": "대한광복회",
       "descriptions": [
         "공화정",
@@ -29670,7 +29684,7 @@
       "era_script": []
     },
     {
-      "id": "n0634",
+      "id": "n0635",
       "keyword": "신한 청년당",
       "descriptions": [
         "김구",
@@ -29719,7 +29733,7 @@
       "era_script": []
     },
     {
-      "id": "n0635",
+      "id": "n0636",
       "keyword": "광주 학생 항일 운동",
       "descriptions": [
         "광주",
@@ -29796,7 +29810,7 @@
       "era_script": []
     },
     {
-      "id": "n0636",
+      "id": "n0637",
       "keyword": "북로군정서",
       "descriptions": [
         "김규식",
@@ -29845,7 +29859,7 @@
       "era_script": []
     },
     {
-      "id": "n0637",
+      "id": "n0638",
       "keyword": "도쿄",
       "descriptions": [
         "2.8 독립 선언",
@@ -29885,7 +29899,7 @@
       "era_script": []
     },
     {
-      "id": "n0638",
+      "id": "n0639",
       "keyword": "부산 임시 수도 지정",
       "descriptions": [
         "6.25 전쟁"
@@ -29919,7 +29933,7 @@
       "era_script": []
     },
     {
-      "id": "n0639",
+      "id": "n0640",
       "keyword": "흥남 철수",
       "descriptions": [
         "6.25 전쟁"
@@ -29955,7 +29969,7 @@
       "era_script": []
     },
     {
-      "id": "n0640",
+      "id": "n0641",
       "keyword": "서울 수복",
       "descriptions": [],
       "ref_id": [
@@ -29985,7 +29999,7 @@
       "era_script": []
     },
     {
-      "id": "n0641",
+      "id": "n0642",
       "keyword": "5.16 군사정변",
       "descriptions": [
         "5대 대통령 선거",
@@ -30021,7 +30035,7 @@
       "era_script": []
     },
     {
-      "id": "n0642",
+      "id": "n0643",
       "keyword": "미륵사지 석탑",
       "descriptions": [
         "금제 사리봉영기",
@@ -30050,7 +30064,7 @@
       "era_script": []
     },
     {
-      "id": "n0643",
+      "id": "n0644",
       "keyword": "고구려부흥운동",
       "descriptions": [
         "검모잠",
@@ -30089,7 +30103,7 @@
       "era_script": []
     },
     {
-      "id": "n0644",
+      "id": "n0645",
       "keyword": "나당 전쟁",
       "descriptions": [
         "기벌포",
@@ -30123,7 +30137,7 @@
       "era_script": []
     },
     {
-      "id": "n0645",
+      "id": "n0646",
       "keyword": "후백제",
       "descriptions": [
         "후당·오월 사신"
@@ -30146,7 +30160,7 @@
       "era_script": []
     },
     {
-      "id": "n0646",
+      "id": "n0647",
       "keyword": "신라 내물 마립간",
       "descriptions": [
         "마립간"
@@ -30169,7 +30183,7 @@
       "era_script": []
     },
     {
-      "id": "n0647",
+      "id": "n0648",
       "keyword": "고려 경종",
       "descriptions": [
         "시정 전시과",
@@ -30200,7 +30214,7 @@
       "era_script": []
     },
     {
-      "id": "n0648",
+      "id": "n0649",
       "keyword": "당나라",
       "descriptions": [
         "나·당 동맹",
@@ -30233,7 +30247,7 @@
       "era_script": []
     },
     {
-      "id": "n0649",
+      "id": "n0650",
       "keyword": "다인철소 항전",
       "descriptions": [
         "다인철소",
@@ -30263,7 +30277,7 @@
       "era_script": []
     },
     {
-      "id": "n0650",
+      "id": "n0651",
       "keyword": "신라 진성여왕",
       "descriptions": [
         "삼대목",
@@ -30310,7 +30324,7 @@
       "era_script": []
     },
     {
-      "id": "n0651",
+      "id": "n0652",
       "keyword": "조선 명종",
       "descriptions": [
         "구황촬요",
@@ -30358,7 +30372,7 @@
       "era_script": []
     },
     {
-      "id": "n0652",
+      "id": "n0653",
       "keyword": "대한제국 군대",
       "descriptions": [
         "정미 7조약"
@@ -30381,7 +30395,7 @@
       "era_script": []
     },
     {
-      "id": "n0653",
+      "id": "n0654",
       "keyword": "조선군",
       "descriptions": [
         "4군 6진"
@@ -30404,7 +30418,7 @@
       "era_script": []
     },
     {
-      "id": "n0654",
+      "id": "n0655",
       "keyword": "잡색군",
       "descriptions": [
         "향토 방위 예비군"
@@ -30427,7 +30441,7 @@
       "era_script": []
     },
     {
-      "id": "n0655",
+      "id": "n0656",
       "keyword": "이색",
       "descriptions": [
         "목은",
@@ -30455,7 +30469,7 @@
       "era_script": []
     },
     {
-      "id": "n0656",
+      "id": "n0657",
       "keyword": "이제현",
       "descriptions": [
         "만권당",
@@ -30488,7 +30502,7 @@
       "era_script": []
     },
     {
-      "id": "n0657",
+      "id": "n0658",
       "keyword": "김부식",
       "descriptions": [
         "고려 인종",
@@ -30526,7 +30540,7 @@
       "era_script": []
     },
     {
-      "id": "n0658",
+      "id": "n0659",
       "keyword": "최충",
       "descriptions": [
         "9재 학당",
@@ -30566,7 +30580,7 @@
       "era_script": []
     },
     {
-      "id": "n0659",
+      "id": "n0660",
       "keyword": "정상기",
       "descriptions": [
         "동국지도"
@@ -30591,7 +30605,7 @@
       "era_script": []
     },
     {
-      "id": "n0660",
+      "id": "n0661",
       "keyword": "직전법",
       "descriptions": [
         "관수 관급제",
@@ -30650,7 +30664,7 @@
       ]
     },
     {
-      "id": "n0661",
+      "id": "n0662",
       "keyword": "화폐주조책",
       "descriptions": [
         "건원중보"
@@ -30681,7 +30695,7 @@
       ]
     },
     {
-      "id": "n0662",
+      "id": "n0663",
       "keyword": "신해통공",
       "descriptions": [
         "금난전권 폐지",
@@ -30728,7 +30742,7 @@
       "era_script": []
     },
     {
-      "id": "n0663",
+      "id": "n0664",
       "keyword": "한양도성",
       "descriptions": [
         "4대문",
@@ -30759,7 +30773,7 @@
       "era_script": []
     },
     {
-      "id": "n0664",
+      "id": "n0665",
       "keyword": "수원 화성",
       "descriptions": [
         "거중기",
@@ -30806,7 +30820,7 @@
       "era_script": []
     },
     {
-      "id": "n0665",
+      "id": "n0666",
       "keyword": "한산도 대첩",
       "descriptions": [
         "이순신",
@@ -30838,7 +30852,7 @@
       "era_script": []
     },
     {
-      "id": "n0666",
+      "id": "n0667",
       "keyword": "정유재란",
       "descriptions": [
         "이순신",
@@ -30873,7 +30887,7 @@
       "era_script": []
     },
     {
-      "id": "n0667",
+      "id": "n0668",
       "keyword": "탄금대 전투",
       "descriptions": [
         "배수의 진",
@@ -30920,7 +30934,7 @@
       "era_script": []
     },
     {
-      "id": "n0668",
+      "id": "n0669",
       "keyword": "민암",
       "descriptions": [
         "갑술환국"
@@ -30943,7 +30957,7 @@
       "era_script": []
     },
     {
-      "id": "n0669",
+      "id": "n0670",
       "keyword": "전주 화약",
       "descriptions": [
         "동학농민운동",
@@ -30989,7 +31003,7 @@
       "era_script": []
     },
     {
-      "id": "n0670",
+      "id": "n0671",
       "keyword": "일본군 경복궁 점령",
       "descriptions": [],
       "ref_id": [
@@ -31023,7 +31037,7 @@
       "era_script": []
     },
     {
-      "id": "n0671",
+      "id": "n0672",
       "keyword": "교정청",
       "descriptions": [
         "동학농민운동",
@@ -31065,7 +31079,7 @@
       ]
     },
     {
-      "id": "n0672",
+      "id": "n0673",
       "keyword": "전봉준 체포",
       "descriptions": [],
       "ref_id": [
@@ -31095,7 +31109,7 @@
       "era_script": []
     },
     {
-      "id": "n0673",
+      "id": "n0674",
       "keyword": "안핵사 이용태",
       "descriptions": [
         "고부 민란",
@@ -31137,7 +31151,7 @@
       ]
     },
     {
-      "id": "n0674",
+      "id": "n0675",
       "keyword": "2차 수신사",
       "descriptions": [
         "김홍집",
@@ -31173,7 +31187,7 @@
       "era_script": []
     },
     {
-      "id": "n0675",
+      "id": "n0676",
       "keyword": "헐버트",
       "descriptions": [
         "대한제국 멸망사",
@@ -31202,7 +31216,7 @@
       "era_script": []
     },
     {
-      "id": "n0676",
+      "id": "n0677",
       "keyword": "메가타",
       "descriptions": [
         "1차 한일협약",
@@ -31242,7 +31256,7 @@
       "era_script": []
     },
     {
-      "id": "n0677",
+      "id": "n0678",
       "keyword": "스크랜턴",
       "descriptions": [
         "이화 학당"
@@ -31268,7 +31282,7 @@
       "era_script": []
     },
     {
-      "id": "n0678",
+      "id": "n0679",
       "keyword": "쟝지연",
       "descriptions": [
         "단연보국채"
@@ -31291,7 +31305,7 @@
       "era_script": []
     },
     {
-      "id": "n0679",
+      "id": "n0680",
       "keyword": "동아일보",
       "descriptions": [
         "브나로드 운동",
@@ -31324,7 +31338,7 @@
       "era_script": []
     },
     {
-      "id": "n0680",
+      "id": "n0681",
       "keyword": "정우회 선언",
       "descriptions": [
         "6.10 만세 운동",
@@ -31367,7 +31381,7 @@
       "era_script": []
     },
     {
-      "id": "n0681",
+      "id": "n0682",
       "keyword": "신간회 해소",
       "descriptions": [],
       "ref_id": [],
@@ -31394,7 +31408,7 @@
       "era_script": []
     },
     {
-      "id": "n0682",
+      "id": "n0683",
       "keyword": "2.8 독립 선언",
       "descriptions": [
         "도쿄",
@@ -31446,7 +31460,7 @@
       "era_script": []
     },
     {
-      "id": "n0683",
+      "id": "n0684",
       "keyword": "상하이",
       "descriptions": [
         "김구",
@@ -31485,7 +31499,7 @@
       "era_script": []
     },
     {
-      "id": "n0684",
+      "id": "n0685",
       "keyword": "멕시코",
       "descriptions": [
         "숭무 학교",
@@ -31518,7 +31532,7 @@
       "era_script": []
     },
     {
-      "id": "n0685",
+      "id": "n0686",
       "keyword": "양세봉",
       "descriptions": [
         "조선혁명군",
@@ -31547,7 +31561,7 @@
       "era_script": []
     },
     {
-      "id": "n0686",
+      "id": "n0687",
       "keyword": "지청천",
       "descriptions": [
         "대전자령 전투",
@@ -31573,7 +31587,7 @@
       "era_script": []
     },
     {
-      "id": "n0687",
+      "id": "n0688",
       "keyword": "김원봉",
       "descriptions": [
         "의열단",
@@ -31621,7 +31635,7 @@
       "era_script": []
     },
     {
-      "id": "n0688",
+      "id": "n0689",
       "keyword": "박상진",
       "descriptions": [
         "대한광복회"
@@ -31655,7 +31669,7 @@
       "era_script": []
     },
     {
-      "id": "n0689",
+      "id": "n0690",
       "keyword": "김좌진",
       "descriptions": [
         "북로군정서",
@@ -31684,7 +31698,7 @@
       "era_script": []
     },
     {
-      "id": "n0690",
+      "id": "n0691",
       "keyword": "좌우 합작 위원회",
       "descriptions": [
         "김규식",
@@ -31723,7 +31737,7 @@
       "era_script": []
     },
     {
-      "id": "n0691",
+      "id": "n0692",
       "keyword": "조선어학회",
       "descriptions": [
         "이극로",
@@ -31761,7 +31775,7 @@
       "era_script": []
     },
     {
-      "id": "n0692",
+      "id": "n0693",
       "keyword": "4.3 사건",
       "descriptions": [
         "남한 단독 선거 반대",
@@ -31802,7 +31816,7 @@
       "era_script": []
     },
     {
-      "id": "n0693",
+      "id": "n0694",
       "keyword": "신한공사",
       "descriptions": [
         "귀속 재산 처리",
@@ -31851,7 +31865,7 @@
       ]
     },
     {
-      "id": "n0694",
+      "id": "n0695",
       "keyword": "인천 상륙 작전",
       "descriptions": [
         "6.25 전쟁"
@@ -31884,7 +31898,7 @@
       "era_script": []
     },
     {
-      "id": "n0695",
+      "id": "n0696",
       "keyword": "반민족 행위 처벌법",
       "descriptions": [
         "대한민국 이승만 정부"
@@ -31917,7 +31931,7 @@
       "era_script": []
     },
     {
-      "id": "n0696",
+      "id": "n0697",
       "keyword": "5대 국회의원 선거",
       "descriptions": [
         "양원제"
@@ -31946,7 +31960,7 @@
       "era_script": []
     },
     {
-      "id": "n0697",
+      "id": "n0698",
       "keyword": "6.15 남북 공동 선언",
       "descriptions": [
         "개성공단 합의",
@@ -31992,7 +32006,7 @@
       "era_script": []
     },
     {
-      "id": "n0698",
+      "id": "n0699",
       "keyword": "10.4 남북 정상 선언",
       "descriptions": [
         "대한민국 노무현 정부"
@@ -32034,7 +32048,7 @@
       "era_script": []
     },
     {
-      "id": "n0699",
+      "id": "n0700",
       "keyword": "7.4 남북 공동 성명",
       "descriptions": [
         "남북 조절 위원회",
@@ -32080,7 +32094,7 @@
       "era_script": []
     },
     {
-      "id": "n0700",
+      "id": "n0701",
       "keyword": "개성공단 건설",
       "descriptions": [
         "대한민국 노무현 정부"
@@ -32124,7 +32138,7 @@
       "era_script": []
     },
     {
-      "id": "n0701",
+      "id": "n0702",
       "keyword": "한반도 비핵화 공동 선언",
       "descriptions": [
         "대한민국 노태우 정부"
@@ -32159,7 +32173,7 @@
       "era_script": []
     },
     {
-      "id": "n0702",
+      "id": "n0703",
       "keyword": "이산가족 교환 방문",
       "descriptions": [
         "대한민국 전두환 정부"
@@ -32218,7 +32232,7 @@
       "era_script": []
     },
     {
-      "id": "n0703",
+      "id": "n0704",
       "keyword": "조선왕조의궤",
       "descriptions": [
         "병인양요",
@@ -32248,7 +32262,7 @@
       "era_script": []
     },
     {
-      "id": "n0704",
+      "id": "n0705",
       "keyword": "현량과",
       "descriptions": [
         "조광조",
@@ -32291,7 +32305,7 @@
       "era_script": []
     },
     {
-      "id": "n0705",
+      "id": "n0706",
       "keyword": "발해 문왕",
       "descriptions": [
         "대흥",
@@ -32322,7 +32336,7 @@
       "era_script": []
     },
     {
-      "id": "n0706",
+      "id": "n0707",
       "keyword": "발해 선왕",
       "descriptions": [
         "5경 15부 62주"
@@ -32345,7 +32359,7 @@
       "era_script": []
     },
     {
-      "id": "n0707",
+      "id": "n0708",
       "keyword": "불국사 삼층석탑",
       "descriptions": [
         "금동제 사리 외함",
@@ -32383,7 +32397,7 @@
       "era_script": []
     },
     {
-      "id": "n0708",
+      "id": "n0709",
       "keyword": "신숭겸",
       "descriptions": [
         "고려 태조",
@@ -32412,7 +32426,7 @@
       "era_script": []
     },
     {
-      "id": "n0709",
+      "id": "n0710",
       "keyword": "인재등용책",
       "descriptions": [
         "독서삼품과"
@@ -32437,7 +32451,7 @@
       "era_script": []
     },
     {
-      "id": "n0710",
+      "id": "n0711",
       "keyword": "관학교육책",
       "descriptions": [
         "4부 학당"
@@ -32460,7 +32474,7 @@
       "era_script": []
     },
     {
-      "id": "n0711",
+      "id": "n0712",
       "keyword": "왕권강화책",
       "descriptions": [
         "초계문신제"
@@ -32483,7 +32497,7 @@
       "era_script": []
     },
     {
-      "id": "n0712",
+      "id": "n0713",
       "keyword": "고려 전기",
       "descriptions": [
         "노비안검법",
@@ -32511,7 +32525,7 @@
       "era_script": []
     },
     {
-      "id": "n0713",
+      "id": "n0714",
       "keyword": "남이의 옥사",
       "descriptions": [
         "조선 예종"
@@ -32544,7 +32558,7 @@
       "era_script": []
     },
     {
-      "id": "n0714",
+      "id": "n0715",
       "keyword": "조선 연산군 즉위",
       "descriptions": [],
       "ref_id": [
@@ -32573,7 +32587,7 @@
       "era_script": []
     },
     {
-      "id": "n0715",
+      "id": "n0716",
       "keyword": "조선 명종 즉위",
       "descriptions": [],
       "ref_id": [
@@ -32600,7 +32614,7 @@
       "era_script": []
     },
     {
-      "id": "n0716",
+      "id": "n0717",
       "keyword": "김육",
       "descriptions": [
         "대동법",
@@ -32635,7 +32649,7 @@
       "era_script": []
     },
     {
-      "id": "n0717",
+      "id": "n0718",
       "keyword": "동서 분당",
       "descriptions": [
         "김효원",
@@ -32673,7 +32687,7 @@
       "era_script": []
     },
     {
-      "id": "n0718",
+      "id": "n0719",
       "keyword": "기해예송",
       "descriptions": [
         "기년복",
@@ -32716,7 +32730,7 @@
       "era_script": []
     },
     {
-      "id": "n0719",
+      "id": "n0720",
       "keyword": "신라 성덕왕",
       "descriptions": [
         "정전",
@@ -32748,7 +32762,7 @@
       "era_script": []
     },
     {
-      "id": "n0720",
+      "id": "n0721",
       "keyword": "안견",
       "descriptions": [
         "몽유도원도"
@@ -32776,7 +32790,7 @@
       "era_script": []
     },
     {
-      "id": "n0721",
+      "id": "n0722",
       "keyword": "신해박해",
       "descriptions": [
         "신주",
@@ -32814,7 +32828,7 @@
       "era_script": []
     },
     {
-      "id": "n0722",
+      "id": "n0723",
       "keyword": "중광단",
       "descriptions": [
         "김좌진",
@@ -32869,7 +32883,7 @@
       ]
     },
     {
-      "id": "n0723",
+      "id": "n0724",
       "keyword": "조선불교유신론",
       "descriptions": [
         "조선불교유신론",
@@ -32903,7 +32917,7 @@
       ]
     },
     {
-      "id": "n0724",
+      "id": "n0725",
       "keyword": "보은 집회",
       "descriptions": [
         "교조신원운동",
@@ -32941,7 +32955,7 @@
       "era_script": []
     },
     {
-      "id": "n0725",
+      "id": "n0726",
       "keyword": "천주실의",
       "descriptions": [
         "이수광"
@@ -32976,7 +32990,7 @@
       ]
     },
     {
-      "id": "n0726",
+      "id": "n0727",
       "keyword": "황사영 백서 사건",
       "descriptions": [
         "백서",
@@ -33027,7 +33041,7 @@
       "era_script": []
     },
     {
-      "id": "n0727",
+      "id": "n0728",
       "keyword": "박규수",
       "descriptions": [
         "박지원",
@@ -33068,7 +33082,7 @@
       "era_script": []
     },
     {
-      "id": "n0728",
+      "id": "n0729",
       "keyword": "스티븐스 암살 사건",
       "descriptions": [
         "스티븐스 외교 고문",
@@ -33100,7 +33114,7 @@
       "era_script": []
     },
     {
-      "id": "n0729",
+      "id": "n0730",
       "keyword": "스티븐스 외교 고문",
       "descriptions": [
         "1차 한일협약",
@@ -33128,7 +33142,7 @@
       "era_script": []
     },
     {
-      "id": "n0730",
+      "id": "n0731",
       "keyword": "청일전쟁 승전",
       "descriptions": [
         "삼국 간섭"
@@ -33153,7 +33167,7 @@
       "era_script": []
     },
     {
-      "id": "n0731",
+      "id": "n0732",
       "keyword": "을미사변",
       "descriptions": [
         "삼국 간섭",
@@ -33190,7 +33204,7 @@
       "era_script": []
     },
     {
-      "id": "n0732",
+      "id": "n0733",
       "keyword": "임병찬",
       "descriptions": [
         "국권 반환 요구서",
@@ -33230,7 +33244,7 @@
       "era_script": []
     },
     {
-      "id": "n0733",
+      "id": "n0734",
       "keyword": "이인영",
       "descriptions": [
         "13도 창의군",
@@ -33261,7 +33275,7 @@
       "era_script": []
     },
     {
-      "id": "n0734",
+      "id": "n0735",
       "keyword": "장지연",
       "descriptions": [
         "단연보국채"
@@ -33284,7 +33298,7 @@
       "era_script": []
     },
     {
-      "id": "n0735",
+      "id": "n0736",
       "keyword": "애국 계몽 운동",
       "descriptions": [
         "대한자강회"
@@ -33307,7 +33321,7 @@
       "era_script": []
     },
     {
-      "id": "n0736",
+      "id": "n0737",
       "keyword": "여성 운동",
       "descriptions": [
         "여권통문"
@@ -33330,7 +33344,7 @@
       "era_script": []
     },
     {
-      "id": "n0737",
+      "id": "n0738",
       "keyword": "김구",
       "descriptions": [
         "경교장",
@@ -33375,7 +33389,7 @@
       "era_script": []
     },
     {
-      "id": "n0738",
+      "id": "n0739",
       "keyword": "여운형",
       "descriptions": [
         "극동 인민 대표 대회",
@@ -33422,7 +33436,7 @@
       "era_script": []
     },
     {
-      "id": "n0739",
+      "id": "n0740",
       "keyword": "이승만",
       "descriptions": [
         "5.10 총선거",
@@ -33452,7 +33466,7 @@
       "era_script": []
     },
     {
-      "id": "n0740",
+      "id": "n0741",
       "keyword": "장면 내각 정부",
       "descriptions": [
         "3.15 부정 선거",
@@ -33488,7 +33502,7 @@
       "era_script": []
     },
     {
-      "id": "n0741",
+      "id": "n0742",
       "keyword": "지방 자치제",
       "descriptions": [],
       "ref_id": [
@@ -33519,7 +33533,7 @@
       ]
     },
     {
-      "id": "n0742",
+      "id": "n0743",
       "keyword": "부석사 소조여래좌상",
       "descriptions": [
         "고려",
@@ -33550,7 +33564,7 @@
       "era_script": []
     },
     {
-      "id": "n0743",
+      "id": "n0744",
       "keyword": "정묘호란",
       "descriptions": [
         "용골산성",
@@ -33590,7 +33604,7 @@
       "era_script": []
     },
     {
-      "id": "n0744",
+      "id": "n0745",
       "keyword": "익산",
       "descriptions": [
         "미륵사",
@@ -33620,7 +33634,7 @@
       "era_script": []
     },
     {
-      "id": "n0745",
+      "id": "n0746",
       "keyword": "금동 대향로",
       "descriptions": [
         "도교",
@@ -33660,7 +33674,7 @@
       "era_script": []
     },
     {
-      "id": "n0746",
+      "id": "n0747",
       "keyword": "백제 의자왕",
       "descriptions": [
         "대야성 전투",
@@ -33699,7 +33713,7 @@
       "era_script": []
     },
     {
-      "id": "n0747",
+      "id": "n0748",
       "keyword": "고구려 분열",
       "descriptions": [
         "연남건",
@@ -33731,7 +33745,7 @@
       "era_script": []
     },
     {
-      "id": "n0748",
+      "id": "n0749",
       "keyword": "율령",
       "descriptions": [
         "고구려 소수림왕",
@@ -33776,7 +33790,7 @@
       ]
     },
     {
-      "id": "n0749",
+      "id": "n0750",
       "keyword": "대가야 병합",
       "descriptions": [
         "신라 진흥왕"
@@ -33811,7 +33825,7 @@
       "era_script": []
     },
     {
-      "id": "n0750",
+      "id": "n0751",
       "keyword": "고국원왕 전사",
       "descriptions": [
         "백제 근초고왕",
@@ -33854,7 +33868,7 @@
       "era_script": []
     },
     {
-      "id": "n0751",
+      "id": "n0752",
       "keyword": "장보고의 난",
       "descriptions": [
         "궁복",
@@ -33888,7 +33902,7 @@
       "era_script": []
     },
     {
-      "id": "n0752",
+      "id": "n0753",
       "keyword": "김지정의 난",
       "descriptions": [
         "김지정",
@@ -33925,7 +33939,7 @@
       "era_script": []
     },
     {
-      "id": "n0753",
+      "id": "n0754",
       "keyword": "시무책 10여 조",
       "descriptions": [
         "신라 하대",
@@ -33972,7 +33986,7 @@
       ]
     },
     {
-      "id": "n0754",
+      "id": "n0755",
       "keyword": "황룡사 구층 목탑",
       "descriptions": [
         "신라",
@@ -34028,7 +34042,7 @@
       "era_script": []
     },
     {
-      "id": "n0755",
+      "id": "n0756",
       "keyword": "세속 5계",
       "descriptions": [
         "신라 진평왕",
@@ -34072,7 +34086,7 @@
       "era_script": []
     },
     {
-      "id": "n0756",
+      "id": "n0757",
       "keyword": "만부교 사건",
       "descriptions": [
         "거란",
@@ -34111,7 +34125,7 @@
       "era_script": []
     },
     {
-      "id": "n0757",
+      "id": "n0758",
       "keyword": "곽주성 전투",
       "descriptions": [
         "곽주",
@@ -34145,7 +34159,7 @@
       "era_script": []
     },
     {
-      "id": "n0758",
+      "id": "n0759",
       "keyword": "최우",
       "descriptions": [
         "강화도 천도",
@@ -34196,7 +34210,7 @@
       "era_script": []
     },
     {
-      "id": "n0759",
+      "id": "n0760",
       "keyword": "최충헌",
       "descriptions": [
         "고려 명종",
@@ -34244,7 +34258,7 @@
       "era_script": []
     },
     {
-      "id": "n0760",
+      "id": "n0761",
       "keyword": "배중손",
       "descriptions": [
         "삼별초",
@@ -34271,7 +34285,7 @@
       "era_script": []
     },
     {
-      "id": "n0761",
+      "id": "n0762",
       "keyword": "경대승",
       "descriptions": [
         "정중부 제거"
@@ -34301,7 +34315,7 @@
       "era_script": []
     },
     {
-      "id": "n0762",
+      "id": "n0763",
       "keyword": "신돈",
       "descriptions": [
         "고려 공민왕",
@@ -34346,7 +34360,7 @@
       "era_script": []
     },
     {
-      "id": "n0763",
+      "id": "n0764",
       "keyword": "고려 무신집권기",
       "descriptions": [
         "고려 의종",
@@ -34398,7 +34412,7 @@
       "era_script": []
     },
     {
-      "id": "n0764",
+      "id": "n0765",
       "keyword": "고려 인종",
       "descriptions": [
         "김부식",
@@ -34446,7 +34460,7 @@
       "era_script": []
     },
     {
-      "id": "n0765",
+      "id": "n0766",
       "keyword": "향약",
       "descriptions": [
         "약문",
@@ -34473,7 +34487,7 @@
       "era_script": []
     },
     {
-      "id": "n0766",
+      "id": "n0767",
       "keyword": "향도",
       "descriptions": [
         "매향",
@@ -34499,7 +34513,7 @@
       "era_script": []
     },
     {
-      "id": "n0767",
+      "id": "n0768",
       "keyword": "동래성 전투",
       "descriptions": [
         "동래성",
@@ -34534,7 +34548,7 @@
       "era_script": []
     },
     {
-      "id": "n0768",
+      "id": "n0769",
       "keyword": "김상용 강화도 순절",
       "descriptions": [
         "병자호란"
@@ -34564,7 +34578,7 @@
       "era_script": []
     },
     {
-      "id": "n0769",
+      "id": "n0770",
       "keyword": "조선 현종",
       "descriptions": [
         "기해예송",
@@ -34596,7 +34610,7 @@
       "era_script": []
     },
     {
-      "id": "n0770",
+      "id": "n0771",
       "keyword": "주세붕",
       "descriptions": [
         "백운동 서원",
@@ -34632,7 +34646,7 @@
       "era_script": []
     },
     {
-      "id": "n0771",
+      "id": "n0772",
       "keyword": "전봉준",
       "descriptions": [
         "동학",
@@ -34666,7 +34680,7 @@
       "era_script": []
     },
     {
-      "id": "n0772",
+      "id": "n0773",
       "keyword": "조선 고종 친정",
       "descriptions": [],
       "ref_id": [
@@ -34693,7 +34707,7 @@
       "era_script": []
     },
     {
-      "id": "n0773",
+      "id": "n0774",
       "keyword": "청일전쟁",
       "descriptions": [
         "톈진 조약"
@@ -34732,7 +34746,7 @@
       "era_script": []
     },
     {
-      "id": "n0774",
+      "id": "n0775",
       "keyword": "대한국 국제",
       "descriptions": [
         "광무개혁",
@@ -34781,7 +34795,7 @@
       ]
     },
     {
-      "id": "n0775",
+      "id": "n0776",
       "keyword": "한성 사범 학교 관제",
       "descriptions": [
         "2차 갑오개혁",
@@ -34818,7 +34832,7 @@
       ]
     },
     {
-      "id": "n0776",
+      "id": "n0777",
       "keyword": "동문학",
       "descriptions": [
         "조선 개항기",
@@ -34858,7 +34872,7 @@
       ]
     },
     {
-      "id": "n0777",
+      "id": "n0778",
       "keyword": "오산 학교",
       "descriptions": [
         "신민회",
@@ -34894,7 +34908,7 @@
       ]
     },
     {
-      "id": "n0778",
+      "id": "n0779",
       "keyword": "원산 학사",
       "descriptions": [],
       "ref_id": [
@@ -34923,7 +34937,7 @@
       ]
     },
     {
-      "id": "n0779",
+      "id": "n0780",
       "keyword": "한성주보",
       "descriptions": [
         "상업 광고"
@@ -34948,7 +34962,7 @@
       "era_script": []
     },
     {
-      "id": "n0780",
+      "id": "n0781",
       "keyword": "만세보",
       "descriptions": [
         "천도교",
@@ -34986,7 +35000,7 @@
       "era_script": []
     },
     {
-      "id": "n0781",
+      "id": "n0782",
       "keyword": "독도 불법 편입",
       "descriptions": [
         "일본"
@@ -35019,7 +35033,7 @@
       "era_script": []
     },
     {
-      "id": "n0782",
+      "id": "n0783",
       "keyword": "가쓰라·태프트 밀약",
       "descriptions": [],
       "ref_id": [
@@ -35048,7 +35062,7 @@
       "era_script": []
     },
     {
-      "id": "n0783",
+      "id": "n0784",
       "keyword": "한일의정서",
       "descriptions": [
         "러일 전쟁"
@@ -35079,7 +35093,7 @@
       "era_script": []
     },
     {
-      "id": "n0784",
+      "id": "n0785",
       "keyword": "대한애국청년당",
       "descriptions": [
         "부민관 폭파 의거"
@@ -35102,7 +35116,7 @@
       "era_script": []
     },
     {
-      "id": "n0785",
+      "id": "n0786",
       "keyword": "천도교 소년회",
       "descriptions": [
         "김기전",
@@ -35136,7 +35150,7 @@
       "era_script": []
     },
     {
-      "id": "n0786",
+      "id": "n0787",
       "keyword": "이윤재",
       "descriptions": [
         "조선어 연구회",
@@ -35167,7 +35181,7 @@
       "era_script": []
     },
     {
-      "id": "n0787",
+      "id": "n0788",
       "keyword": "정읍 발언",
       "descriptions": [
         "단독 정부",
@@ -35203,7 +35217,7 @@
       "era_script": []
     },
     {
-      "id": "n0788",
+      "id": "n0789",
       "keyword": "유엔 한국 임시 위원단 도착",
       "descriptions": [],
       "ref_id": [
@@ -35230,7 +35244,7 @@
       "era_script": []
     },
     {
-      "id": "n0789",
+      "id": "n0790",
       "keyword": "한국 민주당 창당",
       "descriptions": [],
       "ref_id": [
@@ -35259,7 +35273,7 @@
       "era_script": []
     },
     {
-      "id": "n0790",
+      "id": "n0791",
       "keyword": "조선 인민 공화국",
       "descriptions": [
         "조선 건국 준비 위원회"
@@ -35292,7 +35306,7 @@
       ]
     },
     {
-      "id": "n0791",
+      "id": "n0792",
       "keyword": "9주 5소경",
       "descriptions": [
         "신라",
@@ -35336,7 +35350,7 @@
       "era_script": []
     },
     {
-      "id": "n0792",
+      "id": "n0793",
       "keyword": "5도 양계",
       "descriptions": [
         "고려"
@@ -35361,7 +35375,7 @@
       "era_script": []
     },
     {
-      "id": "n0793",
+      "id": "n0794",
       "keyword": "8도",
       "descriptions": [
         "관찰사"
@@ -35385,7 +35399,7 @@
       "era_script": []
     },
     {
-      "id": "n0794",
+      "id": "n0795",
       "keyword": "23부",
       "descriptions": [
         "2차 갑오개혁",
@@ -35418,7 +35432,7 @@
       "era_script": []
     },
     {
-      "id": "n0795",
+      "id": "n0796",
       "keyword": "고구려 지방관제",
       "descriptions": [
         "욕살",
@@ -35442,7 +35456,7 @@
       "era_script": []
     },
     {
-      "id": "n0796",
+      "id": "n0797",
       "keyword": "13도제",
       "descriptions": [
         "광무개혁"
@@ -35465,7 +35479,7 @@
       "era_script": []
     },
     {
-      "id": "n0797",
+      "id": "n0798",
       "keyword": "1.4 후퇴",
       "descriptions": [
         "서울 퇴각",
@@ -35496,7 +35510,7 @@
       "era_script": []
     },
     {
-      "id": "n0798",
+      "id": "n0799",
       "keyword": "장진호 전투",
       "descriptions": [
         "6.25 전쟁"
@@ -35528,7 +35542,7 @@
       "era_script": []
     },
     {
-      "id": "n0799",
+      "id": "n0800",
       "keyword": "대한민국 허정 과도 정부",
       "descriptions": [
         "내각 책임제"
@@ -35551,7 +35565,7 @@
       "era_script": []
     },
     {
-      "id": "n0800",
+      "id": "n0801",
       "keyword": "서희",
       "descriptions": [
         "강동 6주",
@@ -35598,7 +35612,7 @@
       "era_script": []
     },
     {
-      "id": "n0801",
+      "id": "n0802",
       "keyword": "이예",
       "descriptions": [
         "계해약조"
@@ -35622,7 +35636,7 @@
       "era_script": []
     },
     {
-      "id": "n0802",
+      "id": "n0803",
       "keyword": "김규식",
       "descriptions": [
         "남북 협상",
@@ -35668,7 +35682,7 @@
       "era_script": []
     },
     {
-      "id": "n0803",
+      "id": "n0804",
       "keyword": "민영익",
       "descriptions": [
         "갑신정변",
@@ -35701,7 +35715,7 @@
       "era_script": []
     },
     {
-      "id": "n0804",
+      "id": "n0805",
       "keyword": "안동",
       "descriptions": [
         "고려 공민왕",
@@ -35738,7 +35752,7 @@
       "era_script": []
     },
     {
-      "id": "n0805",
+      "id": "n0806",
       "keyword": "충청도",
       "descriptions": [
         "김육",
@@ -35768,7 +35782,7 @@
       "era_script": []
     },
     {
-      "id": "n0806",
+      "id": "n0807",
       "keyword": "경주",
       "descriptions": [
         "김사미·효심의 난",
@@ -35801,7 +35815,7 @@
       "era_script": []
     },
     {
-      "id": "n0807",
+      "id": "n0808",
       "keyword": "옥천",
       "descriptions": [
         "관산성 전투"
@@ -35824,7 +35838,7 @@
       "era_script": []
     },
     {
-      "id": "n0808",
+      "id": "n0809",
       "keyword": "합천",
       "descriptions": [
         "대야성 전투",
@@ -35852,7 +35866,7 @@
       "era_script": []
     },
     {
-      "id": "n0809",
+      "id": "n0810",
       "keyword": "논산",
       "descriptions": [
         "남북접 집결",
@@ -35882,7 +35896,7 @@
       "era_script": []
     },
     {
-      "id": "n0810",
+      "id": "n0811",
       "keyword": "호우총 청동그릇",
       "descriptions": [
         "고구려",
@@ -35916,7 +35930,7 @@
       "era_script": []
     },
     {
-      "id": "n0811",
+      "id": "n0812",
       "keyword": "평양성 전투",
       "descriptions": [
         "고국원왕 전사",
@@ -35965,7 +35979,7 @@
       "era_script": []
     },
     {
-      "id": "n0812",
+      "id": "n0813",
       "keyword": "국내성 천도",
       "descriptions": [],
       "ref_id": [
@@ -35992,7 +36006,7 @@
       "era_script": []
     },
     {
-      "id": "n0813",
+      "id": "n0814",
       "keyword": "낙랑군 축출",
       "descriptions": [
         "고구려 미천왕"
@@ -36031,7 +36045,7 @@
       "era_script": []
     },
     {
-      "id": "n0814",
+      "id": "n0815",
       "keyword": "진대법",
       "descriptions": [
         "고구려",
@@ -36084,7 +36098,7 @@
       ]
     },
     {
-      "id": "n0815",
+      "id": "n0816",
       "keyword": "걸사표",
       "descriptions": [
         "원광"
@@ -36118,7 +36132,7 @@
       "era_script": []
     },
     {
-      "id": "n0816",
+      "id": "n0817",
       "keyword": "각간 위홍",
       "descriptions": [
         "삼대목"
@@ -36143,7 +36157,7 @@
       "era_script": []
     },
     {
-      "id": "n0817",
+      "id": "n0818",
       "keyword": "대구화상",
       "descriptions": [
         "삼대목"
@@ -36168,7 +36182,7 @@
       "era_script": []
     },
     {
-      "id": "n0818",
+      "id": "n0819",
       "keyword": "고려 정종",
       "descriptions": [
         "광군"
@@ -36191,7 +36205,7 @@
       "era_script": []
     },
     {
-      "id": "n0819",
+      "id": "n0820",
       "keyword": "왕규의 난",
       "descriptions": [],
       "ref_id": [
@@ -36221,7 +36235,7 @@
       "era_script": []
     },
     {
-      "id": "n0820",
+      "id": "n0821",
       "keyword": "러시아",
       "descriptions": [
         "나선 정벌",
@@ -36256,7 +36270,7 @@
       "era_script": []
     },
     {
-      "id": "n0821",
+      "id": "n0822",
       "keyword": "일연",
       "descriptions": [
         "삼국유사"
@@ -36282,7 +36296,7 @@
       "era_script": []
     },
     {
-      "id": "n0822",
+      "id": "n0823",
       "keyword": "고려 후기",
       "descriptions": [
         "기철",
@@ -36309,7 +36323,7 @@
       "era_script": []
     },
     {
-      "id": "n0823",
+      "id": "n0824",
       "keyword": "수덕사 대웅전",
       "descriptions": [
         "고려",
@@ -36341,7 +36355,7 @@
       "era_script": []
     },
     {
-      "id": "n0824",
+      "id": "n0825",
       "keyword": "조선 태조",
       "descriptions": [
         "1차 왕자의 난",
@@ -36379,7 +36393,7 @@
       "era_script": []
     },
     {
-      "id": "n0825",
+      "id": "n0826",
       "keyword": "몽유도원도",
       "descriptions": [
         "안견",
@@ -36408,7 +36422,7 @@
       "era_script": []
     },
     {
-      "id": "n0826",
+      "id": "n0827",
       "keyword": "평양성 탈환",
       "descriptions": [
         "불랑기포",
@@ -36446,7 +36460,7 @@
       "era_script": []
     },
     {
-      "id": "n0827",
+      "id": "n0828",
       "keyword": "광교산 전투",
       "descriptions": [
         "김준룡",
@@ -36485,7 +36499,7 @@
       "era_script": []
     },
     {
-      "id": "n0828",
+      "id": "n0829",
       "keyword": "일본 원정",
       "descriptions": [
         "고려 원간섭기",
@@ -36526,7 +36540,7 @@
       "era_script": []
     },
     {
-      "id": "n0829",
+      "id": "n0830",
       "keyword": "용암포 조차 요구",
       "descriptions": [
         "러시아",
@@ -36564,7 +36578,7 @@
       "era_script": []
     },
     {
-      "id": "n0830",
+      "id": "n0831",
       "keyword": "13도 창의군",
       "descriptions": [
         "대한제국 순종",
@@ -36613,7 +36627,7 @@
       "era_script": []
     },
     {
-      "id": "n0831",
+      "id": "n0832",
       "keyword": "영남 유생",
       "descriptions": [
         "영남만인소"
@@ -36636,7 +36650,7 @@
       "era_script": []
     },
     {
-      "id": "n0832",
+      "id": "n0833",
       "keyword": "영선사",
       "descriptions": [
         "개화 정책",
@@ -36687,7 +36701,7 @@
       ]
     },
     {
-      "id": "n0833",
+      "id": "n0834",
       "keyword": "조·청 상민 수륙 무역 장정",
       "descriptions": [
         "내지 통상권",
@@ -36742,7 +36756,7 @@
       "era_script": []
     },
     {
-      "id": "n0834",
+      "id": "n0835",
       "keyword": "황국 중앙 총상회",
       "descriptions": [
         "대한제국",
@@ -36793,7 +36807,7 @@
       ]
     },
     {
-      "id": "n0835",
+      "id": "n0836",
       "keyword": "제중원",
       "descriptions": [],
       "ref_id": [],
@@ -36814,7 +36828,7 @@
       "era_script": []
     },
     {
-      "id": "n0836",
+      "id": "n0837",
       "keyword": "박문국",
       "descriptions": [
         "조선 고종",
@@ -36855,7 +36869,7 @@
       "era_script": []
     },
     {
-      "id": "n0837",
+      "id": "n0838",
       "keyword": "중명전",
       "descriptions": [
         "을사늑약"
@@ -36879,7 +36893,7 @@
       "era_script": []
     },
     {
-      "id": "n0838",
+      "id": "n0839",
       "keyword": "원각사",
       "descriptions": [
         "은세계 공연",
@@ -36911,7 +36925,7 @@
       "era_script": []
     },
     {
-      "id": "n0839",
+      "id": "n0840",
       "keyword": "환구단",
       "descriptions": [
         "대한제국",
@@ -36938,7 +36952,7 @@
       "era_script": []
     },
     {
-      "id": "n0840",
+      "id": "n0841",
       "keyword": "전환국",
       "descriptions": [
         "대한제국",
@@ -36966,7 +36980,7 @@
       "era_script": []
     },
     {
-      "id": "n0841",
+      "id": "n0842",
       "keyword": "단성사",
       "descriptions": [
         "영화 아리랑"
@@ -36992,7 +37006,7 @@
       "era_script": []
     },
     {
-      "id": "n0842",
+      "id": "n0843",
       "keyword": "태학",
       "descriptions": [
         "고구려",
@@ -37033,7 +37047,7 @@
       "era_script": []
     },
     {
-      "id": "n0843",
+      "id": "n0844",
       "keyword": "9재 학당",
       "descriptions": [
         "고려 문종",
@@ -37074,7 +37088,7 @@
       "era_script": []
     },
     {
-      "id": "n0844",
+      "id": "n0845",
       "keyword": "배재 학당",
       "descriptions": [
         "개신교"
@@ -37113,7 +37127,7 @@
       "era_script": []
     },
     {
-      "id": "n0845",
+      "id": "n0846",
       "keyword": "이화 학당",
       "descriptions": [
         "스크랜턴"
@@ -37140,7 +37154,7 @@
       "era_script": []
     },
     {
-      "id": "n0846",
+      "id": "n0847",
       "keyword": "2차 조선 교육령",
       "descriptions": [
         "보통학교 6년"
@@ -37173,7 +37187,7 @@
       ]
     },
     {
-      "id": "n0847",
+      "id": "n0848",
       "keyword": "서당 규칙",
       "descriptions": [
         "조선총독부"
@@ -37206,7 +37220,7 @@
       ]
     },
     {
-      "id": "n0848",
+      "id": "n0849",
       "keyword": "조선어 연구회",
       "descriptions": [
         "이윤재",
@@ -37243,7 +37257,7 @@
       ]
     },
     {
-      "id": "n0849",
+      "id": "n0850",
       "keyword": "조선 여자 교육회",
       "descriptions": [],
       "ref_id": [
@@ -37272,7 +37286,7 @@
       ]
     },
     {
-      "id": "n0850",
+      "id": "n0851",
       "keyword": "만주 애국지사",
       "descriptions": [
         "서전서숙"
@@ -37295,7 +37309,7 @@
       "era_script": []
     },
     {
-      "id": "n0851",
+      "id": "n0852",
       "keyword": "미쓰야 협정",
       "descriptions": [
         "만주 독립군 활동 위축",
@@ -37344,7 +37358,7 @@
       ]
     },
     {
-      "id": "n0852",
+      "id": "n0853",
       "keyword": "조선 형평사",
       "descriptions": [
         "일제강점기",
@@ -37390,7 +37404,7 @@
       ]
     },
     {
-      "id": "n0853",
+      "id": "n0854",
       "keyword": "국가 총동원법",
       "descriptions": [
         "일제강점기 민족말살기"
@@ -37442,7 +37456,7 @@
       ]
     },
     {
-      "id": "n0854",
+      "id": "n0855",
       "keyword": "독립군",
       "descriptions": [
         "자유시 참변"
@@ -37465,7 +37479,7 @@
       "era_script": []
     },
     {
-      "id": "n0855",
+      "id": "n0856",
       "keyword": "한인소년병학교",
       "descriptions": [],
       "ref_id": [
@@ -37486,7 +37500,7 @@
       "era_script": []
     },
     {
-      "id": "n0856",
+      "id": "n0857",
       "keyword": "조선어학회 사건",
       "descriptions": [
         "이극로",
@@ -37533,7 +37547,7 @@
       "era_script": []
     },
     {
-      "id": "n0857",
+      "id": "n0858",
       "keyword": "독립 청원서",
       "descriptions": [
         "김규식",
@@ -37570,7 +37584,7 @@
       "era_script": []
     },
     {
-      "id": "n0858",
+      "id": "n0859",
       "keyword": "한국통사",
       "descriptions": [
         "박은식"
@@ -37605,7 +37619,7 @@
       "era_script": []
     },
     {
-      "id": "n0859",
+      "id": "n0860",
       "keyword": "105인 사건",
       "descriptions": [
         "신민회",
@@ -37650,7 +37664,7 @@
       "era_script": []
     },
     {
-      "id": "n0860",
+      "id": "n0861",
       "keyword": "푸에블로호 나포 사건",
       "descriptions": [],
       "ref_id": [
@@ -37677,7 +37691,7 @@
       "era_script": []
     },
     {
-      "id": "n0861",
+      "id": "n0862",
       "keyword": "국가 보위 비상 대책 위원회",
       "descriptions": [
         "5.17 쿠데타",
@@ -37715,7 +37729,7 @@
       ]
     },
     {
-      "id": "n0862",
+      "id": "n0863",
       "keyword": "2차 경제개발 5개년 계획",
       "descriptions": [],
       "ref_id": [],
@@ -37742,7 +37756,7 @@
       "era_script": []
     },
     {
-      "id": "n0863",
+      "id": "n0864",
       "keyword": "한일 협정",
       "descriptions": [],
       "ref_id": [
@@ -37771,7 +37785,7 @@
       ]
     },
     {
-      "id": "n0864",
+      "id": "n0865",
       "keyword": "100억 달러 수출",
       "descriptions": [
         "대한민국 박정희 정부"
@@ -37815,7 +37829,7 @@
       "era_script": []
     },
     {
-      "id": "n0865",
+      "id": "n0866",
       "keyword": "서울 올림픽",
       "descriptions": [
         "대한민국 노태우 정부"
@@ -37861,7 +37875,7 @@
       "era_script": []
     },
     {
-      "id": "n0866",
+      "id": "n0867",
       "keyword": "OECD 가입",
       "descriptions": [
         "대한민국 김영삼 정부"
@@ -37901,7 +37915,7 @@
       "era_script": []
     },
     {
-      "id": "n0867",
+      "id": "n0868",
       "keyword": "한미FTA",
       "descriptions": [
         "대한민국 노무현 정부"
@@ -37948,7 +37962,7 @@
       "era_script": []
     },
     {
-      "id": "n0868",
+      "id": "n0869",
       "keyword": "부안",
       "descriptions": [
         "반계수록"
@@ -37971,7 +37985,7 @@
       "era_script": []
     },
     {
-      "id": "n0869",
+      "id": "n0870",
       "keyword": "김제",
       "descriptions": [
         "금산사"
@@ -37994,7 +38008,7 @@
       "era_script": []
     },
     {
-      "id": "n0870",
+      "id": "n0871",
       "keyword": "화순",
       "descriptions": [
         "능주"
@@ -38017,7 +38031,7 @@
       "era_script": []
     },
     {
-      "id": "n0871",
+      "id": "n0872",
       "keyword": "태인",
       "descriptions": [
         "을사의병",
@@ -38055,7 +38069,7 @@
       "era_script": []
     },
     {
-      "id": "n0872",
+      "id": "n0873",
       "keyword": "미륵사",
       "descriptions": [
         "백제 무왕",
@@ -38108,7 +38122,7 @@
       ]
     },
     {
-      "id": "n0873",
+      "id": "n0874",
       "keyword": "고흥 서기 편찬",
       "descriptions": [
         "백제 근초고왕"
@@ -38146,7 +38160,7 @@
       "era_script": []
     },
     {
-      "id": "n0874",
+      "id": "n0875",
       "keyword": "신라 원성왕 즉위",
       "descriptions": [
         "김경신",
@@ -38179,7 +38193,7 @@
       "era_script": []
     },
     {
-      "id": "n0875",
+      "id": "n0876",
       "keyword": "계백료서",
       "descriptions": [
         "고려 태조"
@@ -38231,7 +38245,7 @@
       ]
     },
     {
-      "id": "n0876",
+      "id": "n0877",
       "keyword": "성균관 개칭",
       "descriptions": [
         "고려 공민왕"
@@ -38266,7 +38280,7 @@
       "era_script": []
     },
     {
-      "id": "n0877",
+      "id": "n0878",
       "keyword": "초조대장경",
       "descriptions": [
         "거란",
@@ -38317,7 +38331,7 @@
       ]
     },
     {
-      "id": "n0878",
+      "id": "n0879",
       "keyword": "교정도감",
       "descriptions": [
         "고려 무신집권기",
@@ -38352,7 +38366,7 @@
       "era_script": []
     },
     {
-      "id": "n0879",
+      "id": "n0880",
       "keyword": "낭사",
       "descriptions": [
         "서경권",
@@ -38378,7 +38392,7 @@
       "era_script": []
     },
     {
-      "id": "n0880",
+      "id": "n0881",
       "keyword": "월정사 팔각구층석탑",
       "descriptions": [
         "고려"
@@ -38414,7 +38428,7 @@
       "era_script": []
     },
     {
-      "id": "n0881",
+      "id": "n0882",
       "keyword": "정몽주 피살",
       "descriptions": [
         "개성",
@@ -38448,7 +38462,7 @@
       "era_script": []
     },
     {
-      "id": "n0882",
+      "id": "n0883",
       "keyword": "사병 혁파",
       "descriptions": [],
       "ref_id": [
@@ -38475,7 +38489,7 @@
       "era_script": []
     },
     {
-      "id": "n0883",
+      "id": "n0884",
       "keyword": "홍건적 침입",
       "descriptions": [
         "고려 공민왕",
@@ -38516,7 +38530,7 @@
       "era_script": []
     },
     {
-      "id": "n0884",
+      "id": "n0885",
       "keyword": "삼포왜란",
       "descriptions": [
         "비변사",
@@ -38557,7 +38571,7 @@
       "era_script": []
     },
     {
-      "id": "n0885",
+      "id": "n0886",
       "keyword": "덕수궁",
       "descriptions": [
         "1차 미소 공동 위원회",
@@ -38586,7 +38600,7 @@
       "era_script": []
     },
     {
-      "id": "n0886",
+      "id": "n0887",
       "keyword": "제왕운기",
       "descriptions": [
         "고조선",
@@ -38617,7 +38631,7 @@
       "era_script": []
     },
     {
-      "id": "n0887",
+      "id": "n0888",
       "keyword": "을미의병",
       "descriptions": [
         "아관파천",
@@ -38651,7 +38665,7 @@
       "era_script": []
     },
     {
-      "id": "n0888",
+      "id": "n0889",
       "keyword": "원수부 관제",
       "descriptions": [
         "대원수",
@@ -38683,7 +38697,7 @@
       ]
     },
     {
-      "id": "n0889",
+      "id": "n0890",
       "keyword": "지계아문",
       "descriptions": [
         "지계"
@@ -38714,7 +38728,7 @@
       ]
     },
     {
-      "id": "n0890",
+      "id": "n0891",
       "keyword": "회사령",
       "descriptions": [
         "일제강점기 무단통치기",
@@ -38767,7 +38781,7 @@
       ]
     },
     {
-      "id": "n0891",
+      "id": "n0892",
       "keyword": "신문지법",
       "descriptions": [
         "대한제국 고종",
@@ -38806,7 +38820,7 @@
       ]
     },
     {
-      "id": "n0892",
+      "id": "n0893",
       "keyword": "경성 제국 대학",
       "descriptions": [
         "일제강점기 문화통치기"
@@ -38861,7 +38875,7 @@
       ]
     },
     {
-      "id": "n0893",
+      "id": "n0894",
       "keyword": "국민 대표 회의",
       "descriptions": [
         "개조파",
@@ -38899,7 +38913,7 @@
       "era_script": []
     },
     {
-      "id": "n0894",
+      "id": "n0895",
       "keyword": "조소앙",
       "descriptions": [
         "건국 강령",
@@ -38930,7 +38944,7 @@
       "era_script": []
     },
     {
-      "id": "n0895",
+      "id": "n0896",
       "keyword": "대한제국 순종",
       "descriptions": [
         "13도 창의군",
@@ -38968,7 +38982,7 @@
       "era_script": []
     },
     {
-      "id": "n0896",
+      "id": "n0897",
       "keyword": "김상덕",
       "descriptions": [
         "반민특위"
@@ -38991,7 +39005,7 @@
       "era_script": []
     },
     {
-      "id": "n0897",
+      "id": "n0898",
       "keyword": "외환 위기 발발",
       "descriptions": [
         "IMF"
@@ -39020,7 +39034,7 @@
       "era_script": []
     },
     {
-      "id": "n0898",
+      "id": "n0899",
       "keyword": "노사정 위원회",
       "descriptions": [
         "대한민국 김대중 정부"
@@ -39055,7 +39069,7 @@
       ]
     },
     {
-      "id": "n0899",
+      "id": "n0900",
       "keyword": "강릉",
       "descriptions": [
         "경포대",
@@ -39083,7 +39097,7 @@
       "era_script": []
     },
     {
-      "id": "n0900",
+      "id": "n0901",
       "keyword": "남북 기본 합의서",
       "descriptions": [
         "대한민국 노태우 정부",
@@ -39126,7 +39140,7 @@
       ]
     },
     {
-      "id": "n0901",
+      "id": "n0902",
       "keyword": "금강산 육로 관광",
       "descriptions": [],
       "ref_id": [
@@ -39155,7 +39169,7 @@
       ]
     },
     {
-      "id": "n0902",
+      "id": "n0903",
       "keyword": "평창 동계 올림픽",
       "descriptions": [
         "대한민국 문재인 정부"
@@ -39188,7 +39202,7 @@
       "era_script": []
     },
     {
-      "id": "n0903",
+      "id": "n0904",
       "keyword": "분황사 모전석탑",
       "descriptions": [
         "벽돌 모양",
@@ -39221,7 +39235,7 @@
       "era_script": []
     },
     {
-      "id": "n0904",
+      "id": "n0905",
       "keyword": "불국사",
       "descriptions": [
         "무구정광대다라니경",
@@ -39265,7 +39279,7 @@
       ]
     },
     {
-      "id": "n0905",
+      "id": "n0906",
       "keyword": "견훤 유폐",
       "descriptions": [
         "금산사",
@@ -39295,7 +39309,7 @@
       "era_script": []
     },
     {
-      "id": "n0906",
+      "id": "n0907",
       "keyword": "광평성",
       "descriptions": [
         "궁예",
@@ -39352,7 +39366,7 @@
       ]
     },
     {
-      "id": "n0907",
+      "id": "n0908",
       "keyword": "공산 전투",
       "descriptions": [
         "고려 태조",
@@ -39409,7 +39423,7 @@
       "era_script": []
     },
     {
-      "id": "n0908",
+      "id": "n0909",
       "keyword": "일리천 전투",
       "descriptions": [
         "고려 태조",
@@ -39456,7 +39470,7 @@
       "era_script": []
     },
     {
-      "id": "n0909",
+      "id": "n0910",
       "keyword": "고려 명종",
       "descriptions": [
         "권수정혜결사문",
@@ -39510,7 +39524,7 @@
       "era_script": []
     },
     {
-      "id": "n0910",
+      "id": "n0911",
       "keyword": "만권당",
       "descriptions": [
         "고려",
@@ -39566,7 +39580,7 @@
       ]
     },
     {
-      "id": "n0911",
+      "id": "n0912",
       "keyword": "관촉사 석조 미륵보살 입상",
       "descriptions": [
         "고려",
@@ -39599,7 +39613,7 @@
       "era_script": []
     },
     {
-      "id": "n0912",
+      "id": "n0913",
       "keyword": "집현전",
       "descriptions": [
         "단종 복위 운동",
@@ -39643,7 +39657,7 @@
       "era_script": []
     },
     {
-      "id": "n0913",
+      "id": "n0914",
       "keyword": "중추원",
       "descriptions": [
         "군사 기밀",
@@ -39671,7 +39685,7 @@
       "era_script": []
     },
     {
-      "id": "n0914",
+      "id": "n0915",
       "keyword": "황산 대첩",
       "descriptions": [
         "남원"
@@ -39702,7 +39716,7 @@
       "era_script": []
     },
     {
-      "id": "n0915",
+      "id": "n0916",
       "keyword": "조선 태종 즉위",
       "descriptions": [],
       "ref_id": [
@@ -39729,7 +39743,7 @@
       "era_script": []
     },
     {
-      "id": "n0916",
+      "id": "n0917",
       "keyword": "김종서",
       "descriptions": [
         "4군 6진",
@@ -39777,7 +39791,7 @@
       "era_script": []
     },
     {
-      "id": "n0917",
+      "id": "n0918",
       "keyword": "이종무",
       "descriptions": [
         "대마도 정벌",
@@ -39818,7 +39832,7 @@
       "era_script": []
     },
     {
-      "id": "n0918",
+      "id": "n0919",
       "keyword": "총융청",
       "descriptions": [],
       "ref_id": [
@@ -39850,7 +39864,7 @@
       ]
     },
     {
-      "id": "n0919",
+      "id": "n0920",
       "keyword": "금위영",
       "descriptions": [
         "5군영",
@@ -39895,7 +39909,7 @@
       ]
     },
     {
-      "id": "n0920",
+      "id": "n0921",
       "keyword": "속대전 편찬",
       "descriptions": [],
       "ref_id": [
@@ -39922,7 +39936,7 @@
       "era_script": []
     },
     {
-      "id": "n0921",
+      "id": "n0922",
       "keyword": "조선 헌종 즉위",
       "descriptions": [],
       "ref_id": [
@@ -39949,7 +39963,7 @@
       "era_script": []
     },
     {
-      "id": "n0922",
+      "id": "n0923",
       "keyword": "조선통신사",
       "descriptions": [
         "기유약조",
@@ -39983,7 +39997,7 @@
       "era_script": []
     },
     {
-      "id": "n0923",
+      "id": "n0924",
       "keyword": "독립신문",
       "descriptions": [
         "서재필",
@@ -40021,7 +40035,7 @@
       "era_script": []
     },
     {
-      "id": "n0924",
+      "id": "n0925",
       "keyword": "황룡촌 전투",
       "descriptions": [
         "홍계훈",
@@ -40056,7 +40070,7 @@
       "era_script": []
     },
     {
-      "id": "n0925",
+      "id": "n0926",
       "keyword": "대성 학교",
       "descriptions": [
         "신민회",
@@ -40093,7 +40107,7 @@
       "era_script": []
     },
     {
-      "id": "n0926",
+      "id": "n0927",
       "keyword": "박정양",
       "descriptions": [
         "미속습유",
@@ -40119,7 +40133,7 @@
       "era_script": []
     },
     {
-      "id": "n0927",
+      "id": "n0928",
       "keyword": "민립 대학 설립 운동",
       "descriptions": [
         "민립대학기성회",
@@ -40151,7 +40165,7 @@
       "era_script": []
     },
     {
-      "id": "n0928",
+      "id": "n0929",
       "keyword": "이상설",
       "descriptions": [
         "권업회",
@@ -40181,7 +40195,7 @@
       "era_script": []
     },
     {
-      "id": "n0929",
+      "id": "n0930",
       "keyword": "9차 개헌",
       "descriptions": [
         "6월 민주 항쟁",
@@ -40222,7 +40236,7 @@
       "era_script": []
     },
     {
-      "id": "n0930",
+      "id": "n0931",
       "keyword": "제헌 헌법",
       "descriptions": [
         "국회의원 2년 임기",
@@ -40268,7 +40282,7 @@
       ]
     },
     {
-      "id": "n0931",
+      "id": "n0932",
       "keyword": "명도전",
       "descriptions": [
         "연나라",
@@ -40304,7 +40318,7 @@
       "era_script": []
     },
     {
-      "id": "n0932",
+      "id": "n0933",
       "keyword": "해동통보",
       "descriptions": [
         "고려",
@@ -40359,7 +40373,7 @@
       "era_script": []
     },
     {
-      "id": "n0933",
+      "id": "n0934",
       "keyword": "은병",
       "descriptions": [
         "고려"
@@ -40401,7 +40415,7 @@
       "era_script": []
     },
     {
-      "id": "n0934",
+      "id": "n0935",
       "keyword": "상평통보",
       "descriptions": [
         "법화",
@@ -40447,7 +40461,7 @@
       "era_script": []
     },
     {
-      "id": "n0935",
+      "id": "n0936",
       "keyword": "백동화",
       "descriptions": [
         "대한제국",
@@ -40480,13 +40494,13 @@
       "era_script": []
     },
     {
-      "id": "n0936",
+      "id": "n0937",
       "keyword": "당백전",
       "descriptions": [
         "경복궁",
         "경복궁 중건",
         "조선",
-        "조선 흥선대원군_섭정기",
+        "조선 흥선대원군 섭정기",
         "화폐 정리 사업"
       ],
       "ref_id": [
@@ -40517,7 +40531,7 @@
       "era_script": []
     },
     {
-      "id": "n0937",
+      "id": "n0938",
       "keyword": "공산성",
       "descriptions": [
         "공주",
@@ -40544,7 +40558,7 @@
       "era_script": []
     },
     {
-      "id": "n0938",
+      "id": "n0939",
       "keyword": "무령왕릉",
       "descriptions": [
         "공주",
@@ -40580,7 +40594,7 @@
       "era_script": []
     },
     {
-      "id": "n0939",
+      "id": "n0940",
       "keyword": "부소산성",
       "descriptions": [
         "충남 부여"
@@ -40607,7 +40621,7 @@
       "era_script": []
     },
     {
-      "id": "n0940",
+      "id": "n0941",
       "keyword": "능산리 고분군",
       "descriptions": [
         "백제",
@@ -40639,7 +40653,7 @@
       "era_script": []
     },
     {
-      "id": "n0941",
+      "id": "n0942",
       "keyword": "왕궁리 유적",
       "descriptions": [
         "수부 기와"
@@ -40663,7 +40677,7 @@
       "era_script": []
     },
     {
-      "id": "n0942",
+      "id": "n0943",
       "keyword": "관산성",
       "descriptions": [
         "관산성 전투",
@@ -40692,7 +40706,7 @@
       "era_script": []
     },
     {
-      "id": "n0943",
+      "id": "n0944",
       "keyword": "금나라 형제관계 요구",
       "descriptions": [
         "금나라",
@@ -40722,7 +40736,7 @@
       "era_script": []
     },
     {
-      "id": "n0944",
+      "id": "n0945",
       "keyword": "천문",
       "descriptions": [
         "고구려 무용총",
@@ -40761,7 +40775,7 @@
       "era_script": []
     },
     {
-      "id": "n0945",
+      "id": "n0946",
       "keyword": "군사 무기",
       "descriptions": [
         "비격진천뢰"
@@ -40784,7 +40798,7 @@
       "era_script": []
     },
     {
-      "id": "n0946",
+      "id": "n0947",
       "keyword": "어영청",
       "descriptions": [
         "조선 효종",
@@ -40823,7 +40837,7 @@
       "era_script": []
     },
     {
-      "id": "n0947",
+      "id": "n0948",
       "keyword": "여몽연합군",
       "descriptions": [
         "일본 원정"
@@ -40848,7 +40862,7 @@
       "era_script": []
     },
     {
-      "id": "n0948",
+      "id": "n0949",
       "keyword": "2군 6위",
       "descriptions": [
         "용호군",
@@ -40882,7 +40896,7 @@
       "era_script": []
     },
     {
-      "id": "n0949",
+      "id": "n0950",
       "keyword": "어재연 장군 깃발",
       "descriptions": [
         "미군 탈취",
@@ -40906,7 +40920,7 @@
       "era_script": []
     },
     {
-      "id": "n0950",
+      "id": "n0951",
       "keyword": "조식",
       "descriptions": [
         "곽재우",
@@ -40932,7 +40946,7 @@
       "era_script": []
     },
     {
-      "id": "n0951",
+      "id": "n0952",
       "keyword": "한성부",
       "descriptions": [
         "수도의 행정과 치안",
@@ -40967,7 +40981,7 @@
       "era_script": []
     },
     {
-      "id": "n0952",
+      "id": "n0953",
       "keyword": "의정부",
       "descriptions": [
         "재상",
@@ -40994,7 +41008,7 @@
       "era_script": []
     },
     {
-      "id": "n0953",
+      "id": "n0954",
       "keyword": "종묘",
       "descriptions": [
         "사직",
@@ -41027,7 +41041,7 @@
       "era_script": []
     },
     {
-      "id": "n0954",
+      "id": "n0955",
       "keyword": "사직단",
       "descriptions": [
         "제사"
@@ -41050,7 +41064,7 @@
       "era_script": []
     },
     {
-      "id": "n0955",
+      "id": "n0956",
       "keyword": "사노비",
       "descriptions": [
         "매매·상속·증여"
@@ -41073,7 +41087,7 @@
       "era_script": []
     },
     {
-      "id": "n0956",
+      "id": "n0957",
       "keyword": "기유약조",
       "descriptions": [
         "일본",
@@ -41107,7 +41121,7 @@
       "era_script": []
     },
     {
-      "id": "n0957",
+      "id": "n0958",
       "keyword": "시모노세키 조약",
       "descriptions": [],
       "ref_id": [],
@@ -41134,7 +41148,7 @@
       "era_script": []
     },
     {
-      "id": "n0958",
+      "id": "n0959",
       "keyword": "두모진 해관 사건",
       "descriptions": [
         "동래",
@@ -41171,7 +41185,7 @@
       "era_script": []
     },
     {
-      "id": "n0959",
+      "id": "n0960",
       "keyword": "방곡령",
       "descriptions": [
         "조·일 통상 장정",
@@ -41214,7 +41228,7 @@
       ]
     },
     {
-      "id": "n0960",
+      "id": "n0961",
       "keyword": "조사시찰단",
       "descriptions": [
         "별기군"
@@ -41237,7 +41251,7 @@
       "era_script": []
     },
     {
-      "id": "n0961",
+      "id": "n0962",
       "keyword": "개헌 청원 100만인 서명 운동",
       "descriptions": [
         "대한민국 박정희 정부"
@@ -41274,7 +41288,7 @@
       "era_script": []
     },
     {
-      "id": "n0962",
+      "id": "n0963",
       "keyword": "송진우",
       "descriptions": [
         "한국 민주당"
@@ -41297,7 +41311,7 @@
       "era_script": []
     },
     {
-      "id": "n0963",
+      "id": "n0964",
       "keyword": "김성수",
       "descriptions": [
         "한국 민주당"
@@ -41320,7 +41334,7 @@
       "era_script": []
     },
     {
-      "id": "n0964",
+      "id": "n0965",
       "keyword": "삼국시대",
       "descriptions": [],
       "ref_id": [],
@@ -41341,7 +41355,7 @@
       "era_script": []
     },
     {
-      "id": "n0965",
+      "id": "n0966",
       "keyword": "백자",
       "descriptions": [
         "조선 백자 달항아리",
@@ -41366,7 +41380,7 @@
       "era_script": []
     },
     {
-      "id": "n0966",
+      "id": "n0967",
       "keyword": "청자",
       "descriptions": [
         "고려 청자 오리 모양 연적"
@@ -41390,7 +41404,7 @@
       "era_script": []
     },
     {
-      "id": "n0967",
+      "id": "n0968",
       "keyword": "분청사기",
       "descriptions": [
         "조선 전기"
@@ -41416,7 +41430,7 @@
       "era_script": []
     },
     {
-      "id": "n0968",
+      "id": "n0969",
       "keyword": "청화 백자",
       "descriptions": [
         "백자",
@@ -41442,7 +41456,7 @@
       "era_script": []
     },
     {
-      "id": "n0969",
+      "id": "n0970",
       "keyword": "상감 청자",
       "descriptions": [
         "고려",
@@ -41474,7 +41488,7 @@
       "era_script": []
     },
     {
-      "id": "n0970",
+      "id": "n0971",
       "keyword": "청동기토기",
       "descriptions": [
         "가지무늬토기"
@@ -41497,7 +41511,7 @@
       "era_script": []
     },
     {
-      "id": "n0971",
+      "id": "n0972",
       "keyword": "일제강점기",
       "descriptions": [
         "경성 방송국",
@@ -41562,7 +41576,7 @@
       "era_script": []
     },
     {
-      "id": "n0972",
+      "id": "n0973",
       "keyword": "연가 7년명 금동여래입상",
       "descriptions": [
         "연가",
@@ -41586,7 +41600,7 @@
       "era_script": []
     },
     {
-      "id": "n0973",
+      "id": "n0974",
       "keyword": "청주",
       "descriptions": [
         "직지심체요절",
@@ -41612,7 +41626,7 @@
       "era_script": []
     },
     {
-      "id": "n0974",
+      "id": "n0975",
       "keyword": "조선 세도정치기",
       "descriptions": [
         "삼정이정청",
@@ -41643,7 +41657,7 @@
       "era_script": []
     },
     {
-      "id": "n0975",
+      "id": "n0976",
       "keyword": "조일신의 난",
       "descriptions": [
         "기철",
@@ -41673,7 +41687,7 @@
       "era_script": []
     },
     {
-      "id": "n0976",
+      "id": "n0977",
       "keyword": "몽골 침입",
       "descriptions": [
         "살리타"
@@ -41702,7 +41716,7 @@
       "era_script": []
     },
     {
-      "id": "n0977",
+      "id": "n0978",
       "keyword": "부원세력 토지겸병",
       "descriptions": [
         "겁령구",
@@ -41732,7 +41746,7 @@
       "era_script": []
     },
     {
-      "id": "n0978",
+      "id": "n0979",
       "keyword": "개경 나성",
       "descriptions": [
         "강감찬",
@@ -41776,7 +41790,7 @@
       ]
     },
     {
-      "id": "n0979",
+      "id": "n0980",
       "keyword": "최영",
       "descriptions": [
         "요동 정벌 추진",
@@ -41820,7 +41834,7 @@
       "era_script": []
     },
     {
-      "id": "n0980",
+      "id": "n0981",
       "keyword": "강조",
       "descriptions": [
         "강조의 정변",
@@ -41855,7 +41869,7 @@
       "era_script": []
     },
     {
-      "id": "n0981",
+      "id": "n0982",
       "keyword": "김보당",
       "descriptions": [
         "김보당의 난",
@@ -41886,7 +41900,7 @@
       "era_script": []
     },
     {
-      "id": "n0982",
+      "id": "n0983",
       "keyword": "김일손",
       "descriptions": [
         "무오사화",
@@ -41916,7 +41930,7 @@
       "era_script": []
     },
     {
-      "id": "n0983",
+      "id": "n0984",
       "keyword": "북벌 추진",
       "descriptions": [
         "병자호란",
@@ -41968,7 +41982,7 @@
       "era_script": []
     },
     {
-      "id": "n0984",
+      "id": "n0985",
       "keyword": "서울",
       "descriptions": [
         "1차 미소 공동 위원회",
@@ -42003,7 +42017,7 @@
       "era_script": []
     },
     {
-      "id": "n0985",
+      "id": "n0986",
       "keyword": "괴산",
       "descriptions": [
         "만동묘"
@@ -42026,7 +42040,7 @@
       "era_script": []
     },
     {
-      "id": "n0986",
+      "id": "n0987",
       "keyword": "이징옥의 난",
       "descriptions": [],
       "ref_id": [
@@ -42053,7 +42067,7 @@
       "era_script": []
     },
     {
-      "id": "n0987",
+      "id": "n0988",
       "keyword": "김정호",
       "descriptions": [
         "대동여지도",
@@ -42079,7 +42093,7 @@
       "era_script": []
     },
     {
-      "id": "n0988",
+      "id": "n0989",
       "keyword": "고종 강제 퇴위",
       "descriptions": [
         "정미의병"
@@ -42115,7 +42129,7 @@
       "era_script": []
     },
     {
-      "id": "n0989",
+      "id": "n0990",
       "keyword": "관민 공동회",
       "descriptions": [
         "독립협회",
@@ -42161,7 +42175,7 @@
       "era_script": []
     },
     {
-      "id": "n0990",
+      "id": "n0991",
       "keyword": "최현배",
       "descriptions": [
         "우리말 큰 사전",
@@ -42191,7 +42205,7 @@
       "era_script": []
     },
     {
-      "id": "n0991",
+      "id": "n0992",
       "keyword": "조봉암 처형",
       "descriptions": [
         "대한민국 이승만 정부"
@@ -42226,7 +42240,7 @@
       "era_script": []
     },
     {
-      "id": "n0992",
+      "id": "n0993",
       "keyword": "국회프락치사건",
       "descriptions": [],
       "ref_id": [
@@ -42253,7 +42267,7 @@
       "era_script": []
     },
     {
-      "id": "n0993",
+      "id": "n0994",
       "keyword": "부천 경찰서 성고문 사건",
       "descriptions": [
         "대한민국 전두환 정부"
@@ -42287,7 +42301,7 @@
       "era_script": []
     },
     {
-      "id": "n0994",
+      "id": "n0995",
       "keyword": "국민 보도 연맹 사건",
       "descriptions": [
         "6.25 전쟁"
@@ -42319,7 +42333,7 @@
       "era_script": []
     },
     {
-      "id": "n0995",
+      "id": "n0996",
       "keyword": "강경대",
       "descriptions": [
         "대한민국 노태우 정부"
@@ -42350,7 +42364,7 @@
       "era_script": []
     },
     {
-      "id": "n0996",
+      "id": "n0997",
       "keyword": "9서당 10정",
       "descriptions": [
         "신라",
@@ -42403,7 +42417,7 @@
       "era_script": []
     },
     {
-      "id": "n0997",
+      "id": "n0998",
       "keyword": "2영",
       "descriptions": [
         "무위영",
@@ -42444,7 +42458,7 @@
       "era_script": []
     },
     {
-      "id": "n0998",
+      "id": "n0999",
       "keyword": "5군영",
       "descriptions": [
         "금위영"
@@ -42473,7 +42487,7 @@
       "era_script": []
     },
     {
-      "id": "n0999",
+      "id": "n1000",
       "keyword": "고구려의 백제 침공",
       "descriptions": [],
       "ref_id": [],
@@ -42500,7 +42514,7 @@
       "era_script": []
     },
     {
-      "id": "n1000",
+      "id": "n1001",
       "keyword": "고구려 구원요청",
       "descriptions": [],
       "ref_id": [
@@ -42527,7 +42541,7 @@
       "era_script": []
     },
     {
-      "id": "n1001",
+      "id": "n1002",
       "keyword": "고구려 영양왕",
       "descriptions": [
         "살수 대첩",
@@ -42555,7 +42569,7 @@
       "era_script": []
     },
     {
-      "id": "n1002",
+      "id": "n1003",
       "keyword": "도교",
       "descriptions": [
         "금동 대향로",
@@ -42590,7 +42604,7 @@
       "era_script": []
     },
     {
-      "id": "n1003",
+      "id": "n1004",
       "keyword": "유교",
       "descriptions": [
         "과거제",
@@ -42624,7 +42638,7 @@
       "era_script": []
     },
     {
-      "id": "n1004",
+      "id": "n1005",
       "keyword": "신라 무열왕 즉위",
       "descriptions": [],
       "ref_id": [
@@ -42651,7 +42665,7 @@
       "era_script": []
     },
     {
-      "id": "n1005",
+      "id": "n1006",
       "keyword": "정전 지급",
       "descriptions": [
         "신라 성덕왕"
@@ -42682,7 +42696,7 @@
       "era_script": []
     },
     {
-      "id": "n1006",
+      "id": "n1007",
       "keyword": "혜공왕 피살",
       "descriptions": [
         "김지정의 난",
@@ -42721,7 +42735,7 @@
       "era_script": []
     },
     {
-      "id": "n1007",
+      "id": "n1008",
       "keyword": "청해진",
       "descriptions": [
         "신라",
@@ -42784,7 +42798,7 @@
       ]
     },
     {
-      "id": "n1008",
+      "id": "n1009",
       "keyword": "고창 전투",
       "descriptions": [
         "고려 태조",
@@ -42833,7 +42847,7 @@
       "era_script": []
     },
     {
-      "id": "n1009",
+      "id": "n1010",
       "keyword": "금산사 유폐",
       "descriptions": [],
       "ref_id": [],
@@ -42860,7 +42874,7 @@
       "era_script": []
     },
     {
-      "id": "n1010",
+      "id": "n1011",
       "keyword": "신립",
       "descriptions": [
         "임진왜란",
@@ -42893,7 +42907,7 @@
       "era_script": []
     },
     {
-      "id": "n1011",
+      "id": "n1012",
       "keyword": "계해약조",
       "descriptions": [
         "대마도 정벌",
@@ -42941,7 +42955,7 @@
       "era_script": []
     },
     {
-      "id": "n1012",
+      "id": "n1013",
       "keyword": "법주사",
       "descriptions": [
         "팔상전"
@@ -42965,7 +42979,7 @@
       "era_script": []
     },
     {
-      "id": "n1013",
+      "id": "n1014",
       "keyword": "부석사",
       "descriptions": [
         "무량수전",
@@ -42998,7 +43012,7 @@
       "era_script": []
     },
     {
-      "id": "n1014",
+      "id": "n1015",
       "keyword": "봉정사",
       "descriptions": [
         "안동",
@@ -43025,7 +43039,7 @@
       "era_script": []
     },
     {
-      "id": "n1015",
+      "id": "n1016",
       "keyword": "해인사",
       "descriptions": [
         "장경판전",
@@ -43054,7 +43068,7 @@
       "era_script": []
     },
     {
-      "id": "n1016",
+      "id": "n1017",
       "keyword": "선암사",
       "descriptions": [],
       "ref_id": [],
@@ -43075,7 +43089,7 @@
       "era_script": []
     },
     {
-      "id": "n1017",
+      "id": "n1018",
       "keyword": "유수원",
       "descriptions": [
         "우서"
@@ -43100,7 +43114,7 @@
       "era_script": []
     },
     {
-      "id": "n1018",
+      "id": "n1019",
       "keyword": "김득신",
       "descriptions": [
         "조선 후기",
@@ -43129,7 +43143,7 @@
       "era_script": []
     },
     {
-      "id": "n1019",
+      "id": "n1020",
       "keyword": "소년 운동",
       "descriptions": [
         "천도교",
@@ -43160,7 +43174,7 @@
       "era_script": []
     },
     {
-      "id": "n1020",
+      "id": "n1021",
       "keyword": "자유시 참변",
       "descriptions": [
         "대한독립군",
@@ -43212,7 +43226,7 @@
       "era_script": []
     },
     {
-      "id": "n1021",
+      "id": "n1022",
       "keyword": "아리랑 상영",
       "descriptions": [
         "나운규",
@@ -43242,7 +43256,7 @@
       "era_script": []
     },
     {
-      "id": "n1022",
+      "id": "n1023",
       "keyword": "은세계 공연",
       "descriptions": [
         "대한제국 순종",
@@ -43278,7 +43292,7 @@
       "era_script": []
     },
     {
-      "id": "n1023",
+      "id": "n1024",
       "keyword": "신경향파",
       "descriptions": [
         "카프"
@@ -43307,7 +43321,7 @@
       "era_script": []
     },
     {
-      "id": "n1024",
+      "id": "n1025",
       "keyword": "이준",
       "descriptions": [
         "만국 평화 회의"
@@ -43330,7 +43344,7 @@
       "era_script": []
     },
     {
-      "id": "n1025",
+      "id": "n1026",
       "keyword": "8.15 광복",
       "descriptions": [],
       "ref_id": [
@@ -43359,7 +43373,7 @@
       "era_script": []
     },
     {
-      "id": "n1026",
+      "id": "n1027",
       "keyword": "의창",
       "descriptions": [
         "고려",
@@ -43392,7 +43406,7 @@
       "era_script": []
     },
     {
-      "id": "n1027",
+      "id": "n1028",
       "keyword": "제위보",
       "descriptions": [
         "고려",
@@ -43425,7 +43439,7 @@
       "era_script": []
     },
     {
-      "id": "n1028",
+      "id": "n1029",
       "keyword": "환곡제",
       "descriptions": [
         "세도 정치"
@@ -43449,10 +43463,10 @@
       "era_script": []
     },
     {
-      "id": "n1029",
+      "id": "n1030",
       "keyword": "사창제",
       "descriptions": [
-        "조선 흥선대원군_섭정기"
+        "조선 흥선대원군 섭정기"
       ],
       "ref_id": [
         "7415"
@@ -43475,7 +43489,7 @@
       "era_script": []
     },
     {
-      "id": "n1030",
+      "id": "n1031",
       "keyword": "구제도감",
       "descriptions": [
         "고려"
@@ -43501,7 +43515,7 @@
       "era_script": []
     },
     {
-      "id": "n1031",
+      "id": "n1032",
       "keyword": "대한민국 이명박 정부",
       "descriptions": [
         "G20 정상 회의",
@@ -43527,7 +43541,7 @@
       "era_script": []
     },
     {
-      "id": "n1032",
+      "id": "n1033",
       "keyword": "광주",
       "descriptions": [
         "5.18 민주화 운동",
@@ -43561,7 +43575,7 @@
       "era_script": []
     },
     {
-      "id": "n1033",
+      "id": "n1034",
       "keyword": "마산",
       "descriptions": [
         "김주열"
@@ -43584,7 +43598,7 @@
       "era_script": []
     },
     {
-      "id": "n1034",
+      "id": "n1035",
       "keyword": "도선",
       "descriptions": [
         "송악명당기"
@@ -43607,7 +43621,7 @@
       "era_script": []
     },
     {
-      "id": "n1035",
+      "id": "n1036",
       "keyword": "사비 천도",
       "descriptions": [
         "백제 성왕"
@@ -43649,7 +43663,7 @@
       "era_script": []
     },
     {
-      "id": "n1036",
+      "id": "n1037",
       "keyword": "백제 불교 공인",
       "descriptions": [
         "동진 마라난타",
@@ -43690,7 +43704,7 @@
       "era_script": []
     },
     {
-      "id": "n1037",
+      "id": "n1038",
       "keyword": "신라 눌지 마립간",
       "descriptions": [
         "나제동맹",
@@ -43714,7 +43728,7 @@
       "era_script": []
     },
     {
-      "id": "n1038",
+      "id": "n1039",
       "keyword": "발해 무왕 즉위",
       "descriptions": [],
       "ref_id": [
@@ -43741,7 +43755,7 @@
       "era_script": []
     },
     {
-      "id": "n1039",
+      "id": "n1040",
       "keyword": "상경 천도",
       "descriptions": [],
       "ref_id": [
@@ -43768,7 +43782,7 @@
       "era_script": []
     },
     {
-      "id": "n1040",
+      "id": "n1041",
       "keyword": "발해 선왕 즉위",
       "descriptions": [],
       "ref_id": [
@@ -43795,7 +43809,7 @@
       "era_script": []
     },
     {
-      "id": "n1041",
+      "id": "n1042",
       "keyword": "발해 멸망",
       "descriptions": [],
       "ref_id": [
@@ -43822,7 +43836,7 @@
       "era_script": []
     },
     {
-      "id": "n1042",
+      "id": "n1043",
       "keyword": "개정 전시과",
       "descriptions": [
         "고려 목종"
@@ -43857,7 +43871,7 @@
       "era_script": []
     },
     {
-      "id": "n1043",
+      "id": "n1044",
       "keyword": "불교진행책",
       "descriptions": [
         "속장경"
@@ -43880,7 +43894,7 @@
       "era_script": []
     },
     {
-      "id": "n1044",
+      "id": "n1045",
       "keyword": "이규보",
       "descriptions": [
         "고려",
@@ -43909,7 +43923,7 @@
       "era_script": []
     },
     {
-      "id": "n1045",
+      "id": "n1046",
       "keyword": "남원",
       "descriptions": [
         "만인의총",
@@ -43935,7 +43949,7 @@
       "era_script": []
     },
     {
-      "id": "n1046",
+      "id": "n1047",
       "keyword": "삼전도의 굴욕",
       "descriptions": [
         "병자호란",
@@ -43971,7 +43985,7 @@
       "era_script": []
     },
     {
-      "id": "n1047",
+      "id": "n1048",
       "keyword": "계축옥사",
       "descriptions": [
         "영창 대군 사사",
@@ -44008,7 +44022,7 @@
       "era_script": []
     },
     {
-      "id": "n1048",
+      "id": "n1049",
       "keyword": "금난전권 폐지",
       "descriptions": [
         "난전",
@@ -44050,7 +44064,7 @@
       "era_script": []
     },
     {
-      "id": "n1049",
+      "id": "n1050",
       "keyword": "조선 순조 1801년",
       "descriptions": [
         "공노비 해방"
@@ -44073,7 +44087,7 @@
       "era_script": []
     },
     {
-      "id": "n1050",
+      "id": "n1051",
       "keyword": "조·영 수호 통상 조약",
       "descriptions": [
         "100리",
@@ -44103,7 +44117,7 @@
       "era_script": []
     },
     {
-      "id": "n1051",
+      "id": "n1052",
       "keyword": "절영도 조차 요구",
       "descriptions": [
         "러시아"
@@ -44134,7 +44148,7 @@
       "era_script": []
     },
     {
-      "id": "n1052",
+      "id": "n1053",
       "keyword": "처용무",
       "descriptions": [
         "가면",
@@ -44162,7 +44176,7 @@
       "era_script": []
     },
     {
-      "id": "n1053",
+      "id": "n1054",
       "keyword": "종묘 제례악",
       "descriptions": [
         "종묘"
@@ -44185,7 +44199,7 @@
       "era_script": []
     },
     {
-      "id": "n1054",
+      "id": "n1055",
       "keyword": "영산재",
       "descriptions": [
         "영취산 설법"
@@ -44208,7 +44222,7 @@
       "era_script": []
     },
     {
-      "id": "n1055",
+      "id": "n1056",
       "keyword": "판소리",
       "descriptions": [
         "너름새",
@@ -44247,7 +44261,7 @@
       "era_script": []
     },
     {
-      "id": "n1056",
+      "id": "n1057",
       "keyword": "산대놀이",
       "descriptions": [
         "조선 후기",
@@ -44282,7 +44296,7 @@
       "era_script": []
     },
     {
-      "id": "n1057",
+      "id": "n1058",
       "keyword": "대한제국 정부",
       "descriptions": [
         "신문지법",
@@ -44307,7 +44321,7 @@
       "era_script": []
     },
     {
-      "id": "n1058",
+      "id": "n1059",
       "keyword": "조선총독부",
       "descriptions": [
         "서당 규칙"
@@ -44330,7 +44344,7 @@
       "era_script": []
     },
     {
-      "id": "n1059",
+      "id": "n1060",
       "keyword": "당오전",
       "descriptions": [],
       "ref_id": [
@@ -44351,7 +44365,7 @@
       "era_script": []
     },
     {
-      "id": "n1060",
+      "id": "n1061",
       "keyword": "강우규",
       "descriptions": [
         "서울역",
@@ -44375,7 +44389,7 @@
       "era_script": []
     },
     {
-      "id": "n1061",
+      "id": "n1062",
       "keyword": "회사령 폐지",
       "descriptions": [
         "물산 장려 운동",
@@ -44408,7 +44422,7 @@
       "era_script": []
     },
     {
-      "id": "n1062",
+      "id": "n1063",
       "keyword": "농촌 진흥 운동",
       "descriptions": [
         "농촌 진흥 위원회",
@@ -44440,7 +44454,7 @@
       "era_script": []
     },
     {
-      "id": "n1063",
+      "id": "n1064",
       "keyword": "3차 조선 교육령",
       "descriptions": [],
       "ref_id": [
@@ -44469,7 +44483,7 @@
       ]
     },
     {
-      "id": "n1064",
+      "id": "n1065",
       "keyword": "동양 척식 주식회사",
       "descriptions": [
         "나석주",
@@ -44515,7 +44529,7 @@
       ]
     },
     {
-      "id": "n1065",
+      "id": "n1066",
       "keyword": "강주룡 고공농성 사건",
       "descriptions": [
         "을밀대",
@@ -44558,7 +44572,7 @@
       "era_script": []
     },
     {
-      "id": "n1066",
+      "id": "n1067",
       "keyword": "대한 천일 은행",
       "descriptions": [
         "상권 수호 운동"
@@ -44591,7 +44605,7 @@
       "era_script": []
     },
     {
-      "id": "n1067",
+      "id": "n1068",
       "keyword": "암태도 소작 쟁의",
       "descriptions": [
         "문재철",
@@ -44633,7 +44647,7 @@
       "era_script": []
     },
     {
-      "id": "n1068",
+      "id": "n1069",
       "keyword": "단양",
       "descriptions": [
         "수양개 유적"
@@ -44656,7 +44670,7 @@
       "era_script": []
     },
     {
-      "id": "n1069",
+      "id": "n1070",
       "keyword": "정읍",
       "descriptions": [
         "만석보",
@@ -44683,7 +44697,7 @@
       "era_script": []
     },
     {
-      "id": "n1070",
+      "id": "n1071",
       "keyword": "천안",
       "descriptions": [
         "아우내"
@@ -44706,7 +44720,7 @@
       "era_script": []
     },
     {
-      "id": "n1071",
+      "id": "n1072",
       "keyword": "5대 대통령 선거",
       "descriptions": [
         "5.16 군사정변"
@@ -44729,7 +44743,7 @@
       "era_script": []
     },
     {
-      "id": "n1072",
+      "id": "n1073",
       "keyword": "9대 대통령 선거",
       "descriptions": [
         "통일 주체 국민 회의"
@@ -44752,7 +44766,7 @@
       "era_script": []
     },
     {
-      "id": "n1073",
+      "id": "n1074",
       "keyword": "4대 국회의원 선거",
       "descriptions": [
         "양원제"
@@ -44775,7 +44789,7 @@
       "era_script": []
     },
     {
-      "id": "n1074",
+      "id": "n1075",
       "keyword": "12대 국회의원 선거",
       "descriptions": [
         "신한 민주당"
@@ -44798,7 +44812,7 @@
       "era_script": []
     },
     {
-      "id": "n1075",
+      "id": "n1076",
       "keyword": "한강 유역 쟁탈",
       "descriptions": [
         "금현성",
@@ -44828,7 +44842,7 @@
       "era_script": []
     },
     {
-      "id": "n1076",
+      "id": "n1077",
       "keyword": "충남 부여",
       "descriptions": [
         "금동 대향로",
@@ -44860,7 +44874,7 @@
       "era_script": []
     },
     {
-      "id": "n1077",
+      "id": "n1078",
       "keyword": "신라 경순왕",
       "descriptions": [
         "경주 사심관",
@@ -44891,7 +44905,7 @@
       "era_script": []
     },
     {
-      "id": "n1078",
+      "id": "n1079",
       "keyword": "감은사지 동 삼층석탑",
       "descriptions": [],
       "ref_id": [],
@@ -44912,7 +44926,7 @@
       "era_script": []
     },
     {
-      "id": "n1079",
+      "id": "n1080",
       "keyword": "쌍봉사 철감선사탑",
       "descriptions": [
         "선종"
@@ -44936,7 +44950,7 @@
       "era_script": []
     },
     {
-      "id": "n1080",
+      "id": "n1081",
       "keyword": "정림사지 오층석탑",
       "descriptions": [
         "백제",
@@ -44962,7 +44976,7 @@
       "era_script": []
     },
     {
-      "id": "n1081",
+      "id": "n1082",
       "keyword": "고려 목종",
       "descriptions": [
         "강조의 정변",
@@ -44989,7 +45003,7 @@
       "era_script": []
     },
     {
-      "id": "n1082",
+      "id": "n1083",
       "keyword": "조선 예종",
       "descriptions": [
         "남이의 옥사"
@@ -45014,7 +45028,7 @@
       "era_script": []
     },
     {
-      "id": "n1083",
+      "id": "n1084",
       "keyword": "이시애의 난",
       "descriptions": [
         "조선 세조"
@@ -45054,7 +45068,7 @@
       "era_script": []
     },
     {
-      "id": "n1084",
+      "id": "n1085",
       "keyword": "조선 선조 즉위",
       "descriptions": [],
       "ref_id": [
@@ -45081,7 +45095,7 @@
       "era_script": []
     },
     {
-      "id": "n1085",
+      "id": "n1086",
       "keyword": "연행사",
       "descriptions": [
         "박제가",
@@ -45110,7 +45124,7 @@
       "era_script": []
     },
     {
-      "id": "n1086",
+      "id": "n1087",
       "keyword": "암행어사",
       "descriptions": [],
       "ref_id": [
@@ -45131,7 +45145,7 @@
       "era_script": []
     },
     {
-      "id": "n1087",
+      "id": "n1088",
       "keyword": "조천사",
       "descriptions": [
         "조천록"
@@ -45154,7 +45168,7 @@
       "era_script": []
     },
     {
-      "id": "n1088",
+      "id": "n1089",
       "keyword": "고사관수도",
       "descriptions": [
         "강희안"
@@ -45180,7 +45194,7 @@
       "era_script": []
     },
     {
-      "id": "n1089",
+      "id": "n1090",
       "keyword": "금산 전투",
       "descriptions": [
         "조헌"
@@ -45209,7 +45223,7 @@
       "era_script": []
     },
     {
-      "id": "n1090",
+      "id": "n1091",
       "keyword": "황성신문",
       "descriptions": [],
       "ref_id": [],
@@ -45230,7 +45244,7 @@
       "era_script": []
     },
     {
-      "id": "n1091",
+      "id": "n1092",
       "keyword": "한·청 통상 조약",
       "descriptions": [],
       "ref_id": [
@@ -45257,10 +45271,10 @@
       "era_script": []
     },
     {
-      "id": "n1092",
+      "id": "n1093",
       "keyword": "최제우 처형",
       "descriptions": [
-        "조선 흥선대원군_섭정기"
+        "조선 흥선대원군 섭정기"
       ],
       "ref_id": [
         "7124",
@@ -45281,17 +45295,17 @@
         "조선"
       ],
       "sub_era": [
-        "흥선대원군_섭정기"
+        ""
       ],
       "det_era": [
         ""
       ],
-      "years": "1864년",
+      "years": "흥선대원군 섭정기 1864년",
       "years_check": "true",
       "era_script": []
     },
     {
-      "id": "n1093",
+      "id": "n1094",
       "keyword": "남만주",
       "descriptions": [],
       "ref_id": [
@@ -45312,7 +45326,7 @@
       "era_script": []
     },
     {
-      "id": "n1094",
+      "id": "n1095",
       "keyword": "주요한",
       "descriptions": [
         "국문 연구소"
@@ -45335,7 +45349,7 @@
       "era_script": []
     },
     {
-      "id": "n1095",
+      "id": "n1096",
       "keyword": "박승희",
       "descriptions": [
         "토월회"
@@ -45358,7 +45372,7 @@
       "era_script": []
     },
     {
-      "id": "n1096",
+      "id": "n1097",
       "keyword": "일제강점기 사회",
       "descriptions": [
         "미쓰코시 백화점",
@@ -45383,7 +45397,7 @@
       "era_script": []
     },
     {
-      "id": "n1097",
+      "id": "n1098",
       "keyword": "조선 외교",
       "descriptions": [
         "개화 정책"
@@ -45406,7 +45420,7 @@
       "era_script": []
     },
     {
-      "id": "n1098",
+      "id": "n1099",
       "keyword": "신분해방운동",
       "descriptions": [
         "형평 운동"
@@ -45429,7 +45443,7 @@
       "era_script": []
     },
     {
-      "id": "n1099",
+      "id": "n1100",
       "keyword": "대한민국 경제",
       "descriptions": [
         "경제개발 5개년 계획"
@@ -45452,7 +45466,7 @@
       "era_script": []
     },
     {
-      "id": "n1100",
+      "id": "n1101",
       "keyword": "조선 후기 사회",
       "descriptions": [
         "상품 화폐 경제",
@@ -45476,7 +45490,7 @@
       "era_script": []
     },
     {
-      "id": "n1101",
+      "id": "n1102",
       "keyword": "조선 혁명 선언",
       "descriptions": [
         "신채호",
@@ -45528,7 +45542,7 @@
       "era_script": []
     },
     {
-      "id": "n1102",
+      "id": "n1103",
       "keyword": "조선상고사",
       "descriptions": [
         "신채호",
@@ -45560,7 +45574,7 @@
       "era_script": []
     },
     {
-      "id": "n1103",
+      "id": "n1104",
       "keyword": "뤼순",
       "descriptions": [
         "안중근"
@@ -45586,7 +45600,7 @@
       "era_script": []
     },
     {
-      "id": "n1104",
+      "id": "n1105",
       "keyword": "4.3 사건 공식 사과",
       "descriptions": [
         "진상 조사 보고서"
@@ -45609,7 +45623,7 @@
       "era_script": []
     },
     {
-      "id": "n1105",
+      "id": "n1106",
       "keyword": "국민 방위군",
       "descriptions": [
         "대한민국 이승만 정부"
@@ -45642,7 +45656,7 @@
       ]
     },
     {
-      "id": "n1106",
+      "id": "n1107",
       "keyword": "통일 주체 국민 회의",
       "descriptions": [
         "10월 유신",
@@ -45697,7 +45711,7 @@
       ]
     },
     {
-      "id": "n1107",
+      "id": "n1108",
       "keyword": "창녕",
       "descriptions": [
         "우포늪",
@@ -45722,7 +45736,7 @@
       "era_script": []
     },
     {
-      "id": "n1108",
+      "id": "n1109",
       "keyword": "신라 헌덕왕",
       "descriptions": [
         "김헌창의 난"
@@ -45751,7 +45765,7 @@
       "era_script": []
     },
     {
-      "id": "n1109",
+      "id": "n1110",
       "keyword": "행정구역 차별",
       "descriptions": [
         "망이·망소이의 난",
@@ -45776,7 +45790,7 @@
       "era_script": []
     },
     {
-      "id": "n1110",
+      "id": "n1111",
       "keyword": "중앙정부 약화",
       "descriptions": [
         "호족 세력 성장"
@@ -45799,7 +45813,7 @@
       "era_script": []
     },
     {
-      "id": "n1111",
+      "id": "n1112",
       "keyword": "신분제 동요",
       "descriptions": [
         "조선 후기 사회",
@@ -45825,7 +45839,7 @@
       "era_script": []
     },
     {
-      "id": "n1112",
+      "id": "n1113",
       "keyword": "토지제도 개편",
       "descriptions": [
         "과전법"
@@ -45848,7 +45862,7 @@
       "era_script": []
     },
     {
-      "id": "n1113",
+      "id": "n1114",
       "keyword": "고려군",
       "descriptions": [
         "홍산 전투"
@@ -45871,7 +45885,7 @@
       "era_script": []
     },
     {
-      "id": "n1114",
+      "id": "n1115",
       "keyword": "동의보감",
       "descriptions": [
         "조선 광해군",
@@ -45911,7 +45925,7 @@
       "era_script": []
     },
     {
-      "id": "n1115",
+      "id": "n1116",
       "keyword": "일성록",
       "descriptions": [],
       "ref_id": [],
@@ -45932,7 +45946,7 @@
       "era_script": []
     },
     {
-      "id": "n1116",
+      "id": "n1117",
       "keyword": "승정원일기",
       "descriptions": [
         "승정원"
@@ -45955,7 +45969,7 @@
       "era_script": []
     },
     {
-      "id": "n1117",
+      "id": "n1118",
       "keyword": "고양",
       "descriptions": [
         "북한산성",
@@ -45980,7 +45994,7 @@
       "era_script": []
     },
     {
-      "id": "n1118",
+      "id": "n1119",
       "keyword": "경재소",
       "descriptions": [
         "서울에 살면서 벼슬하는 자들의 모임",
@@ -46008,7 +46022,7 @@
       "era_script": []
     },
     {
-      "id": "n1119",
+      "id": "n1120",
       "keyword": "설점수세제",
       "descriptions": [
         "조선",
@@ -46040,7 +46054,7 @@
       "era_script": []
     },
     {
-      "id": "n1120",
+      "id": "n1121",
       "keyword": "황무지 개간권 요구",
       "descriptions": [
         "황무지 개간권 반대운동"
@@ -46076,7 +46090,7 @@
       "era_script": []
     },
     {
-      "id": "n1121",
+      "id": "n1122",
       "keyword": "진단 학회",
       "descriptions": [
         "이병도",
@@ -46104,7 +46118,7 @@
       "era_script": []
     },
     {
-      "id": "n1122",
+      "id": "n1123",
       "keyword": "태평양 전쟁",
       "descriptions": [],
       "ref_id": [],
@@ -46131,7 +46145,7 @@
       "era_script": []
     },
     {
-      "id": "n1123",
+      "id": "n1124",
       "keyword": "여자 정신 근로령",
       "descriptions": [
         "일제강점기 민족말살기"
@@ -46168,7 +46182,7 @@
       ]
     },
     {
-      "id": "n1124",
+      "id": "n1125",
       "keyword": "대동단결 선언",
       "descriptions": [
         "상하이 독립운동가",
@@ -46203,7 +46217,7 @@
       "era_script": []
     },
     {
-      "id": "n1125",
+      "id": "n1126",
       "keyword": "판문점 선언",
       "descriptions": [],
       "ref_id": [],
@@ -46230,7 +46244,7 @@
       "era_script": []
     },
     {
-      "id": "n1126",
+      "id": "n1127",
       "keyword": "남북한 UN 동시 가입",
       "descriptions": [
         "대한민국 노태우 정부"
@@ -46278,7 +46292,7 @@
       "era_script": []
     },
     {
-      "id": "n1127",
+      "id": "n1128",
       "keyword": "남부여 개칭",
       "descriptions": [
         "백제 성왕"
@@ -46320,7 +46334,7 @@
       "era_script": []
     },
     {
-      "id": "n1128",
+      "id": "n1129",
       "keyword": "신주",
       "descriptions": [
         "신해박해",
@@ -46358,7 +46372,7 @@
       ]
     },
     {
-      "id": "n1129",
+      "id": "n1130",
       "keyword": "2성 6부",
       "descriptions": [],
       "ref_id": [],
@@ -46379,7 +46393,7 @@
       "era_script": []
     },
     {
-      "id": "n1130",
+      "id": "n1131",
       "keyword": "대간",
       "descriptions": [
         "5품 이하 관리 서경권"
@@ -46402,7 +46416,7 @@
       "era_script": []
     },
     {
-      "id": "n1131",
+      "id": "n1132",
       "keyword": "해동제국기",
       "descriptions": [
         "신숙주",
@@ -46446,7 +46460,7 @@
       ]
     },
     {
-      "id": "n1132",
+      "id": "n1133",
       "keyword": "회답 겸 쇄환사",
       "descriptions": [
         "일본"
@@ -46483,7 +46497,7 @@
       ]
     },
     {
-      "id": "n1133",
+      "id": "n1134",
       "keyword": "사량진 왜변",
       "descriptions": [],
       "ref_id": [
@@ -46510,7 +46524,7 @@
       "era_script": []
     },
     {
-      "id": "n1134",
+      "id": "n1135",
       "keyword": "갑인예송",
       "descriptions": [
         "대공복"
@@ -46539,11 +46553,11 @@
       "era_script": []
     },
     {
-      "id": "n1135",
+      "id": "n1136",
       "keyword": "이필제의 난",
       "descriptions": [
         "이필제",
-        "조선 흥선대원군_섭정기"
+        "조선 흥선대원군 섭정기"
       ],
       "ref_id": [
         "7127",
@@ -46565,7 +46579,7 @@
       "era_script": []
     },
     {
-      "id": "n1136",
+      "id": "n1137",
       "keyword": "관세주권",
       "descriptions": [
         "인천 해관",
@@ -46590,7 +46604,7 @@
       "era_script": []
     },
     {
-      "id": "n1137",
+      "id": "n1138",
       "keyword": "만주 독립군 활동 위축",
       "descriptions": [
         "미쓰야 협정"
@@ -46613,7 +46627,7 @@
       "era_script": []
     },
     {
-      "id": "n1138",
+      "id": "n1139",
       "keyword": "거중조정",
       "descriptions": [
         "조·미 수호 통상 조약"
@@ -46640,7 +46654,7 @@
       "era_script": []
     },
     {
-      "id": "n1139",
+      "id": "n1140",
       "keyword": "치외법권",
       "descriptions": [
         "강화도 조약",
@@ -46667,7 +46681,7 @@
       "era_script": []
     },
     {
-      "id": "n1140",
+      "id": "n1141",
       "keyword": "최혜국 대우",
       "descriptions": [
         "조·미 수호 통상 조약",
@@ -46702,7 +46716,7 @@
       "era_script": []
     },
     {
-      "id": "n1141",
+      "id": "n1142",
       "keyword": "이만손",
       "descriptions": [
         "영남만인소"
@@ -46731,7 +46745,7 @@
       "era_script": []
     },
     {
-      "id": "n1142",
+      "id": "n1143",
       "keyword": "박성춘",
       "descriptions": [
         "관민 공동회",
@@ -46756,7 +46770,7 @@
       "era_script": []
     },
     {
-      "id": "n1143",
+      "id": "n1144",
       "keyword": "어린이날",
       "descriptions": [
         "천도교",
@@ -46799,7 +46813,7 @@
       ]
     },
     {
-      "id": "n1144",
+      "id": "n1145",
       "keyword": "조선 노동 총동맹",
       "descriptions": [
         "원산 총파업"
@@ -46824,7 +46838,7 @@
       "era_script": []
     },
     {
-      "id": "n1145",
+      "id": "n1146",
       "keyword": "한용운",
       "descriptions": [
         "조선불교유신론"
@@ -46847,7 +46861,7 @@
       "era_script": []
     },
     {
-      "id": "n1146",
+      "id": "n1147",
       "keyword": "만주",
       "descriptions": [
         "간도 참변"
@@ -46871,7 +46885,7 @@
       "era_script": []
     },
     {
-      "id": "n1147",
+      "id": "n1148",
       "keyword": "중앙아시아",
       "descriptions": [
         "강제 이주"
@@ -46895,7 +46909,7 @@
       "era_script": []
     },
     {
-      "id": "n1148",
+      "id": "n1149",
       "keyword": "한일 국교정상화회담",
       "descriptions": [
         "6.3 시위"
@@ -46918,7 +46932,7 @@
       "era_script": []
     },
     {
-      "id": "n1149",
+      "id": "n1150",
       "keyword": "삼청교육대",
       "descriptions": [
         "대한민국 전두환 정부"
@@ -46958,7 +46972,7 @@
       ]
     },
     {
-      "id": "n1150",
+      "id": "n1151",
       "keyword": "5.17 쿠데타",
       "descriptions": [
         "국가 보위 비상 대책 위원회"
@@ -46987,7 +47001,7 @@
       "era_script": []
     },
     {
-      "id": "n1151",
+      "id": "n1152",
       "keyword": "YH 무역 사건",
       "descriptions": [
         "대한민국 박정희 정부",
@@ -47032,7 +47046,7 @@
       "era_script": []
     },
     {
-      "id": "n1152",
+      "id": "n1153",
       "keyword": "독서삼품과",
       "descriptions": [
         "신라",
@@ -47081,7 +47095,7 @@
       "era_script": []
     },
     {
-      "id": "n1153",
+      "id": "n1154",
       "keyword": "선거조례",
       "descriptions": [],
       "ref_id": [],
@@ -47102,7 +47116,7 @@
       "era_script": []
     },
     {
-      "id": "n1154",
+      "id": "n1155",
       "keyword": "위만 망명",
       "descriptions": [
         "준왕"
@@ -47131,7 +47145,7 @@
       "era_script": []
     },
     {
-      "id": "n1155",
+      "id": "n1156",
       "keyword": "고조선 멸망",
       "descriptions": [
         "누선장군",
@@ -47162,7 +47176,7 @@
       "era_script": []
     },
     {
-      "id": "n1156",
+      "id": "n1157",
       "keyword": "위만 조선 건국",
       "descriptions": [
         "위만 왕위 찬탈"
@@ -47191,7 +47205,7 @@
       "era_script": []
     },
     {
-      "id": "n1157",
+      "id": "n1158",
       "keyword": "백제 건국",
       "descriptions": [
         "온조",
@@ -47221,7 +47235,7 @@
       "era_script": []
     },
     {
-      "id": "n1158",
+      "id": "n1159",
       "keyword": "서안평 점령",
       "descriptions": [
         "고구려 미천왕"
@@ -47252,7 +47266,7 @@
       "era_script": []
     },
     {
-      "id": "n1159",
+      "id": "n1160",
       "keyword": "호족 세력 성장",
       "descriptions": [
         "중앙정부 약화"
@@ -47284,7 +47298,7 @@
       "era_script": []
     },
     {
-      "id": "n1160",
+      "id": "n1161",
       "keyword": "고구려 천리장성",
       "descriptions": [
         "부여성",
@@ -47316,7 +47330,7 @@
       ]
     },
     {
-      "id": "n1161",
+      "id": "n1162",
       "keyword": "이재현",
       "descriptions": [
         "만권당"
@@ -47339,7 +47353,7 @@
       "era_script": []
     },
     {
-      "id": "n1162",
+      "id": "n1163",
       "keyword": "권근",
       "descriptions": [
         "입학도설"
@@ -47362,7 +47376,7 @@
       "era_script": []
     },
     {
-      "id": "n1163",
+      "id": "n1164",
       "keyword": "1차 왕자의 난",
       "descriptions": [
         "이방번",
@@ -47395,7 +47409,7 @@
       "era_script": []
     },
     {
-      "id": "n1164",
+      "id": "n1165",
       "keyword": "조광조 신원복구",
       "descriptions": [
         "조광조",
@@ -47425,7 +47439,7 @@
       "era_script": []
     },
     {
-      "id": "n1165",
+      "id": "n1166",
       "keyword": "이봉창",
       "descriptions": [
         "도쿄",
@@ -47461,7 +47475,7 @@
       "era_script": []
     },
     {
-      "id": "n1166",
+      "id": "n1167",
       "keyword": "헌정 연구회",
       "descriptions": [],
       "ref_id": [],
@@ -47482,7 +47496,7 @@
       "era_script": []
     },
     {
-      "id": "n1167",
+      "id": "n1168",
       "keyword": "조문기",
       "descriptions": [
         "부민관 폭파 의거"
@@ -47505,7 +47519,7 @@
       "era_script": []
     },
     {
-      "id": "n1168",
+      "id": "n1169",
       "keyword": "강윤국",
       "descriptions": [
         "부민관 폭파 의거"
@@ -47528,7 +47542,7 @@
       "era_script": []
     },
     {
-      "id": "n1169",
+      "id": "n1170",
       "keyword": "헌의 6조",
       "descriptions": [
         "관민 공동회",
@@ -47570,7 +47584,7 @@
       "era_script": []
     },
     {
-      "id": "n1170",
+      "id": "n1171",
       "keyword": "대한민국 임시헌장",
       "descriptions": [
         "민권"
@@ -47599,7 +47613,7 @@
       "era_script": []
     },
     {
-      "id": "n1171",
+      "id": "n1172",
       "keyword": "조선 농민 총동맹",
       "descriptions": [
         "일제강점기 문화통치기",
@@ -47633,7 +47647,7 @@
       ]
     },
     {
-      "id": "n1172",
+      "id": "n1173",
       "keyword": "농광 회사",
       "descriptions": [],
       "ref_id": [
@@ -47662,7 +47676,7 @@
       ]
     },
     {
-      "id": "n1173",
+      "id": "n1174",
       "keyword": "삼천만 동포에게 읍고함",
       "descriptions": [
         "3천만 동포",
@@ -47694,7 +47708,7 @@
       ]
     },
     {
-      "id": "n1174",
+      "id": "n1175",
       "keyword": "조선 건국 준비 위원회",
       "descriptions": [
         "엔도",
@@ -47738,7 +47752,7 @@
       "era_script": []
     },
     {
-      "id": "n1175",
+      "id": "n1176",
       "keyword": "경부고속도로",
       "descriptions": [
         "대한민국 박정희 정부"
@@ -47782,7 +47796,7 @@
       "era_script": []
     },
     {
-      "id": "n1176",
+      "id": "n1177",
       "keyword": "함평 고구마 피해 보상 운동",
       "descriptions": [
         "대한민국 박정희 정부"
@@ -47815,7 +47829,7 @@
       "era_script": []
     },
     {
-      "id": "n1177",
+      "id": "n1178",
       "keyword": "금융실명제",
       "descriptions": [
         "대한민국 김영삼 정부"
@@ -47867,7 +47881,7 @@
       "era_script": []
     },
     {
-      "id": "n1178",
+      "id": "n1179",
       "keyword": "최저 임금제",
       "descriptions": [
         "대한민국 전두환 정부",
@@ -47907,7 +47921,7 @@
       "era_script": []
     },
     {
-      "id": "n1179",
+      "id": "n1180",
       "keyword": "상주",
       "descriptions": [
         "원종·애노의 난"
@@ -47930,7 +47944,7 @@
       "era_script": []
     },
     {
-      "id": "n1180",
+      "id": "n1181",
       "keyword": "고려 귀부",
       "descriptions": [
         "후백제 견훤"
@@ -47961,7 +47975,7 @@
       "era_script": []
     },
     {
-      "id": "n1181",
+      "id": "n1182",
       "keyword": "나주 점령",
       "descriptions": [],
       "ref_id": [
@@ -47988,7 +48002,7 @@
       "era_script": []
     },
     {
-      "id": "n1182",
+      "id": "n1183",
       "keyword": "임연",
       "descriptions": [
         "원종 폐위"
@@ -48011,7 +48025,7 @@
       "era_script": []
     },
     {
-      "id": "n1183",
+      "id": "n1184",
       "keyword": "압록강",
       "descriptions": [
         "저고여 피살"
@@ -48034,7 +48048,7 @@
       "era_script": []
     },
     {
-      "id": "n1184",
+      "id": "n1185",
       "keyword": "금강",
       "descriptions": [
         "진포 대첩"
@@ -48057,7 +48071,7 @@
       "era_script": []
     },
     {
-      "id": "n1185",
+      "id": "n1186",
       "keyword": "명청전쟁",
       "descriptions": [
         "사르후 전투"
@@ -48080,7 +48094,7 @@
       "era_script": []
     },
     {
-      "id": "n1186",
+      "id": "n1187",
       "keyword": "실록청",
       "descriptions": [
         "실록 편찬"
@@ -48103,7 +48117,7 @@
       "era_script": []
     },
     {
-      "id": "n1187",
+      "id": "n1188",
       "keyword": "영정법",
       "descriptions": [
         "전세 부담액을 고정",
@@ -48131,7 +48145,7 @@
       "era_script": []
     },
     {
-      "id": "n1188",
+      "id": "n1189",
       "keyword": "김준근",
       "descriptions": [
         "기산풍속도"
@@ -48154,7 +48168,7 @@
       "era_script": []
     },
     {
-      "id": "n1189",
+      "id": "n1190",
       "keyword": "강희안",
       "descriptions": [
         "고사관수도"
@@ -48180,7 +48194,7 @@
       "era_script": []
     },
     {
-      "id": "n1190",
+      "id": "n1191",
       "keyword": "삼정이정청",
       "descriptions": [
         "임술농민봉기",
@@ -48242,7 +48256,7 @@
       "era_script": []
     },
     {
-      "id": "n1191",
+      "id": "n1192",
       "keyword": "독립운동",
       "descriptions": [
         "신돌석",
@@ -48268,7 +48282,7 @@
       "era_script": []
     },
     {
-      "id": "n1192",
+      "id": "n1193",
       "keyword": "개화 정책",
       "descriptions": [
         "갑신정변",
@@ -48300,7 +48314,7 @@
       "era_script": []
     },
     {
-      "id": "n1193",
+      "id": "n1194",
       "keyword": "해조신문",
       "descriptions": [],
       "ref_id": [
@@ -48329,7 +48343,7 @@
       ]
     },
     {
-      "id": "n1194",
+      "id": "n1195",
       "keyword": "송죽회",
       "descriptions": [],
       "ref_id": [
@@ -48358,7 +48372,7 @@
       ]
     },
     {
-      "id": "n1195",
+      "id": "n1196",
       "keyword": "근우회",
       "descriptions": [
         "박신우",
@@ -48392,7 +48406,7 @@
       "era_script": []
     },
     {
-      "id": "n1196",
+      "id": "n1197",
       "keyword": "조선학회",
       "descriptions": [
         "여유당전서",
@@ -48416,7 +48430,7 @@
       "era_script": []
     },
     {
-      "id": "n1197",
+      "id": "n1198",
       "keyword": "중일 전쟁",
       "descriptions": [],
       "ref_id": [],
@@ -48443,7 +48457,7 @@
       "era_script": []
     },
     {
-      "id": "n1198",
+      "id": "n1199",
       "keyword": "치안 유지법",
       "descriptions": [
         "6.10 만세 운동",
@@ -48500,7 +48514,7 @@
       ]
     },
     {
-      "id": "n1199",
+      "id": "n1200",
       "keyword": "조선사 편수회",
       "descriptions": [
         "이병도"
@@ -48533,7 +48547,7 @@
       ]
     },
     {
-      "id": "n1200",
+      "id": "n1201",
       "keyword": "김신조 사건",
       "descriptions": [
         "향토 예비군 창설"
@@ -48556,7 +48570,7 @@
       "era_script": []
     },
     {
-      "id": "n1201",
+      "id": "n1202",
       "keyword": "남연군 묘",
       "descriptions": [
         "오페르트 도굴 사건"
@@ -48583,7 +48597,7 @@
       "era_script": []
     },
     {
-      "id": "n1202",
+      "id": "n1203",
       "keyword": "윤봉길",
       "descriptions": [
         "한인 애국단"
@@ -48614,7 +48628,7 @@
       "era_script": []
     },
     {
-      "id": "n1203",
+      "id": "n1204",
       "keyword": "임존성",
       "descriptions": [
         "백제 부흥 운동"
@@ -48645,7 +48659,7 @@
       "era_script": []
     },
     {
-      "id": "n1204",
+      "id": "n1205",
       "keyword": "기대승",
       "descriptions": [
         "사단칠정",

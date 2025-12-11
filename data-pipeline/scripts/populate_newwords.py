@@ -346,15 +346,19 @@ def main():
                 if not final_keyword:
                     continue
 
+                # Clean underscores for better matching with ref-timeline
+                final_keyword_clean = final_keyword.replace("_", " ")
+
                 # New Logic: Check for "Nation SubEra Ruler" pattern in keyword
                 # parse_era returns ((era, sub, det), remaining) or (None, error_msg)
-                parsed_kw, kw_info = parse_era(final_keyword, age_list, key_age_map, SUB_ERAS)
+                parsed_kw, kw_info = parse_era(final_keyword_clean, age_list, key_age_map, SUB_ERAS)
                 extra_sub_era = None
                 
                 if parsed_kw:
                     p_era, p_sub, p_det = parsed_kw
                     # Check if exact match (no remaining text) and has all three components
                     if not kw_info and p_era and p_sub and p_det:
+                        # Use clean keyword
                         final_keyword = f"{p_era} {p_det}"
                         extra_sub_era = p_sub
 
@@ -401,7 +405,7 @@ def main():
                 # 6. Era/Time Logic
                 if row_type and row_type.endswith("-시기"):
                     if i < len(details) and details[i]:
-                        time_text = details[i]
+                        time_text = details[i].replace("_", " ")
                         parsed, info = parse_era(time_text, age_list, key_age_map, SUB_ERAS)
                         
                         if parsed:
@@ -622,25 +626,34 @@ def main():
         # Sort types according to type-set order
         sorted_types = sort_types(entry.types, type_order)
         
+        # KEY CHANGE: Replace underscores with spaces for presentation
+        final_keyword = entry.keyword.replace("_", " ")
+        final_descriptions = [d.replace("_", " ") for d in entry.descriptions]
+        
+        # Era tuples: (era, sub, det)
+        final_era_list = [t[0].replace("_", " ") for t in entry.era_tuples]
+        final_sub_era_list = [t[1].replace("_", " ") for t in entry.era_tuples]
+        final_det_era_list = [t[2].replace("_", " ") for t in entry.era_tuples]
+        
         data_to_insert.append((
             entry.id,
-            entry.keyword,
-            json.dumps(sorted(list(entry.descriptions)), ensure_ascii=False),
+            final_keyword, # Use processed keyword
+            json.dumps(sorted(final_descriptions), ensure_ascii=False), # Use processed descriptions
             json.dumps(sorted(list(entry.ref_id), key=int), ensure_ascii=False),
             json.dumps(sorted(list(entry.q_ref_id), key=int), ensure_ascii=False),
             json.dumps(sorted_types, ensure_ascii=False),
             json.dumps(entry.scores, ensure_ascii=False),
-            json.dumps(era_list, ensure_ascii=False),
-            json.dumps(sub_era_list, ensure_ascii=False),
-            json.dumps(det_era_list, ensure_ascii=False),
-            entry.years, # Store as string directly
+            json.dumps(final_era_list, ensure_ascii=False), # Processed
+            json.dumps(final_sub_era_list, ensure_ascii=False), # Processed
+            json.dumps(final_det_era_list, ensure_ascii=False), # Processed
+            entry.years.replace("_", " "), # Processed
             entry.years_check,
             json.dumps(list(entry.era_script), ensure_ascii=False)
         ))
         
     cur.executemany(insert_sql, data_to_insert)
     conn.commit()
-    print(f"Inserted {len(data_to_insert)} rows into newwords.")
+    print(f"Inserted {len(data_to_insert)} rows into newwords (underscores removed).")
     conn.close()
 
     if errors:
