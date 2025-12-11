@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { View, StyleSheet } from "react-native";
-import { useTheme } from "react-native-paper";
 import AppText from "./AppText";
 import type { TextStyle, StyleProp, ViewStyle } from "react-native";
 import { typography } from "../../theme/typography";
@@ -34,7 +33,6 @@ const PriorityMark: React.FC<PriorityMarkProps> = ({
   textStyle,
   style,
 }) => {
-  const theme = useTheme();
   const label = useMemo(() => getScoreFrequencyLabel(scores), [scores]);
 
   if (!label) {

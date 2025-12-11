@@ -17,7 +17,6 @@ import {
   ActivityIndicator,
   List,
   Surface,
-  useTheme,
   Searchbar,
   Menu,
   Divider,
@@ -32,13 +31,14 @@ import { QuizItem } from "../types/QuizItem";
 import { getScoreFrequencyLabel } from "../utils/score";
 import PriorityMark from "../components/common/PriorityMark";
 import { colors } from "../theme/colors";
+import { useAppTheme } from "../hooks/useAppTheme";
 import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordList">;
 
 const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   const { problems, loading } = useQuiz();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchVisible, setSearchVisible] = useState(false);
   const [sortMode, setSortMode] = useState<"alphabetical" | "importance">(

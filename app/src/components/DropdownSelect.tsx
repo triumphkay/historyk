@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { Button, useTheme, Surface, Divider } from "react-native-paper";
+import { Button, Surface, Divider } from "react-native-paper";
 import AppText from "./common/AppText";
 import { POINT_COLOR_1 } from "../theme";
+import { useAppTheme } from "../hooks/useAppTheme";
 
 interface DropdownSelectProps {
   label: string;
@@ -35,7 +36,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     height: 0,
   });
   const containerRef = useRef<View>(null);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const showIcon = !disabled;
 
   const openMenu = () => {

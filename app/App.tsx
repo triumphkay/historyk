@@ -6,7 +6,7 @@ import {
   NativeStackHeaderProps,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { Appbar, PaperProvider, useTheme, Text } from "react-native-paper";
+import { Appbar, PaperProvider, Text } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider } from "styled-components/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -32,6 +32,7 @@ import { NewWordEraQuizProvider } from "./src/context/NewWordEraQuizContext";
 import { RootStackParamList } from "./src/types/navigation";
 import { lightTheme } from "./src/theme";
 import { styledTheme } from "./src/theme/styledTheme";
+import { useAppTheme } from "./src/hooks/useAppTheme";
 import texts from "./assets/texts.json";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -60,7 +61,7 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
   route,
   options,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const isHome = route.name === "Home";
   const isKeywordList = route.name === "KeywordList";
   const title = getScreenTitle(route.name);

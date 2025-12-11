@@ -1,10 +1,11 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Surface, Divider, useTheme } from "react-native-paper";
+import { Surface, Divider } from "react-native-paper";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
 import { typography } from "../theme/typography";
+import { useAppTheme } from "../hooks/useAppTheme";
 // import { getScoreFrequencyLabel } from "../utils/score";
 import { formatReferenceId } from "../utils/referenceFormatter";
 import PriorityMark from "@components/common/PriorityMark";
@@ -15,7 +16,7 @@ import texts from "../../assets/texts.json";
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordDetail">;
 
 const KeywordDetailScreen: React.FC<Props> = ({ route }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const { keyword } = route.params;
 
   // const importanceLabel = getScoreFrequencyLabel(keyword.score);

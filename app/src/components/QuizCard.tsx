@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import { IconButton, TextInput, useTheme } from "react-native-paper";
+import { IconButton, TextInput } from "react-native-paper";
 import AppText from "./common/AppText";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -15,6 +15,7 @@ import { mergeReferenceIds } from "../utils/references";
 import { quizScreenStyles } from "../theme/quizStyles";
 import { useQuiz } from "../context/QuizContext";
 import { POINT_COLOR_1 } from "../theme";
+import { useAppTheme } from "../hooks/useAppTheme";
 import FlipCard from "./common/FlipCard";
 import QuizCardLayout from "./common/QuizCardLayout";
 import texts from "../../assets/texts.json";
@@ -38,7 +39,7 @@ const selectRandomDescriptions = (descriptions: string[]) => {
 };
 
 const QuizCard: React.FC<Props> = ({ problem, index }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { cardStates, updateCardState } = useQuiz();

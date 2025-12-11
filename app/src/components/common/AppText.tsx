@@ -1,9 +1,9 @@
 import React from "react";
 import { Text as PaperText, TextProps } from "react-native-paper";
-import { Platform, TextStyle, StyleSheet } from "react-native";
+import { Platform, TextStyle, StyleSheet, StyleProp } from "react-native";
 
 interface AppTextProps extends TextProps<string> {
-  style?: TextStyle | TextStyle[];
+  style?: StyleProp<TextStyle>;
 }
 
 const AppText: React.FC<AppTextProps> = ({ style, children, ...props }) => {

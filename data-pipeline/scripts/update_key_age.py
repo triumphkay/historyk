@@ -148,7 +148,11 @@ def _sort_entries_by_age(
             seen.add(normalized_entry)
         except ValueError:
             # If not found in timeline, we might want to skip or append at the end.
-            # For now, let's print a warning and skip to avoid breaking execution
+            
+            # Suppress warning for year entries (e.g. "1864년") as they are expected to be skipped
+            if "년" in normalized_entry and any(c.isdigit() for c in normalized_entry):
+                continue
+                
             print(f"[Warning] '{nation} {normalized_entry}' not found in timeline. Skipping.")
             continue
 

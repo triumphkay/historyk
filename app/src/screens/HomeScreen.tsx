@@ -3,7 +3,6 @@ import Constants from "expo-constants";
 import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
 import {
   Surface,
-  useTheme,
   IconButton,
   Portal,
   Modal,
@@ -13,6 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
+import { useAppTheme } from "../hooks/useAppTheme";
 import texts from "../../assets/texts.json";
 import { typography } from "@theme/typography";
 import { colors, POINT_COLOR_1 } from "@theme/colors";
@@ -22,7 +22,7 @@ import LocoMotoIcon from "../../assets/locomoto_iconiq.svg";
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const [visible, setVisible] = useState(false);
 
   const showModal = () => setVisible(true);

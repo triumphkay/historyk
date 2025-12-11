@@ -15,6 +15,8 @@ KEYWORD_TYPES_PATH = "hardcodes/keyword-types.json"
 TIMETABLE_PATH = "hardcodes/timetable.json"
 AGE_LIST_PATH = "database/ref-timeline.json"
 
+KEY_AGE_PATH = "app/assets/key-timeline.json"
+
 def load_json(path: str):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -138,14 +140,43 @@ def parse_era(text: str, age_list: list[str], key_age_map: dict, sub_eras: set[s
         others = parts[1:]
 
     if others:
-        possible_sub = others[0]
-        # Check if first token is a known sub_era
-        if possible_sub in sub_eras:
-            sub_era = possible_sub
-            if len(others) > 1:
-                det_era = " ".join(others[1:])
+        remaining_suffix = " ".join(others)
+        
+        # Try to match sub_era (longest match first)
+        found_sub = None
+        # Sort sub_eras by length descending to ensure "흥선대원군 섭정기" matches before "흥선대원군" (if existed)
+        sorted_subs = sorted(list(sub_eras), key=len, reverse=True)
+        
+        for sub in sorted_subs:
+            if remaining_suffix.startswith(sub):
+                found_sub = sub
+                break
+        
+        if found_sub:
+            sub_era = found_sub
+            det_era = remaining_suffix[len(found_sub):].strip()
         else:
-            det_era = " ".join(others)
+            det_era = remaining_suffix
+
+    # If we have remaining text that wasn't part of best_match, check if it starts with a known sub_era
+    if remaining:
+        sorted_subs = sorted(list(sub_eras), key=len, reverse=True)
+        for sub in sorted_subs:
+            if remaining.startswith(sub):
+                # Found a sub_era in the remaining text
+                if not sub_era:
+                    sub_era = sub
+                    
+                    # The part after sub_era is det_era
+                    extra = remaining[len(sub):].strip()
+                    if extra:
+                        if det_era: 
+                            det_era += " " + extra
+                        else: 
+                            det_era = extra
+                    
+                    remaining = "" # Fully consumed
+                break
             
     # Special handling for "정부" suffix (e.g. "이승만 정부")
     # If det_era ends with "정부", it implies Era is "대한민국"
@@ -200,7 +231,9 @@ def main():
     times_keys = set(keyword_types.get("times-key", []))
     
     # Build key_age map for nation lookup
-    key_age_data = keyword_types.get("key-age", [])
+    # key-age is now in a separate file (app/assets/key-age.json)
+    key_age_file = repo_root.parent / KEY_AGE_PATH
+    key_age_data = load_json(key_age_file)
     key_age_map = {} # Nation -> List of Rulers
     for item in key_age_data:
         nation = item["nation"]
@@ -347,7 +380,8 @@ def main():
                     continue
 
                 # Clean underscores for better matching with ref-timeline
-                final_keyword_clean = final_keyword.replace("_", " ")
+                final_keyword = final_keyword.replace("_", " ")
+                final_keyword_clean = final_keyword
 
                 # New Logic: Check for "Nation SubEra Ruler" pattern in keyword
                 # parse_era returns ((era, sub, det), remaining) or (None, error_msg)
@@ -373,7 +407,7 @@ def main():
                 
                 # 2. Descriptions
                 if i < len(analyzes) and analyzes[i]:
-                    desc_parts = [p.strip() for p in analyzes[i].split(",") if p.strip()]
+                    desc_parts = [p.strip().replace("_", " ") for p in analyzes[i].split(",") if p.strip()]
                     entry.descriptions.update(desc_parts)
                 
                 # 3. ref_id / q_ref_id
@@ -408,10 +442,11 @@ def main():
                         time_text = details[i].replace("_", " ")
                         parsed, info = parse_era(time_text, age_list, key_age_map, SUB_ERAS)
                         
+                        remaining_text = info
+                        last_valid_era = ""
+                        
                         if parsed:
                             p_era, p_sub, p_det = parsed
-                            if final_keyword == "국민교육헌장":
-                                print(f"[DEBUG] Keyword: {final_keyword}, Input: {time_text}, Parsed: {parsed}")
                             
                             # Add as tuple to maintain relationship using merge logic
                             era_tuple = (p_era or "", p_sub or "", p_det or "")
@@ -421,13 +456,8 @@ def main():
                             last_valid_era = p_era or ""
 
                             # Recursively parse remaining text to extract pure year info
-                            remaining_text = info
-                            if final_keyword == "김지정의 난":
-                                print(f"[DEBUG RECURSIVE] Initial remaining: '{remaining_text}'")
                             while remaining_text:
                                 parsed_remaining, info_remaining = parse_era(remaining_text, age_list, key_age_map, SUB_ERAS)
-                                if final_keyword == "김지정의 난":
-                                    print(f"[DEBUG RECURSIVE] Parsed: {parsed_remaining}, Remaining: '{info_remaining}'")
                                 if parsed_remaining:
                                     # Found more era info in remaining text
                                     r_era, r_sub, r_det = parsed_remaining
@@ -448,15 +478,11 @@ def main():
                                     # No more era info, this is the pure year
                                     break
                             
-                            if final_keyword == "김지정의 난":
-                                print(f"[DEBUG RECURSIVE] Final remaining for years: '{remaining_text}'")
-                            
-                            # Store only pure year info
-                            if remaining_text:
-                                update_years(entry, remaining_text, row_id, final_keyword)
-                        else:
-                            # info is error message
-                            errors[info].append(f"ID: {row_id}, Keyword: {final_keyword}, Text: {time_text}")
+                        # Store only pure year info
+                        if remaining_text:
+                            # Clean UNKNOWN_ERA prefix if present
+                            years_val = remaining_text.replace("UNKNOWN_ERA: ", "")
+                            update_years(entry, years_val, row_id, final_keyword)
                 
                 # 7. Years Check
                 if row_y_check == "true":
@@ -589,6 +615,7 @@ def main():
         for desc in entry.descriptions:
             # Use same parser
             parsed, remaining = parse_era(desc, age_list, key_age_map, SUB_ERAS)
+            
             if parsed and not remaining:
                 # Only apply to pure era strings
                 parsed_descs.append((parsed, desc))
