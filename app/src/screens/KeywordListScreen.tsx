@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useLayoutEffect } from "react";
+import React, { useMemo, useState, useEffect, useLayoutEffect, useRef } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -9,6 +9,8 @@ import {
   Platform,
   Modal,
   TouchableWithoutFeedback,
+  LayoutAnimation,
+  UIManager,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -45,17 +47,44 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   useEffect(() => {
+    if (Platform.OS === "android") {
+      if (UIManager.setLayoutAnimationEnabledExperimental) {
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+      }
+    }
+  }, []);
+
+
+  useEffect(() => {
     navigation.setParams({
-      toggleSearch: () => setSearchVisible((prev) => !prev),
+      toggleSearch: () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setSearchVisible((prev) => !prev);
+      },
+      isSearchVisible: searchVisible,
     } as any);
-  }, [navigation]);
+  }, [navigation, searchVisible]);
+
+  const searchRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (searchVisible) {
+      // Small delay to ensure component is rendered and animation started
+      setTimeout(() => {
+        searchRef.current?.focus();
+      }, 100);
+    } else {
+      Keyboard.dismiss();
+      setSearchQuery("");
+    }
+  }, [searchVisible]);
 
   // Ref for the menu anchor
   const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });
 
   const openMenu = (event: GestureResponderEvent) => {
     event.stopPropagation();
-    
+
     const { nativeEvent } = event;
     const anchor = { x: nativeEvent.pageX - 100, y: nativeEvent.pageY + 10 };
     setMenuAnchor(anchor);
@@ -142,17 +171,42 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
     );
   };
 
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const ITEMS_PER_PAGE = 20;
+
+  // Reset page when filter/sort changes
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, sortMode]);
+
+  const displayedProblems = useMemo(() => {
+    return filteredProblems.slice(0, page * ITEMS_PER_PAGE);
+  }, [filteredProblems, page]);
+
+  const loadMore = () => {
+    if (displayedProblems.length < filteredProblems.length) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
   return (
     <Surface
       style={[styles.container, { backgroundColor: theme.colors.level1 }]}
     >
       {searchVisible && (
-        <Searchbar
-          placeholder={texts.keywordList.searchLabel}
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-          style={styles.searchBar}
-        />
+        <View style={{ backgroundColor: theme.colors.level0 }}>
+          <Searchbar
+            ref={searchRef}
+            placeholder={texts.keywordList.searchLabel}
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            style={styles.searchBar}
+            keyboardType="default"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </View>
       )}
       <Surface style={styles.countContainer} elevation={1}>
         <AppText style={styles.countText}>
@@ -220,10 +274,16 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
       </Modal>
 
       <FlatList
-        data={filteredProblems}
+        data={displayedProblems}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        initialNumToRender={20}
+        maxToRenderPerBatch={20}
+        windowSize={10}
+        removeClippedSubviews={true}
       />
     </Surface>
   );

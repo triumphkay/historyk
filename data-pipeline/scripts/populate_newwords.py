@@ -574,7 +574,7 @@ def main():
     # The cache insertion order is preserved in Python 3.7+.
     # But we assigned IDs based on encounter order.
     
-    for kw, entry in newwords_cache.items():
+    for kw, entry in newwords_cache.items():       
         # Remove duplicates: if an ID is in both, remove it from ref_id (priority to q_ref_id)
         entry.ref_id.difference_update(entry.q_ref_id)
         

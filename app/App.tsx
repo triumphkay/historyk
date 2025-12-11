@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
@@ -9,6 +9,7 @@ import {
 import { Appbar, PaperProvider, useTheme, Text } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider } from "styled-components/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import {
   NotoSansKR_200ExtraLight,
@@ -64,6 +65,8 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
   const isKeywordList = route.name === "KeywordList";
   const title = getScreenTitle(route.name);
 
+
+
   if (isHome) {
     return null;
   }
@@ -95,15 +98,30 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
         <View style={{ flex: 1 }} />
         {isKeywordList ? (
           <View style={{ flexDirection: "row" }}>
-            <Appbar.Action
-              icon="magnify"
+            <TouchableOpacity
               onPress={() => {
                 const params = route.params as any;
                 if (params?.toggleSearch) {
                   params.toggleSearch();
                 }
               }}
-            />
+              style={{
+                width: 48,
+                height: 48,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                name={
+                  (route.params as any)?.isSearchVisible
+                    ? "magnify-close"
+                    : "magnify"
+                }
+                size={24}
+                color={theme.colors.onSurface}
+              />
+            </TouchableOpacity>
             {/* <Appbar.Action
               icon="sort"
               onPress={() => {

@@ -61,8 +61,15 @@ export const prepareProblems = (records: Keyword[] = []): QuizItem[] => {
 };
 
 export const prepareNewWordProblems = (records: NewWord[] = []): QuizItem[] => {
-  // No filtering - return all records
-  const randomized = shuffle(records);
+  // Filter out if "주제" is the only type, as requested
+  const filtered = records.filter((record) => {
+    const { types } = record;
+    const onlyTopicType =
+      types.length === 1 && typeof types[0] === 'string' && types[0].trim() === '주제';
+    return !onlyTopicType;
+  });
+
+  const randomized = shuffle(filtered);
   return randomized.map(convertNewWordToQuizItem);
 };
 
