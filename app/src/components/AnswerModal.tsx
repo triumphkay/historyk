@@ -35,7 +35,7 @@ const AnswerModal: React.FC<AnswerModalProps> = ({
             {answer}
           </AppText>
           <Button mode="outlined" onPress={onClose} style={styles.button}>
-            {texts.componentContents.close}
+            {texts.componentContents.closeText}
           </Button>
           <Button mode="contained" onPress={onNext}>
             {texts.componentContents.nextQuestion}

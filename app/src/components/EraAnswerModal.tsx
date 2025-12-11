@@ -57,7 +57,7 @@ const EraAnswerModal: React.FC<EraAnswerModalProps> = ({
             </AppText>
           ) : null}
           <Button mode="outlined" onPress={onClose} style={styles.button}>
-            {texts.componentContents.close}
+            {texts.componentContents.closeText}
           </Button>
           <Button mode="contained" onPress={onNext}>
             {texts.componentContents.nextQuestion}

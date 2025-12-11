@@ -16,6 +16,8 @@ import { spacing } from "../theme/spacing";
 import texts from "../../assets/texts.json";
 import { typography } from "@theme/typography";
 import { colors, POINT_COLOR_1 } from "@theme/colors";
+import data from "../../assets/data.json";
+import LocoMotoIcon from "../../assets/locomoto_iconiq.svg";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -50,9 +52,9 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 <AppText
                   style={[styles.modalAppTitle, { color: POINT_COLOR_1 }]}
                 >
-                  키워드 한국사
+                  {texts.appTitle}
                 </AppText>
-                <AppText style={styles.modalHeader}>{texts.appTitle}</AppText>
+                <AppText style={styles.modalHeader}>{texts.subTitle}</AppText>
                 {texts.notice.map((line, index) => {
                   const parts = line.split(/(\*\*.*?\*\*|\*.*?\*)/g);
                   const isMainHeader = line.startsWith("**");
@@ -104,17 +106,40 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                     </AppText>
                   );
                 })}
+                <View style={styles.disclaimerContainer}>
+                  {texts.disclaimer.map((dis, disIndex) => (
+                    <AppText
+                      key={"dis" + disIndex}
+                      style={styles.disclaimerText}
+                    >
+                      {dis}
+                    </AppText>
+                  ))}
+                </View>
+              </View>
+              <View style={styles.versionText}>
+                <AppText style={{ color: theme.colors.outline }}>
+                  Version{" "}
+                  {Constants.expoConfig?.version ||
+                    Constants.manifest?.version ||
+                    Constants.nativeAppVersion}
+                  {" / "}
+                  Dataset {data.id}
+                </AppText>
               </View>
 
-              <AppText
-                style={[styles.versionText, { color: theme.colors.outline }]}
-              >
-                version{" "}
-                {Constants.expoConfig?.version ||
-                  Constants.manifest?.version ||
-                  Constants.nativeAppVersion ||
-                  texts.version}
-              </AppText>
+              <View style={[styles.locomoto]}>
+                <LocoMotoIcon
+                  width={24}
+                  height={12}
+                  color={theme.colors.outline}
+                />
+                <AppText
+                  style={[styles.locomotoText, { color: theme.colors.outline }]}
+                >
+                  {texts.locomoto}
+                </AppText>
+              </View>
 
               <TouchableOpacity
                 style={[
@@ -129,7 +154,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                     fontWeight: "600",
                   }}
                 >
-                  {texts.componentContents.close}
+                  {texts.componentContents.confirmText}
                 </AppText>
               </TouchableOpacity>
             </ScrollView>
@@ -344,7 +369,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "NanumMyeongjo-800",
 
-    marginBottom: spacing.reg,
+    marginBottom: spacing.md,
   },
   modalContainer: {
     paddingVertical: spacing.lg,
@@ -357,7 +382,7 @@ const styles = StyleSheet.create({
   modalScrollContent: {
     alignItems: "center",
     paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xl, // Reduced padding to avoid excessive whitespace
+    paddingBottom: spacing.md, // Reduced padding to avoid excessive whitespace
   },
   modalTitle: {
     fontSize: 24,
@@ -374,10 +399,29 @@ const styles = StyleSheet.create({
     textAlign: "left",
     width: "100%",
   },
+  disclaimerContainer: {
+    marginTop: 10,
+  },
+  disclaimerText: {
+    fontSize: 12,
+    marginBottom: 4,
+    // fontWeight: 700,
+  },
   versionText: {
-    fontSize: 14,
+    // width: "100%",
     textAlign: "center",
-    marginBottom: spacing.lg,
+    marginBottom: spacing.sm,
+  },
+  locomoto: {
+    marginBottom: spacing.xl,
+    flexDirection: "row",
+    gap: 6,
+    alignItems: "center",
+  },
+  locomotoText: {
+    fontSize: 10,
+    // flex: 1,
+    fontWeight: 500,
   },
   closeButton: {
     paddingVertical: spacing.sm,

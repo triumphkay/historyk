@@ -4,7 +4,11 @@ import { TypeDetail } from "../types/TypeDetail";
 import { NewWord } from "../types/NewWord";
 
 export const loadNewWordData = async (): Promise<NewWord[]> => {
-  return newWordsData as NewWord[];
+  const data = newWordsData as any;
+  if (data.items && Array.isArray(data.items)) {
+    return data.items as NewWord[];
+  }
+  return data as NewWord[];
 };
 
 export const loadTypeDetails = (): TypeDetail[] => {

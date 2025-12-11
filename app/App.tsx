@@ -38,7 +38,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const getScreenTitle = (routeName: string): string => {
   switch (routeName) {
     case "Home":
-      return texts.appTitle;
+      return texts.subTitle;
     case "KeywordList":
       return texts.keywordList.headTitle;
     case "Quiz":
@@ -50,7 +50,7 @@ const getScreenTitle = (routeName: string): string => {
     case "Settings":
       return texts.settings.headTitle;
     default:
-      return texts.appTitle;
+      return texts.subTitle;
   }
 };
 

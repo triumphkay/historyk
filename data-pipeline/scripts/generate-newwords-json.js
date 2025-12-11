@@ -69,8 +69,32 @@ const main = () => {
     era_script: ensureArray(row.era_script)
   }));
 
-  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(formatted, null, 2), 'utf8');
-  console.log(`Generated ${formatted.length} newwords records at ${OUTPUT_PATH}`);
+  // Determine Version ID
+  let nextId = "00001";
+  if (fs.existsSync(OUTPUT_PATH)) {
+    try {
+      const content = fs.readFileSync(OUTPUT_PATH, 'utf8');
+      const data = JSON.parse(content);
+      // Check if it matches new structure { id, items }
+      if (data && data.id && typeof data.id === 'string') {
+        const currentInt = parseInt(data.id, 10);
+        if (!isNaN(currentInt)) {
+          nextId = String(currentInt + 1).padStart(5, '0');
+        }
+      }
+    } catch (e) {
+      // If error or file is in old format, start from 00001
+      console.warn('Could not read existing version ID, starting from 00001');
+    }
+  }
+
+  const finalOutput = {
+    id: nextId,
+    items: formatted
+  };
+
+  fs.writeFileSync(OUTPUT_PATH, JSON.stringify(finalOutput, null, 2), 'utf8');
+  console.log(`Generated ${formatted.length} newwords records at ${OUTPUT_PATH} (Version: ${nextId})`);
 };
 
 main();

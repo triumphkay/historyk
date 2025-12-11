@@ -55,7 +55,7 @@ const ReferenceModal: React.FC<ReferenceModalProps> = ({
             contentContainerStyle={styles.list}
           />
           <Button mode="outlined" onPress={onClose}>
-            {texts.componentContents.close}
+            {texts.componentContents.closeText}
           </Button>
         </Surface>
       </Modal>

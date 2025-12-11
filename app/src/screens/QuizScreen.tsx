@@ -152,6 +152,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
             offset: width * index,
             index,
           })}
+          initialScrollIndex={currentIndex}
           initialNumToRender={1}
           maxToRenderPerBatch={2}
           windowSize={3}
