@@ -18,13 +18,9 @@ const KeywordChip: React.FC<KeywordChipProps> = ({
   const theme = useTheme<AppTheme>();
 
   const chipBgColor =
-    variant === "back"
-      ? theme.colors.level3
-      : theme.colors.onGrey;
+    variant === "back" ? theme.colors.level3 : theme.colors.onGrey;
   const chipTextColor =
-    variant === "back"
-      ? theme.colors.level8
-      : theme.colors.grey;
+    variant === "back" ? theme.colors.level8 : theme.colors.grey;
 
   return (
     <Surface
@@ -46,7 +42,9 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: typography.sizes.lg,
-    fontWeight: 600,
+    fontWeight: 700,
+    height: typography.sizes.xxl,
+    lineHeight: typography.sizes.xxl,
   },
 });
 
