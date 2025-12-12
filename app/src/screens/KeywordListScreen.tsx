@@ -1,4 +1,10 @@
-import React, { useMemo, useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, {
+  useMemo,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import {
   FlatList,
   StyleSheet,
@@ -53,7 +59,6 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
       }
     }
   }, []);
-
 
   useEffect(() => {
     navigation.setParams({
@@ -156,7 +161,10 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
             elevation={0}
             style={[
               styles.indexBadge,
-              { backgroundColor: theme.colors.primaryContainer },
+              {
+                backgroundColor: theme.colors.primaryContainer,
+                alignSelf: "center",
+              },
             ]}
           >
             <AppText style={[styles.indexText, { color: colors.level8 }]}>
@@ -337,6 +345,7 @@ const styles = StyleSheet.create({
   listItem: {
     borderBottomWidth: 1,
     borderBottomColor: colors.level2,
+    paddingRight: spacing.xs,
   },
   center: {
     flex: 1,
