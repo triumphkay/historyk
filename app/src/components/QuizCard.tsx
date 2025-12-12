@@ -31,11 +31,49 @@ const selectRandomDescriptions = (descriptions: string[]) => {
   if (descriptions.length <= 3) {
     return descriptions;
   }
-  const shuffled = [...descriptions]
-    .map((value) => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-  return shuffled.slice(0, 3);
+  const shuffled = [...descriptions].sort(() => 0.5 - Math.random());
+  const selected: string[] = [];
+
+  // 1. Try to pick distinct hints (filtering out substrings)
+  for (const candidate of shuffled) {
+    if (selected.length >= 3) break;
+
+    let isRedundant = false;
+    let replaceIndex = -1;
+
+    for (let i = 0; i < selected.length; i++) {
+      const existing = selected[i];
+      // If existing contains candidate (existing is better/longer), skip candidate
+      if (existing.includes(candidate)) {
+        isRedundant = true;
+        break;
+      }
+      // If candidate contains existing (candidate is better/longer), replace existing
+      if (candidate.includes(existing)) {
+        isRedundant = true;
+        replaceIndex = i;
+        break;
+      }
+    }
+
+    if (replaceIndex !== -1) {
+      selected[replaceIndex] = candidate;
+    } else if (!isRedundant) {
+      selected.push(candidate);
+    }
+  }
+
+  // 2. If we still don't have 3 hints, fill with remaining ones regardless of redundancy
+  if (selected.length < 3) {
+    for (const candidate of shuffled) {
+      if (selected.length >= 3) break;
+      if (!selected.includes(candidate)) {
+        selected.push(candidate);
+      }
+    }
+  }
+
+  return selected;
 };
 
 const QuizCard: React.FC<Props> = ({ problem, index }) => {
