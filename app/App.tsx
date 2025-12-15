@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Platform, TouchableOpacity } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createNativeStackNavigator,
@@ -210,6 +211,29 @@ const ThemedApp: React.FC = () => {
       };
     }
   }, []);
+
+  // Keep the splash screen visible while we fetch resources
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+    prepare();
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      // Add a 1-second delay before hiding the splash screen to ensure smooth transition
+      const timer = setTimeout(async () => {
+        await SplashScreen.hideAsync();
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [fontsLoaded]);
 
   // Always use light theme
   const currentTheme = lightTheme;
