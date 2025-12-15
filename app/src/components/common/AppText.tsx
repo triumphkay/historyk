@@ -35,8 +35,12 @@ const AppText: React.FC<AppTextProps> = ({ style, children, ...props }) => {
     fontWeight: undefined, // Remove fontWeight so RN uses the font family
   };
 
-  // Android text break strategy for better Korean word wrapping
+  // Android text break strategy for better Korean word wrapping and layout
   const androidProps = Platform.OS === "android" ? { textBreakStrategy: "simple" as const } : {};
+
+  if (Platform.OS === "android") {
+    computedStyle.includeFontPadding = false; // Fix vertical alignment issues on Android
+  }
 
   return (
     <PaperText

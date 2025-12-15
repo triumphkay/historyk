@@ -125,6 +125,7 @@ export const lightTheme: AppTheme = {
   colors: {
     ...MD3LightTheme.colors,
     ...colors,
+    background: colors.level1, // Match app background to prevent white flash
   },
 };
 

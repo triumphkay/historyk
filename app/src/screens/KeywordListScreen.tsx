@@ -17,6 +17,7 @@ import {
   TouchableWithoutFeedback,
   LayoutAnimation,
   UIManager,
+  InteractionManager,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -43,7 +44,7 @@ import texts from "../../assets/texts.json";
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordList">;
 
 const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { problems, loading } = useQuiz();
+  const { sortedProblems: preSortedProblems, loading } = useQuiz();
   const theme = useAppTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchVisible, setSearchVisible] = useState(false);
@@ -52,23 +53,48 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   );
   const [menuVisible, setMenuVisible] = useState(false);
 
-  useEffect(() => {
-    if (Platform.OS === "android") {
-      if (UIManager.setLayoutAnimationEnabledExperimental) {
-        UIManager.setLayoutAnimationEnabledExperimental(true);
-      }
-    }
-  }, []);
+  // State to track if screen transition is complete
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    navigation.setParams({
-      toggleSearch: () => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setSearchVisible((prev) => !prev);
-      },
-      isSearchVisible: searchVisible,
-    } as any);
-  }, [navigation, searchVisible]);
+    // Wait for navigation animation to finish before processing data
+    const task = InteractionManager.runAfterInteractions(() => {
+      setIsReady(true);
+    });
+
+    return () => task.cancel();
+  }, []);
+
+
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={() => {
+              LayoutAnimation.configureNext(
+                LayoutAnimation.Presets.easeInEaseOut
+              );
+              setSearchVisible((prev) => !prev);
+            }}
+            style={{
+              width: 48,
+              height: 48,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <MaterialCommunityIcons
+              name={searchVisible ? "magnify-close" : "magnify"}
+              size={24}
+              color={theme.colors.onSurface}
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation, searchVisible, theme.colors.onSurface]);
 
   const searchRef = useRef<any>(null);
 
@@ -99,52 +125,38 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   const closeMenu = () => setMenuVisible(false);
 
   const sortedProblems = useMemo(() => {
-    if (sortMode === "importance") {
-      return [...problems].sort((a, b) => {
-        const scoreA = (a.score || []).reduce<number>(
-          (sum, val) =>
-            sum + (typeof val === "number" ? val : Number(val) || 0),
-          0
-        );
-        const scoreB = (b.score || []).reduce<number>(
-          (sum, val) =>
-            sum + (typeof val === "number" ? val : Number(val) || 0),
-          0
-        );
-        return scoreB - scoreA;
-      });
-    }
-    return [...problems].sort((a, b) =>
-      a.keyword.localeCompare(b.keyword, "ko")
-    );
-  }, [problems, sortMode]);
+    // If transition is not finished, return empty to speed up navigation
+    if (!isReady) return [];
+
+    // Use pre-sorted data from context
+    return preSortedProblems[sortMode] || [];
+  }, [preSortedProblems, sortMode, isReady]);
 
   const filteredProblems = useMemo(() => {
+    if (!isReady) return [];
+    
     if (!searchQuery.trim()) {
       return sortedProblems;
     }
     return sortedProblems.filter((problem) =>
       problem.keyword.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [sortedProblems, searchQuery]);
+  }, [sortedProblems, searchQuery, isReady]);
 
-  if (loading) {
-    return (
-      <Surface style={styles.center}>
-        <ActivityIndicator animating color={theme.colors.primary} />
-        <AppText>{texts.componentContents.nowLoading}</AppText>
-      </Surface>
-    );
-  }
-
+  // Render Item Function
   const renderItem = ({ item, index }: { item: QuizItem; index: number }) => {
     return (
       <List.Item
-        title={item.keyword}
-        titleStyle={[
-          styles.titleText,
-          { color: theme.colors.onPrimaryContainer },
-        ]}
+        title={(props) => (
+          <AppText
+            style={[
+              styles.titleText,
+              { color: theme.colors.onPrimaryContainer },
+            ]}
+          >
+            {item.keyword}
+          </AppText>
+        )}
         description={() => (
           <PriorityMark
             textStyle={{ color: colors.level6 }}
@@ -178,7 +190,7 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
       />
     );
   };
-
+ 
   // Pagination state
   const [page, setPage] = useState(1);
   const ITEMS_PER_PAGE = 20;
@@ -198,6 +210,15 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
+  if (loading || !isReady) {
+    return (
+      <Surface style={styles.center}>
+        <ActivityIndicator animating color={theme.colors.primary} />
+        <AppText>{texts.componentContents.nowLoading}</AppText>
+      </Surface>
+    );
+  }
+
   return (
     <Surface
       style={[styles.container, { backgroundColor: theme.colors.level1 }]}
@@ -210,6 +231,11 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
             onChangeText={setSearchQuery}
             value={searchQuery}
             style={styles.searchBar}
+            inputStyle={
+              Platform.OS === "android"
+                ? { includeFontPadding: false, textAlignVertical: "center" }
+                : undefined
+            }
             keyboardType="default"
             autoCapitalize="none"
             autoCorrect={false}

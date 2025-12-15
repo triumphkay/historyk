@@ -151,6 +151,9 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
           textAlign: "center",
           fontSize: typography.sizes.lg,
           height: 42,
+          backgroundColor: theme.colors.level2,
+          borderTopRightRadius: spacing.reg,
+          borderTopLeftRadius: spacing.reg,
         }}
       />
     </View>

@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import Constants from "expo-constants";
 import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
-import {
-  Surface,
-  IconButton,
-  Portal,
-  Modal,
-} from "react-native-paper";
+import { Surface, IconButton, Portal, Modal } from "react-native-paper";
 import AppText from "../components/common/AppText";
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -175,15 +170,14 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           />
         </View>
         */}
-        <View style={{ height: 40 }} />
-        {/* Placeholder for spacing */}
-        {/* Main Content */}
-
-        <View style={[styles.headWrapper, { backgroundColor: POINT_COLOR_1 }]}>
-          <AppText style={[styles.headTitle, { color: theme.colors.level1 }]}>
-            키워드 한국사
-          </AppText>
+        <View style={styles.headWrapper}>
+          <View style={[styles.headBlock, { backgroundColor: POINT_COLOR_1 }]}>
+            <AppText style={[styles.headTitle, { color: theme.colors.level1 }]}>
+              키워드 한국사
+            </AppText>
+          </View>
         </View>
+
         <View style={styles.content}>
           {/* Title */}
           <View style={styles.titleContainer}>
@@ -251,19 +245,20 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
               />
             </TouchableOpacity>
           </View>
-        </View>
-        {/* Bottom Link */}
-        <View style={styles.bottomLinkContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("KeywordList")}
-            activeOpacity={0.7}
-          >
-            <AppText
-              style={[styles.bottomLink, { color: theme.colors.onPrimary }]}
+
+          {/* Bottom Link */}
+          <View style={styles.bottomLinkContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("KeywordList")}
+              activeOpacity={0.7}
             >
-              {texts.main.toListTitle}
-            </AppText>
-          </TouchableOpacity>
+              <AppText
+                style={[styles.bottomLink, { color: theme.colors.onPrimary }]}
+              >
+                {texts.main.toListTitle}
+              </AppText>
+            </TouchableOpacity>
+          </View>
         </View>
       </LinearGradient>
     </Surface>
@@ -281,7 +276,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: spacing.xl,
     paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxl,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     overflow: "hidden", // Ensure border radius clips content if needed
@@ -290,10 +285,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   headWrapper: {
+    paddingTop: spacing.md,
+    marginBottom: spacing.lg,
+  },
+  headBlock: {
     height: 36,
     alignSelf: "flex-start",
     borderRadius: 18,
-    marginBottom: spacing.lg,
   },
   headTitle: {
     paddingHorizontal: spacing.reg,
@@ -331,6 +329,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     width: "100%",
     gap: spacing.md,
+    marginBottom: spacing.xl,
   },
   mainButton: {
     flexDirection: "row",
@@ -352,7 +351,10 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   bottomLinkContainer: {
+    // paddingTop: spacing.xl,
     alignItems: "center",
+    flexGrow: 1,
+    justifyContent: "center",
     // paddingBottom: spacing.lg,
   },
   bottomLink: {

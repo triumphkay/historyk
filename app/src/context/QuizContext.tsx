@@ -17,6 +17,8 @@ interface QuizContextValue {
   resetAnswer: () => void;
   resetKey: number;
   loading: boolean;
+  sortedProblems: Record<'alphabetical' | 'importance', QuizItem[]>;
+
   cardStates: Record<number, { answer: string; isFlipped: boolean }>;
   updateCardState: (index: number, state: Partial<{ answer: string; isFlipped: boolean }>) => void;
   resetAllCards: () => void;
@@ -26,6 +28,10 @@ const QuizContext = createContext<QuizContextValue | undefined>(undefined);
 
 export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [problems, setProblems] = useState<QuizItem[]>([]); // All problems
+  const [sortedProblems, setSortedProblems] = useState<Record<'alphabetical' | 'importance', QuizItem[]>>({
+    alphabetical: [],
+    importance: [],
+  });
   const [quizProblems, setQuizProblems] = useState<QuizItem[]>([]); // Filtered for quiz
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState(''); // Deprecated, keep for compatibility if needed or remove
@@ -38,7 +44,28 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const newWords = await loadNewWordData();
       const allPrepared = prepareNewWordProblems(newWords); // All without filtering
       const quizPrepared = prepareNewWordQuizProblems(newWords); // Filtered for quiz
+      
+      // Pre-calculate sorts
+      const alphabetical = [...allPrepared].sort((a, b) =>
+        a.keyword.localeCompare(b.keyword, "ko")
+      );
+
+      const importance = [...allPrepared].sort((a, b) => {
+        const scoreA = (a.score || []).reduce<number>(
+          (sum, val) =>
+            sum + (typeof val === "number" ? val : Number(val) || 0),
+          0
+        );
+        const scoreB = (b.score || []).reduce<number>(
+          (sum, val) =>
+            sum + (typeof val === "number" ? val : Number(val) || 0),
+          0
+        );
+        return scoreB - scoreA;
+      });
+
       setProblems(allPrepared);
+      setSortedProblems({ alphabetical, importance });
       setQuizProblems(quizPrepared);
       setLoading(false);
     };
@@ -107,6 +134,7 @@ export const QuizProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAnswer,
     resetAnswer,
     resetKey,
+    sortedProblems,
     loading,
     cardStates,
     updateCardState,

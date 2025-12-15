@@ -64,7 +64,7 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
 }) => {
   const theme = useAppTheme();
   const isHome = route.name === "Home";
-  const isKeywordList = route.name === "KeywordList";
+
   const title = getScreenTitle(route.name);
 
 
@@ -98,42 +98,10 @@ const NavigationHeader: React.FC<NativeStackHeaderProps> = ({
           </Text>
         </View>
         <View style={{ flex: 1 }} />
-        {isKeywordList ? (
-          <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity
-              onPress={() => {
-                const params = route.params as any;
-                if (params?.toggleSearch) {
-                  params.toggleSearch();
-                }
-              }}
-              style={{
-                width: 48,
-                height: 48,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <MaterialCommunityIcons
-                name={
-                  (route.params as any)?.isSearchVisible
-                    ? "magnify-close"
-                    : "magnify"
-                }
-                size={24}
-                color={theme.colors.onSurface}
-              />
-            </TouchableOpacity>
-            {/* <Appbar.Action
-              icon="sort"
-              onPress={() => {
-                const params = route.params as any;
-                if (params?.toggleSortDialog) {
-                  params.toggleSortDialog();
-                }
-              }}
-            /> */}
-          </View>
+        {options.headerRight ? (
+          // Render the component returned by headerRight
+          // @ts-ignore
+          options.headerRight({})
         ) : (
           <View style={{ width: 48 }} />
         )}

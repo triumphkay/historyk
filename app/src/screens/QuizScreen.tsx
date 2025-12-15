@@ -8,6 +8,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
+
 import { ActivityIndicator, Surface, useTheme } from "react-native-paper";
 import AppText from "../components/common/AppText";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -134,7 +135,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
         onNext={handleNext}
       />
 
-      <View style={[quizScreenStyles.scrollContent, { padding: 0, flex: 1 }]}>
+      <View style={[quizScreenStyles.scrollContent, { padding: 0 }]}>
         <FlatList
           ref={flatListRef}
           data={quizProblems}
@@ -170,7 +171,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   fixedButtonContainer: {
     padding: spacing.md,
-    paddingBottom: spacing.lg,
+    marginTop: spacing.lg,
     alignItems: "center",
   },
 });
