@@ -27,7 +27,7 @@ module.exports = {
     },
     assetBundlePatterns: ["**/*"],
     ios: {
-      supportsTablet: true,
+      supportsTablet: false,
       bundleIdentifier: "com.triumphkay.historyk",
       buildNumber: String(versionCode),
       infoPlist: {
