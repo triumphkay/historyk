@@ -55,6 +55,12 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
 
   const keyboardShift = useRef(new Animated.Value(0)).current;
 
+  const currentIndexRef = useRef(currentIndex);
+
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+
   useEffect(() => {
     if (Platform.OS !== "android") return;
 
@@ -111,13 +117,14 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
 
       if (viewableItems && viewableItems.length > 0) {
         const firstVisible = viewableItems[0];
+        const currentIdx = currentIndexRef.current;
         if (
           firstVisible.index !== null &&
           firstVisible.index !== undefined &&
-          firstVisible.index !== currentIndex
+          firstVisible.index !== currentIdx
         ) {
           const newIndex = firstVisible.index;
-          const prevIndex = currentIndex;
+          const prevIndex = currentIdx;
           setCurrentIndex(newIndex);
           // Reset previous card to front
           setTimeout(() => {
