@@ -37,14 +37,19 @@ const KeywordChip: React.FC<KeywordChipProps> = ({
 const styles = StyleSheet.create({
   chip: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    // paddingVertical: 8,
+    height: 42,
+    borderRadius: 21,
+    // alignItems: "center",
+    justifyContent: "center",
   },
   chipText: {
     fontSize: typography.sizes.lg,
     fontWeight: 700,
-    height: typography.sizes.xxl,
-    lineHeight: typography.sizes.xxl,
+    // height: typography.sizes.xxl,
+    // height: 26,
+    // lineHeight: 25,
+    // lineHeight: typography.sizes.xxl,
   },
 });
 

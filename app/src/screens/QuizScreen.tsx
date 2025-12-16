@@ -10,7 +10,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
-  TouchableWithoutFeedback,
 } from "react-native";
 
 import { ActivityIndicator, Surface, useTheme } from "react-native-paper";
@@ -109,21 +108,34 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
     }
   }, [currentIndex, quizProblems.length]);
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    // Skip state update during programmatic scroll
-    if (isProgrammaticScroll.current) return;
+  // Use onViewableItemsChanged for reliable page tracking
+  const onViewableItemsChanged = useRef(
+    ({ viewableItems }: { viewableItems: Array<{ index: number | null }> }) => {
+      if (isProgrammaticScroll.current) return;
 
-    const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const index = Math.round(contentOffsetX / width);
-    if (index !== currentIndex && index >= 0 && index < totalProblems) {
-      const prevIndex = currentIndex;
-      setCurrentIndex(index);
-      // Reset previous card to front after drag
-      setTimeout(() => {
-        updateCardState(prevIndex, { isFlipped: false });
-      }, 0);
+      if (viewableItems && viewableItems.length > 0) {
+        const firstVisible = viewableItems[0];
+        if (
+          firstVisible.index !== null &&
+          firstVisible.index !== undefined &&
+          firstVisible.index !== currentIndex
+        ) {
+          const newIndex = firstVisible.index;
+          const prevIndex = currentIndex;
+          setCurrentIndex(newIndex);
+          // Reset previous card to front
+          setTimeout(() => {
+            updateCardState(prevIndex, { isFlipped: false });
+          }, 0);
+        }
+      }
     }
-  };
+  );
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50,
+    waitForInteraction: true,
+  });
 
   const handleNext = () => {
     isProgrammaticScroll.current = true;
@@ -183,8 +195,8 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
+          onViewableItemsChanged={onViewableItemsChanged.current}
+          viewabilityConfig={viewabilityConfig.current}
           getItemLayout={(_, index) => ({
             length: width,
             offset: width * index,
@@ -195,6 +207,7 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
           maxToRenderPerBatch={2}
           windowSize={3}
           removeClippedSubviews={true}
+          keyboardDismissMode="on-drag"
         />
       </View>
 
@@ -205,27 +218,25 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
   );
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Surface style={quizScreenStyles.container}>
-        {Platform.OS === "android" ? (
-          <Animated.View
-            style={{ flex: 1, transform: [{ translateY: keyboardShift }] }}
-          >
-            {content}
-          </Animated.View>
-        ) : (
-          <KeyboardAvoidingView
-            behavior="position"
-            enabled={SHOULD_AVOID_KEYBOARD}
-            style={{ flex: 1 }}
-            contentContainerStyle={{ flex: 1 }}
-            keyboardVerticalOffset={Platform.OS === "ios" ? -50 : 0}
-          >
-            {content}
-          </KeyboardAvoidingView>
-        )}
-      </Surface>
-    </TouchableWithoutFeedback>
+    <Surface style={quizScreenStyles.container}>
+      {Platform.OS === "android" ? (
+        <Animated.View
+          style={{ flex: 1, transform: [{ translateY: keyboardShift }] }}
+        >
+          {content}
+        </Animated.View>
+      ) : (
+        <KeyboardAvoidingView
+          behavior="position"
+          enabled={SHOULD_AVOID_KEYBOARD}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ flex: 1 }}
+          keyboardVerticalOffset={Platform.OS === "ios" ? -50 : 0}
+        >
+          {content}
+        </KeyboardAvoidingView>
+      )}
+    </Surface>
   );
 };
 
