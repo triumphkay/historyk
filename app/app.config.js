@@ -13,7 +13,7 @@ const versionCode = major * 1000000 + minor * 1000 + patch;
 
 module.exports = {
   expo: {
-    name: "history-keyword-quiz",
+    name: "키워드 한국사",
     slug: "history-keyword-quiz",
     version: version,
     sdkVersion: "54.0.0",
@@ -22,7 +22,7 @@ module.exports = {
     userInterfaceStyle: "light",
     splash: {
       image: "./assets/splash.png",
-      resizeMode: "contain",
+      resizeMode: "cover",
       backgroundColor: "#d5d0c8",
     },
     assetBundlePatterns: ["**/*"],
@@ -35,12 +35,17 @@ module.exports = {
       },
     },
     android: {
+      package: "com.triumphkay.historyk",
       adaptiveIcon: {
-        foregroundImage: "./assets/icon.png",
+        foregroundImage: "./assets/android-adaptive-icon.png",
         backgroundColor: "#d5d0c8",
       },
       versionCode: versionCode,
       softwareKeyboardLayoutMode: "pan",
+    },
+    androidNavigationBar: {
+      backgroundColor: "#D5D0C8",
+      barStyle: "dark-content",
     },
     web: {
       bundler: "metro",

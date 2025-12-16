@@ -7,6 +7,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { Button, Surface, Divider } from "react-native-paper";
 import AppText from "./common/AppText";
@@ -35,18 +37,29 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     width: 0,
     height: 0,
   });
+  const [menuLayout, setMenuLayout] = useState({ width: 0, height: 0 });
   const containerRef = useRef<View>(null);
   const theme = useAppTheme();
   const showIcon = !disabled;
 
+  const { height: windowHeight } = Dimensions.get("window");
+
   const openMenu = () => {
     containerRef.current?.measureInWindow((x, y, width, height) => {
-      setMenuAnchor({ x, y, width, height });
+      let finalY = y;
+      if (Platform.OS === "android") {
+        finalY += StatusBar.currentHeight || 0;
+      }
+      setMenuAnchor({ x, y: finalY, width, height });
+      setMenuLayout({ width: 0, height: 0 }); // Reset layout to force remeasure
       setVisible(true);
     });
   };
 
   const closeMenu = () => setVisible(false);
+
+  const fitBelow =
+    windowHeight - (menuAnchor.y + menuAnchor.height) >= menuLayout.height + 36;
 
   return (
     <View ref={containerRef} collapsable={false}>
@@ -79,19 +92,30 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       <Modal
         visible={visible}
         transparent={true}
+        statusBarTranslucent={true}
         animationType="fade"
         onRequestClose={closeMenu}
       >
         <TouchableWithoutFeedback onPress={closeMenu}>
           <View style={styles.modalOverlay}>
             <Surface
+              onLayout={(event) => {
+                const { width, height } = event.nativeEvent.layout;
+                setMenuLayout({ width, height });
+              }}
               style={[
                 styles.dropdownMenu,
                 {
-                  top: menuAnchor.y + menuAnchor.height + 2, // Slight offset
+                  top:
+                    menuLayout.height > 0
+                      ? fitBelow
+                        ? menuAnchor.y + menuAnchor.height + 2
+                        : menuAnchor.y - menuLayout.height - 2
+                      : -9999,
                   left: menuAnchor.x,
                   minWidth: menuAnchor.width,
                   backgroundColor: theme.colors.elevation.level2,
+                  opacity: menuLayout.height > 0 ? 1 : 0,
                 },
               ]}
               elevation={2}

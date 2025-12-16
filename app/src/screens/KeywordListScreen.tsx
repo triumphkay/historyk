@@ -10,7 +10,6 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  GestureResponderEvent,
   Keyboard,
   Platform,
   Modal,
@@ -18,6 +17,7 @@ import {
   LayoutAnimation,
   UIManager,
   InteractionManager,
+  StatusBar,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -113,13 +113,17 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
   // Ref for the menu anchor
   const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });
 
-  const openMenu = (event: GestureResponderEvent) => {
-    event.stopPropagation();
+  const buttonRef = useRef<View>(null);
 
-    const { nativeEvent } = event;
-    const anchor = { x: nativeEvent.pageX - 100, y: nativeEvent.pageY + 10 };
-    setMenuAnchor(anchor);
-    setMenuVisible(true);
+  const openMenu = () => {
+    buttonRef.current?.measureInWindow((x, y, width, height) => {
+      let finalY = y + height;
+      if (Platform.OS === 'android') {
+        finalY += (StatusBar.currentHeight || 0);
+      }
+      setMenuAnchor({ x: x + width - 150, y: finalY });
+      setMenuVisible(true);
+    });
   };
 
   const closeMenu = () => setMenuVisible(false);
@@ -248,23 +252,26 @@ const KeywordListScreen: React.FC<Props> = ({ navigation, route }) => {
           {texts.keywordList.keywordCount}
         </AppText>
 
-        <Button
-          mode="text"
-          onPress={openMenu}
-          icon="sort"
-          contentStyle={{ flexDirection: "row-reverse" }}
-          labelStyle={{ fontSize: 13 }}
-        >
-          {sortMode === "alphabetical"
-            ? texts.keywordList.orderAtoZ
-            : texts.keywordList.orderPriority}
-        </Button>
+        <View ref={buttonRef} collapsable={false}>
+          <Button
+            mode="text"
+            onPress={openMenu}
+            icon="sort"
+            contentStyle={{ flexDirection: "row-reverse" }}
+            labelStyle={{ fontSize: 13 }}
+          >
+            {sortMode === "alphabetical"
+              ? texts.keywordList.orderAtoZ
+              : texts.keywordList.orderPriority}
+          </Button>
+        </View>
       </Surface>
 
       {/* Custom Modal for robust iOS behavior */}
       <Modal
         visible={menuVisible}
         transparent={true}
+        statusBarTranslucent={true}
         animationType="fade"
         onRequestClose={closeMenu}
       >
