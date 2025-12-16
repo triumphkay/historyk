@@ -173,7 +173,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.headWrapper}>
           <View style={[styles.headBlock, { backgroundColor: POINT_COLOR_1 }]}>
             <AppText style={[styles.headTitle, { color: theme.colors.level1 }]}>
-              키워드 한국사
+              {texts.appTitle}
             </AppText>
           </View>
         </View>
@@ -360,6 +360,9 @@ const styles = StyleSheet.create({
   bottomLink: {
     fontSize: 16,
     textDecorationLine: "underline",
+    padding: spacing.md,
+
+    fontWeight: typography.weights.bold,
   },
   // Modal Styles
   modalAppTitle: {

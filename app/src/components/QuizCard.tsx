@@ -179,7 +179,7 @@ const QuizCard: React.FC<Props> = ({ problem, index }) => {
       </AppText>
 
       <View style={styles.keywordRow}>
-        <AppText style={[styles.answerKeyword, { color: backTextColor }]}>
+        <AppText style={[styles.answerKeyword, { color: theme.colors.secondary }]}>
           {problem.keyword}
         </AppText>
         <IconButton
@@ -255,13 +255,13 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   answerKeyword: {
-    fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
+    fontFamily: "NanumMyeongjo-800",
+    fontSize: 30,
   },
   keywordRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start",
+    // justifyContent: "flex-start",
     // marginBottom: spacing.md,
   },
   infoRowBottom: {

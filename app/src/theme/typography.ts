@@ -11,6 +11,6 @@ export const typography = {
   weights: {
     regular: "400",
     medium: "600",
-    bold: "700",
+    bold: "800",
   },
 } as const;
