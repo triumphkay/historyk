@@ -40,6 +40,7 @@ module.exports = {
         backgroundColor: "#d5d0c8",
       },
       versionCode: versionCode,
+      softwareKeyboardLayoutMode: "pan",
     },
     web: {
       bundler: "metro",

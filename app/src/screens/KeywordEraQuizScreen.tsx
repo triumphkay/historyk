@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -7,6 +7,10 @@ import {
   Animated,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 import { ActivityIndicator, Surface, useTheme } from "react-native-paper";
@@ -17,29 +21,24 @@ import { RootStackParamList } from "../types/navigation";
 import { spacing } from "../theme/spacing";
 import { quizScreenStyles, eraQuizStyles } from "../theme/quizStyles";
 import KeywordEraQuizCard from "../components/KeywordEraQuizCard";
-import { parseYearParts } from "../utils/eraQuiz";
-import keyAgeData from "../../assets/key-timeline.json";
-import { TypeDetail } from "../types/TypeDetail";
 import { QuizButton, QuizNavigation } from "../components/QuizLayout";
 import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "KeywordEraQuizScreen">;
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+const SHOULD_AVOID_KEYBOARD = height < 900;
 
 const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
   const theme = useTheme();
   const {
     problems,
-    currentProblem,
-    selectedEraIndex,
     currentIndex,
     totalProblems,
     goToNext,
     goToPrevious,
     setCurrentIndex,
     loading,
-    resetKey,
     cardStates,
     updateCardState,
     resetAllCards,
@@ -48,6 +47,46 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
   // Reset all cards when entering the screen
   useEffect(() => {
     resetAllCards();
+  }, []);
+
+  // Dismiss keyboard when changing cards
+  useEffect(() => {
+    Keyboard.dismiss();
+  }, [currentIndex]);
+
+  const keyboardShift = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+
+    const showEvent = "keyboardDidShow";
+    const hideEvent = "keyboardDidHide";
+
+    const onShow = () => {
+      // Only shift if screen is small
+      const shiftValue = SHOULD_AVOID_KEYBOARD ? -150 : 0;
+      Animated.timing(keyboardShift, {
+        toValue: shiftValue,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    const onHide = () => {
+      Animated.timing(keyboardShift, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    const showListener = Keyboard.addListener(showEvent, onShow);
+    const hideListener = Keyboard.addListener(hideEvent, onHide);
+
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
   }, []);
 
   const flatListRef = useRef<FlatList>(null);
@@ -91,64 +130,9 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
 
   // Get current card state
   const currentCardState = cardStates[currentIndex] || {
-    country: "",
-    leader: "",
-    year: "",
-    month: "",
     isFlipped: false,
   };
-  const { country, leader, year, month, isFlipped } = currentCardState;
-
-  // const metadata = keywordTypes as {
-  //   "key-age": Array<{ nation: string; list: string[] }>;
-  //   "types-details": TypeDetail[];
-  // };
-  // const keyAgeData = metadata["key-age"] || [];
-
-  // Get selected era and det_era based on selectedEraIndex
-  const selectedEra = useMemo(() => {
-    if (!currentProblem || !currentProblem.era[selectedEraIndex]) return "";
-    return currentProblem.era[selectedEraIndex];
-  }, [currentProblem, selectedEraIndex]);
-
-  const selectedDetEra = useMemo(() => {
-    if (!currentProblem || !currentProblem.det_era[selectedEraIndex]) return "";
-    return currentProblem.det_era[selectedEraIndex];
-  }, [currentProblem, selectedEraIndex]);
-
-  const yearParts = useMemo(
-    () => parseYearParts(currentProblem?.years || ""),
-    [currentProblem]
-  );
-
-  const isCorrect = useMemo(() => {
-    if (!currentProblem) return false;
-
-    // Check Era (Country)
-    if (country !== selectedEra) return false;
-
-    // Check Detail Era (Leader)
-    const hasLeaderAnswer = Boolean(selectedDetEra.trim());
-    if (hasLeaderAnswer && leader !== selectedDetEra) return false;
-
-    // Check Year
-    const shouldShowYearInputs = currentProblem.years_check === "true";
-    if (shouldShowYearInputs) {
-      if (year !== yearParts.year) return false;
-      if (yearParts.month && month !== yearParts.month) return false;
-    }
-
-    return true;
-  }, [
-    currentProblem,
-    country,
-    leader,
-    year,
-    month,
-    selectedEra,
-    selectedDetEra,
-    yearParts,
-  ]);
+  const { isFlipped } = currentCardState;
 
   const handleFlip = () => {
     updateCardState(currentIndex, { isFlipped: !isFlipped });
@@ -170,8 +154,8 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
     );
   }
 
-  return (
-    <Surface style={styles.container}>
+  const content = (
+    <>
       <QuizNavigation
         currentIndex={currentIndex}
         totalProblems={totalProblems}
@@ -207,7 +191,31 @@ const KeywordEraQuizScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.fixedButtonContainer}>
         <QuizButton isFlipped={isFlipped} onPress={handleFlip} />
       </View>
-    </Surface>
+    </>
+  );
+
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Surface style={styles.container}>
+        {Platform.OS === "android" ? (
+          <Animated.View
+            style={{ flex: 1, transform: [{ translateY: keyboardShift }] }}
+          >
+            {content}
+          </Animated.View>
+        ) : (
+          <KeyboardAvoidingView
+            behavior="position"
+            enabled={SHOULD_AVOID_KEYBOARD}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flex: 1 }}
+            keyboardVerticalOffset={Platform.OS === "ios" ? -50 : 0}
+          >
+            {content}
+          </KeyboardAvoidingView>
+        )}
+      </Surface>
+    </TouchableWithoutFeedback>
   );
 };
 

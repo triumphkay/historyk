@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -7,6 +7,10 @@ import {
   Animated,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 import { ActivityIndicator, Surface, useTheme } from "react-native-paper";
@@ -22,7 +26,10 @@ import texts from "../../assets/texts.json";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Quiz">;
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+
+// Adjust threshold as needed. iPhone 14 is ~844. SE is ~667.
+const SHOULD_AVOID_KEYBOARD = height < 900;
 
 const QuizScreen: React.FC<Props> = ({ navigation }) => {
   const {
@@ -39,9 +46,48 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
   } = useQuiz();
   const theme = useTheme();
 
-  // Reset all cards when entering the screen
   useEffect(() => {
     resetAllCards();
+  }, []);
+
+  // Dismiss keyboard when changing cards
+  useEffect(() => {
+    Keyboard.dismiss();
+  }, [currentIndex]);
+
+  const keyboardShift = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+
+    const showEvent = "keyboardDidShow";
+    const hideEvent = "keyboardDidHide";
+
+    const onShow = () => {
+      // Only shift if screen is small
+      const shiftValue = SHOULD_AVOID_KEYBOARD ? -150 : 0;
+      Animated.timing(keyboardShift, {
+        toValue: shiftValue,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    const onHide = () => {
+      Animated.timing(keyboardShift, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    const showListener = Keyboard.addListener(showEvent, onShow);
+    const hideListener = Keyboard.addListener(hideEvent, onHide);
+
+    return () => {
+      showListener.remove();
+      hideListener.remove();
+    };
   }, []);
 
   const flatListRef = useRef<FlatList>(null);
@@ -90,25 +136,16 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   // Get current card state
+  // Get current card state
   const currentCardState = cardStates[currentIndex] || {
     answer: "",
     isFlipped: false,
   };
-  const { isFlipped, answer } = currentCardState;
-  // const currentProblem = quizProblems[currentIndex];
+  const { isFlipped } = currentCardState;
 
   const handleFlip = () => {
     updateCardState(currentIndex, { isFlipped: !isFlipped });
   };
-
-  // const isCorrect = useMemo(
-  //   () =>
-  //     currentProblem
-  //       ? answer.replace(/\s/g, "") ===
-  //         currentProblem.keyword.replace(/\s/g, "")
-  //       : false,
-  //   [answer, currentProblem]
-  // );
 
   if (loading) {
     return (
@@ -126,8 +163,8 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
     );
   }
 
-  return (
-    <Surface style={quizScreenStyles.container}>
+  const content = (
+    <>
       <QuizNavigation
         currentIndex={currentIndex}
         totalProblems={totalProblems}
@@ -164,7 +201,31 @@ const QuizScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.fixedButtonContainer}>
         <QuizButton isFlipped={isFlipped} onPress={handleFlip} />
       </View>
-    </Surface>
+    </>
+  );
+
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Surface style={quizScreenStyles.container}>
+        {Platform.OS === "android" ? (
+          <Animated.View
+            style={{ flex: 1, transform: [{ translateY: keyboardShift }] }}
+          >
+            {content}
+          </Animated.View>
+        ) : (
+          <KeyboardAvoidingView
+            behavior="position"
+            enabled={SHOULD_AVOID_KEYBOARD}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flex: 1 }}
+            keyboardVerticalOffset={Platform.OS === "ios" ? -50 : 0}
+          >
+            {content}
+          </KeyboardAvoidingView>
+        )}
+      </Surface>
+    </TouchableWithoutFeedback>
   );
 };
 
