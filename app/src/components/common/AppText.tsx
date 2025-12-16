@@ -1,6 +1,6 @@
 import React from "react";
 import { Text as PaperText, TextProps } from "react-native-paper";
-import { Platform, TextStyle, StyleSheet, StyleProp } from "react-native";
+import { Platform, TextStyle, StyleSheet, StyleProp, useWindowDimensions } from "react-native";
 
 interface AppTextProps extends TextProps<string> {
   style?: StyleProp<TextStyle>;
@@ -42,10 +42,16 @@ const AppText: React.FC<AppTextProps> = ({ style, children, ...props }) => {
     computedStyle.includeFontPadding = false; // Fix vertical alignment issues on Android
   }
 
+  const { fontScale } = useWindowDimensions();
+
   return (
     <PaperText
       {...props}
       {...androidProps}
+      // If system font scale is small (<1), disable scaling to enforce minimum size 1.0
+      // If scale is large, allow scaling but cap it at 1.2 via maxFontSizeMultiplier
+      allowFontScaling={fontScale >= 1}
+      maxFontSizeMultiplier={1.2}
       style={computedStyle}
     >
       {children}
